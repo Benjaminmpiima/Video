@@ -1,156 +1,310 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reelhouse · Video Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@750&family=Inter:wght@400;550;600;650;700&display=swap" rel="stylesheet">
-    <style>
-      :root {
-        --rh-bg: #faf9f6;
-        --rh-ink: #302c28;
-        --rh-muted: #77716b;
-        --rh-primary: #e96c3b;
-        --rh-border: #e8e4df;
-        --rh-card: #fff;
-        --rh-player: #24211f;
-      }
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      body {
-        background-color: var(--rh-bg);
-        color: var(--rh-ink);
-        font-family: 'Inter', sans-serif;
-        font-size: 16px;
-        line-height: 1.5;
-      }
-      button, input { font: inherit; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reelhouse · Video Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@750&family=Inter:wght@400;550;600;650;700&display=swap" rel="stylesheet">
 
-      #reelhouse-widget {
-        max-width: 1152px;
-        margin: 0 auto;
-      }
+  <style>
+    :root {
+      --rh-bg: #faf9f6;
+      --rh-ink: #302c28;
+      --rh-muted: #77716b;
+      --rh-primary: #e96c3b;
+      --rh-border: #e8e4df;
+      --rh-player: #24211f;
+    }
 
-      /* Navigation Header */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--rh-bg);
+      color: var(--rh-ink);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    #reelhouse-widget {
+      max-width: 1152px;
+      margin: 0 auto;
+    }
+
+    .rh-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      height: 64px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(224, 220, 214, .8);
+      background: rgba(250, 249, 246, .92);
+      backdrop-filter: blur(8px);
+    }
+
+    .rh-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--rh-ink);
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 19px;
+      font-weight: 750;
+      letter-spacing: -.04em;
+    }
+
+    .rh-brand-mark {
+      width: 29px;
+      height: 29px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--rh-primary);
+      color: #fff;
+    }
+
+    .rh-brand-mark svg {
+      width: 14px;
+      height: 14px;
+      margin-left: 2px;
+    }
+
+    .rh-main {
+      padding: 48px 20px 96px;
+    }
+
+    .rh-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .rh-eyebrow {
+      color: var(--rh-primary);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .rh-title {
+      margin-top: 9px;
+      color: var(--rh-ink);
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(38px, 5vw, 52px);
+      font-weight: 750;
+      letter-spacing: -.055em;
+      line-height: 1.08;
+    }
+
+    .rh-count {
+      margin-top: 9px;
+      color: var(--rh-muted);
+      font-size: 14px;
+    }
+
+    .rh-search-wrap {
+      position: relative;
+      width: 288px;
+      flex: 0 0 288px;
+    }
+
+    .rh-search-icon {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      width: 16px;
+      height: 16px;
+      transform: translateY(-50%);
+      color: #87827c;
+      pointer-events: none;
+    }
+
+    .rh-search {
+      width: 100%;
+      height: 44px;
+      padding: 0 16px 0 40px;
+      border: 1px solid var(--rh-border);
+      border-radius: 999px;
+      outline: none;
+      background: #fff;
+      color: var(--rh-ink);
+      font-size: 14px;
+    }
+
+    .rh-search:focus {
+      border-color: var(--rh-primary);
+      box-shadow: 0 0 0 3px rgba(233, 108, 59, .12);
+    }
+
+    .rh-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      column-gap: 24px;
+      row-gap: 38px;
+      margin-top: 40px;
+    }
+
+    .rh-card {
+      min-width: 0;
+      animation: rh-enter .42s ease both;
+    }
+
+    @keyframes rh-enter {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rh-frame {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      background: var(--rh-player);
+      box-shadow: 0 1px 2px rgba(48,44,40,.06),
+                  0 8px 24px -12px rgba(48,44,40,.18);
+    }
+
+    .rh-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: var(--rh-player);
+    }
+
+    .rh-play-fallback {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      z-index: 2;
+      padding: 10px 15px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(20,20,20,.88);
+      color: #fff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .rh-play-fallback[hidden] {
+      display: none;
+    }
+
+    .rh-video-error {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      color: #fff;
+      background: var(--rh-player);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .rh-card-caption {
+      margin-top: 11px;
+      color: var(--rh-ink);
+      text-align: left;
+    }
+
+    .rh-card-title {
+      display: block;
+      overflow: hidden;
+      font-size: 15px;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rh-card-meta {
+      display: block;
+      margin-top: 2px;
+      color: var(--rh-muted);
+      font-size: 13px;
+    }
+
+    .rh-error {
+      margin-top: 32px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      background: #fce9e6;
+      color: #a8352a;
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .rh-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
       .rh-nav {
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        height: 64px;
-        padding: 0 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid rgba(224, 220, 214, .8);
-        background: rgba(250, 249, 246, .92);
-        backdrop-filter: blur(8px);
+        height: 60px;
+        padding: 0 15px;
       }
+
       .rh-brand {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        color: var(--rh-ink);
-        font-family: 'Bricolage Grotesque', sans-serif;
-        font-size: 19px;
-        font-weight: 750;
-        letter-spacing: -.04em;
-        text-decoration: none;
+        font-size: 17px;
       }
-      .rh-brand-mark {
-        width: 29px;
-        height: 29px;
-        display: grid;
-        place-items: center;
-        border-radius: 9px;
-        background: var(--rh-primary);
-        color: #fff;
-      }
-      .rh-brand-mark svg { width: 14px; height: 14px; margin-left: 2px; }
 
-      /* Main Layout */
-      .rh-main { padding: 48px 20px 96px; }
-      .rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-      .rh-eyebrow { margin: 0; color: var(--rh-primary); font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
-      .rh-title {
-        margin: 9px 0 0;
-        color: var(--rh-ink);
-        font-family: 'Bricolage Grotesque', sans-serif;
-        font-size: clamp(38px, 5vw, 52px);
-        font-weight: 750;
-        letter-spacing: -.055em;
-        line-height: 1.08;
+      .rh-main {
+        padding: 34px 15px 70px;
       }
-      .rh-count { margin: 9px 0 0; color: var(--rh-muted); font-size: 14px; }
-      .rh-search-wrap { position: relative; width: 288px; flex: 0 0 288px; }
-      .rh-search-icon {
-        position: absolute;
-        top: 50%;
-        left: 14px;
-        width: 16px;
-        height: 16px;
-        transform: translateY(-50%);
-        color: #87827c;
-        pointer-events: none;
+
+      .rh-head {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 18px;
       }
-      .rh-search {
+
+      .rh-search-wrap {
         width: 100%;
-        height: 44px;
-        padding: 0 16px 0 40px;
-        border: 1px solid var(--rh-border);
-        border-radius: 999px;
-        outline: none;
-        background: #fff;
-        color: var(--rh-ink);
-        font-size: 14px;
-        transition: border-color .15s ease, box-shadow .15s ease;
+        flex-basis: auto;
       }
-      .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233, 108, 59, .12); }
 
-      /* Grid & Video Cards */
-      .rh-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; row-gap: 38px; margin-top: 40px; }
-      .rh-card { min-width: 0; animation: rh-enter .42s ease both; }
-      @keyframes rh-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-      .rh-frame {
-        position: relative;
-        overflow: hidden;
-        aspect-ratio: 16/9;
-        border-radius: 16px;
-        background: var(--rh-player);
-        box-shadow: 0 1px 2px rgba(48, 44, 40, .06), 0 8px 24px -12px rgba(48, 44, 40, .18);
+      .rh-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 26px;
+        margin-top: 28px;
       }
-      .rh-video { display: block; width: 100%; height: 100%; object-fit: cover; background: var(--rh-player); }
-      
-      .rh-card-caption {
-        display: block;
-        width: 100%;
-        margin-top: 11px;
-        padding: 0;
-        border: 0;
-        background: none;
-        color: var(--rh-ink);
-        text-align: left;
-      }
-      .rh-card-title { display: block; overflow: hidden; font-size: 15px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
-      .rh-card-meta { display: block; margin-top: 2px; color: var(--rh-muted); font-size: 13px; }
-      .rh-error { margin-top: 32px; padding: 18px 20px; border-radius: 16px; background: #fce9e6; color: #a8352a; font-size: 14px; }
-
-      @media (max-width: 900px) { .rh-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-      @media (max-width: 640px) {
-        .rh-nav { height: 60px; padding: 0 15px; }
-        .rh-brand { font-size: 17px; }
-        .rh-main { padding: 34px 15px 70px; }
-        .rh-head { align-items: stretch; flex-direction: column; gap: 18px; }
-        .rh-search-wrap { width: 100%; }
-        .rh-grid { grid-template-columns: minmax(0, 1fr); gap: 26px; margin-top: 28px; }
-      }
-    </style>
+    }
+  </style>
 </head>
-<body>
 
-  <div id="reelhouse-widget" data-api-base="https://script.google.com/macros/s/AKfycbyHh9H4rI91gZC5SeQiAK-9Qhjl930EX9JDfkJS7aDEJf9lvEuOCcb-BsJyP1Rn3oXy/exec">
+<body>
+  <div
+    id="reelhouse-widget"
+    data-api-base="https://script.google.com/macros/s/AKfycbyHh9H4rI91gZC5SeQiAK-9Qhjl930EX9JDfkJS7aDEJf9lvEuOCcb-BsJyP1Rn3oXy/exec"
+  >
     <header class="rh-nav">
       <div class="rh-brand">
         <span class="rh-brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.8c0-.78.85-1.26 1.52-.86l11.1 6.7a1 1 0 0 1 0 1.72l-11.1 6.7A1 1 0 0 1 7 18.2V4.8Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 4.8c0-.78.85-1.26 1.52-.86l11.1 6.7a1 1 0 0 1 0 1.72l-11.1 6.7A1 1 0 0 1 7 18.2V4.8Z"/>
+          </svg>
         </span>
         <span>Reelhouse</span>
       </div>
@@ -164,11 +318,21 @@
             <h1 class="rh-title">Fresh reels</h1>
             <p class="rh-count" aria-live="polite">Loading videos…</p>
           </div>
+
           <label class="rh-search-wrap">
-            <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
-            <input class="rh-search" type="search" placeholder="Search videos" aria-label="Search videos">
+            <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.8"/>
+              <path d="m16 16 5 5"/>
+            </svg>
+            <input
+              class="rh-search"
+              type="search"
+              placeholder="Search videos"
+              aria-label="Search videos"
+            >
           </label>
         </div>
+
         <div class="rh-error" hidden></div>
         <div class="rh-grid" aria-live="polite"></div>
       </section>
@@ -178,94 +342,321 @@
   <script>
   (() => {
     const root = document.getElementById('reelhouse-widget');
+
     if (!root || root.dataset.initialized === '1') return;
     root.dataset.initialized = '1';
-    
+
     const apiBase = root.dataset.apiBase || '';
     const grid = root.querySelector('.rh-grid');
     const countLabel = root.querySelector('.rh-count');
     const search = root.querySelector('.rh-search');
     const galleryError = root.querySelector('.rh-error');
-    
+
     const items = new Map();
+    let autoplayObserver = null;
+    let requestInProgress = false;
 
     function formatBytes(bytes) {
       const n = Number(bytes || 0);
-      if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + ' KB';
+
+      if (n < 1024 * 1024) {
+        return Math.max(1, Math.round(n / 1024)) + ' KB';
+      }
+
       return (n / (1024 * 1024)).toFixed(1) + ' MB';
     }
+
     function dateText(value) {
       const date = new Date(value);
-      return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString(undefined, {month:'short',day:'numeric',year:'numeric'});
+
+      return Number.isNaN(date.getTime())
+        ? ''
+        : date.toLocaleDateString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
     }
-    
-    search.addEventListener('input', renderFilter);
 
     function createCard(item) {
-      const article = document.createElement('article'); article.className='rh-card'; article.dataset.id=String(item.id);
-      const frame = document.createElement('div'); frame.className='rh-frame';
-      
-      // Video configured to autoplay, loop seamlessly, and play inline without controls
-      const video = document.createElement('video'); 
-      video.className = 'rh-video'; 
-      video.src = item.url; 
+      const article = document.createElement('article');
+      article.className = 'rh-card';
+      article.dataset.id = String(item.id);
+
+      const frame = document.createElement('div');
+      frame.className = 'rh-frame';
+
+      const video = document.createElement('video');
+      video.className = 'rh-video';
+
+      // Keep the video URL supplied by the existing Apps Script.
+      video.src = item.url;
+
+      // Muted inline autoplay is the most compatible browser setting.
       video.autoplay = true;
       video.muted = true;
+      video.defaultMuted = true;
       video.loop = true;
       video.playsInline = true;
-      video.preload = 'auto';
+      video.preload = 'metadata';
+
+      video.setAttribute('muted', '');
+      video.setAttribute('autoplay', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
       video.setAttribute('aria-label', item.title || 'Uploaded video');
-      
-      frame.append(video);
-      
-      const caption = document.createElement('div'); caption.className='rh-card-caption';
-      const title = document.createElement('span'); title.className='rh-card-title'; title.textContent=item.title || 'Untitled video';
-      const meta = document.createElement('span'); meta.className='rh-card-meta'; meta.textContent=dateText(item.date)+(item.size ? ' · '+formatBytes(item.size) : '');
+
+      const playButton = document.createElement('button');
+      playButton.type = 'button';
+      playButton.className = 'rh-play-fallback';
+      playButton.textContent = '▶ Tap to play';
+      playButton.hidden = true;
+
+      playButton.addEventListener('click', () => {
+        video.muted = true;
+
+        video.play()
+          .then(() => {
+            video.dataset.autoplayBlocked = '0';
+            playButton.hidden = true;
+          })
+          .catch(error => {
+            console.warn('Video could not play:', video.currentSrc, error);
+            playButton.textContent = 'Unable to play video';
+          });
+      });
+
+      video.addEventListener('playing', () => {
+        playButton.hidden = true;
+      });
+
+      video.addEventListener('error', () => {
+        playButton.hidden = false;
+        playButton.textContent = 'Video source unavailable';
+        playButton.disabled = true;
+
+        console.error(
+          'Reelhouse video source error:',
+          video.currentSrc || video.src,
+          video.error
+        );
+      });
+
+      video.addEventListener('canplay', () => {
+        if (isVisible(video)) attemptAutoplay(video);
+      });
+
+      frame.append(video, playButton);
+
+      const caption = document.createElement('div');
+      caption.className = 'rh-card-caption';
+
+      const title = document.createElement('span');
+      title.className = 'rh-card-title';
+      title.textContent = item.title || 'Untitled video';
+
+      const meta = document.createElement('span');
+      meta.className = 'rh-card-meta';
+      meta.textContent =
+        dateText(item.date) +
+        (item.size ? ' · ' + formatBytes(item.size) : '');
+
       caption.append(title, meta);
       article.append(frame, caption);
-
-      // Ensure playback starts immediately on append
-      video.play().catch(() => {});
 
       return article;
     }
 
-    function renderFilter(){
-      const query = search.value.trim().toLocaleLowerCase(); let shown = 0;
+    function isVisible(video) {
+      const rect = video.getBoundingClientRect();
+
+      return rect.bottom > 0 &&
+        rect.top < window.innerHeight &&
+        rect.right > 0 &&
+        rect.left < window.innerWidth;
+    }
+
+    function attemptAutoplay(video) {
+      if (!video || !video.isConnected) return;
+
+      const card = video.closest('.rh-card');
+
+      if (card && card.style.display === 'none') return;
+
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+
+      video.play()
+        .then(() => {
+          video.dataset.autoplayBlocked = '0';
+
+          const button =
+            video.parentElement.querySelector('.rh-play-fallback');
+
+          if (button) button.hidden = true;
+        })
+        .catch(error => {
+          video.dataset.autoplayBlocked = '1';
+
+          const button =
+            video.parentElement.querySelector('.rh-play-fallback');
+
+          if (button) {
+            button.hidden = false;
+            button.textContent = '▶ Tap to play';
+          }
+
+          // Helps diagnose autoplay or Google Drive playback problems.
+          console.warn(
+            'Reelhouse autoplay failed:',
+            video.currentSrc || video.src,
+            error
+          );
+        });
+    }
+
+    function observeVideos() {
+      if (!('IntersectionObserver' in window)) {
+        grid.querySelectorAll('video.rh-video').forEach(video => {
+          if (isVisible(video)) attemptAutoplay(video);
+        });
+
+        return;
+      }
+
+      if (!autoplayObserver) {
+        autoplayObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const video = entry.target;
+            const card = video.closest('.rh-card');
+
+            if (card && card.style.display === 'none') {
+              video.pause();
+              return;
+            }
+
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+              // Avoid playing every video at the same time.
+              grid.querySelectorAll('video.rh-video').forEach(other => {
+                if (other !== video && !other.paused) other.pause();
+              });
+
+              attemptAutoplay(video);
+            } else {
+              video.pause();
+            }
+          });
+        }, {
+          threshold: [0, 0.35, 0.6]
+        });
+      }
+
+      grid.querySelectorAll('video.rh-video').forEach(video => {
+        if (video.dataset.observed !== '1') {
+          video.dataset.observed = '1';
+          autoplayObserver.observe(video);
+        }
+      });
+    }
+
+    function renderFilter() {
+      const query = search.value.trim().toLocaleLowerCase();
+      let shown = 0;
+
       grid.querySelectorAll('.rh-card').forEach(card => {
-        const title = items.get(card.dataset.id)?.title || '';
-        const match = !query || title.toLocaleLowerCase().includes(query);
-        card.style.display = match ? '' : 'none';
-        if (match) shown++;
+        const item = items.get(card.dataset.id);
+        const title = item?.title || '';
+
+        const matches =
+          !query || title.toLocaleLowerCase().includes(query);
+
+        card.style.display = matches ? '' : 'none';
+
+        const video = card.querySelector('video');
+
+        if (!matches && video) video.pause();
+
+        if (matches) shown++;
       });
-      if (query && shown === 0 && items.size > 0) countLabel.textContent = 'No videos match your search';
-      else countLabel.textContent = items.size + ' video' + (items.size === 1 ? '' : 's') + ' · live from Google Form uploads';
+
+      if (query && shown === 0 && items.size > 0) {
+        countLabel.textContent = 'No videos match your search';
+      } else {
+        countLabel.textContent =
+          items.size + ' video' +
+          (items.size === 1 ? '' : 's') +
+          ' · live from Google Form uploads';
+      }
+
+      observeVideos();
     }
 
-    async function refreshGallery(){
-      if (!apiBase) throw new Error('Missing Google Apps Script Web App URL.');
-      const response = await fetch(apiBase, {cache: 'no-store'});
-      if (!response.ok) throw new Error('Could not load videos from Google Drive.');
-      const body = await response.json();
-      const videos = Array.isArray(body.videos) ? body.videos : [];
-      grid.innerHTML = '';
-      items.clear();
-      videos.forEach(item => {
-        if (!item || item.id == null || !item.url || items.has(String(item.id))) return;
-        items.set(String(item.id), item);
-        grid.prepend(createCard(item));
-      });
-      galleryError.hidden = true;
-      renderFilter();
+    async function refreshGallery() {
+      // Prevent overlapping requests.
+      if (requestInProgress || !apiBase) return;
+
+      requestInProgress = true;
+
+      try {
+        const response = await fetch(apiBase, {
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          throw new Error('Could not load videos from Google Drive.');
+        }
+
+        const body = await response.json();
+
+        if (body && body.error) {
+          throw new Error('Apps Script error: ' + body.error);
+        }
+
+        const videos = Array.isArray(body.videos) ? body.videos : [];
+        let added = false;
+
+        videos.forEach(item => {
+          if (!item || item.id == null || !item.url) return;
+
+          const id = String(item.id);
+
+          // Keep existing video elements playing during gallery refreshes.
+          if (items.has(id)) return;
+
+          items.set(id, item);
+          grid.prepend(createCard(item));
+          added = true;
+        });
+
+        galleryError.hidden = true;
+
+        renderFilter();
+
+        if (added) observeVideos();
+      } catch (error) {
+        console.error('Reelhouse gallery refresh failed:', error);
+
+        // Show the error only if the gallery has no videos to display.
+        if (items.size === 0) {
+          galleryError.textContent =
+            error.message || 'Could not load videos.';
+          galleryError.hidden = false;
+          countLabel.textContent = '';
+        }
+      } finally {
+        requestInProgress = false;
+      }
     }
 
-    refreshGallery().catch(error => {
-      galleryError.textContent = error.message || 'Could not load videos.';
-      galleryError.hidden = false;
-      countLabel.textContent = '';
-    });
+    search.addEventListener('input', renderFilter);
 
-    window.setInterval(() => refreshGallery().catch(() => {}), 20000);
+    // Load videos when the page opens.
+    refreshGallery();
+
+    // Check for new Google Form uploads without rebuilding existing cards.
+    window.setInterval(refreshGallery, 20000);
+
   })();
   </script>
 </body>
