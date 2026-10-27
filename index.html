@@ -278,7 +278,6 @@
     const search = root.querySelector('.rh-search');
     const galleryError = root.querySelector('.rh-error');
     
-    const maxBytes = 50 * 1024 * 1024;
     const items = new Map();
     const ratios = new Map();
     let activeVideo = null;
@@ -331,8 +330,10 @@
     function createCard(item) {
       const article = document.createElement('article'); article.className='rh-card'; article.dataset.id=String(item.id);
       const frame = document.createElement('div'); frame.className='rh-frame';
-      const video = document.createElement('video'); video.className='rh-video'; video.src=item.url; video.playsInline=true; video.muted=true; video.loop=true; video.preload='metadata'; video.setAttribute('aria-label',item.title || 'Uploaded video');
-      const playOverlay = document.createElement('button'); playOverlay.type='button'; playOverlay.className='rh-play-overlay'; playOverlay.setAttribute('aria-label','Play video');
+      
+      const video = document.createElement('video'); video.className='rh-video'; video.src=item.url; video.playsInline=true; video.muted=true; video.loop=true; video.preload='auto'; video.setAttribute('aria-label',item.title || 'Uploaded video');
+      
+      const playOverlay = document.createElement('button'); playOverlay.type='button'; playOverlay.className='rh-play-overlay rh-show'; playOverlay.setAttribute('aria-label','Play video');
       const playCircle=document.createElement('span');playCircle.className='rh-play-circle';playCircle.append(createIcon('play'));playOverlay.append(playCircle);
       const spinner=document.createElement('span');spinner.className='rh-spinner';spinner.hidden=true;spinner.setAttribute('aria-label','Loading video');
       const fullscreen=makeButton('rh-full','Open fullscreen','full');
@@ -361,7 +362,7 @@
       video.addEventListener('play',()=>{setPlayOverlay(playOverlay,false);playButton.replaceChildren(createIcon('pause'));playButton.setAttribute('aria-label','Pause video');playButton.title='Pause video';});
       video.addEventListener('pause',()=>{playButton.replaceChildren(createIcon('play'));playButton.setAttribute('aria-label','Play video');playButton.title='Play video';if(activeVideo===video)activeVideo=null;});
       video.addEventListener('waiting',()=>{spinner.hidden=false;});
-      video.addEventListener('playing',()=>{spinner.hidden=true;});
+      video.addEventListener('playing',()=>{spinner.hidden=true;setPlayOverlay(playOverlay,false);});
       video.addEventListener('canplay',()=>{spinner.hidden=true;});
       video.addEventListener('error',()=>{spinner.hidden=true;setPlayOverlay(playOverlay,true);});
       video.addEventListener('timeupdate',()=>{if(video.duration){timeline.value=String(Math.round((video.currentTime/video.duration)*1000));time.textContent=formatTime(video.currentTime)+' / '+formatTime(video.duration);}});
@@ -398,9 +399,9 @@
       entries.forEach(entry=>ratios.set(entry.target.dataset.id,entry.isIntersecting?entry.intersectionRatio:0));
       let bestId=null,bestRatio=0;
       ratios.forEach((ratio,id)=>{if(ratio>bestRatio){bestRatio=ratio;bestId=id;}});
-      if(bestId&&bestRatio>=0.58){const card=grid.querySelector('.rh-card[data-id="'+CSS.escape(bestId)+'"]');const video=card&&card.querySelector('.rh-video');const overlay=card&&card.querySelector('.rh-play-overlay');if(video&&video.paused)attemptPlay(video,overlay);else if(video&&activeVideo!==video){pauseAll(video);activeVideo=video;}}
+      if(bestId&&bestRatio>=0.3){const card=grid.querySelector('.rh-card[data-id="'+CSS.escape(bestId)+'"]');const video=card&&card.querySelector('.rh-video');const overlay=card&&card.querySelector('.rh-play-overlay');if(video&&video.paused)attemptPlay(video,overlay);else if(video&&activeVideo!==video){pauseAll(video);activeVideo=video;}}
       else if(activeVideo){activeVideo.pause();}
-    },{threshold:[0,0.2,0.4,0.58,0.75,0.9,1]});
+    },{threshold:[0,0.1,0.3,0.5,0.75,1]});
 
     refreshGallery().catch(error => {
       galleryError.textContent = error.message || 'Could not load videos.';
