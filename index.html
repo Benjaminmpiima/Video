@@ -62,17 +62,6 @@
       border: 0;
       outline: none;
     }
-    .rh-feature-embed {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: none;
-      background: #171614;
-    }
-    .rh-feature-frame.is-embedded .rh-feature-video { display: none; }
-    .rh-feature-frame.is-embedded .rh-feature-embed { display: block; }
 
     .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 42px; }
     .rh-gallery-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(22px,3vw,28px); font-weight: 800; letter-spacing: -.035em; }
@@ -148,8 +137,7 @@
 
         <section class="rh-featured" aria-label="Featured video">
           <div class="rh-feature-frame">
-            <video class="rh-feature-video" autoplay muted loop playsinline preload="auto"></video>
-            <iframe class="rh-feature-embed" title="Featured Reelhouse video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <video class="rh-feature-video" autoplay muted controls playsinline preload="auto"></video>
           </div>
         </section>
 
@@ -179,13 +167,11 @@
     const search = root.querySelector('.rh-search');
     const galleryError = root.querySelector('.rh-error');
     const emptyMessage = root.querySelector('.rh-empty');
-
-    const featuredFrame = root.querySelector('.rh-feature-frame');
     const featuredVideo = root.querySelector('.rh-feature-video');
-    const featuredEmbed = root.querySelector('.rh-feature-embed');
 
     const items = new Map();
-    let selectedId = null;
+    let videoList = [];
+    let currentIndex = 0;
     let refreshInProgress = false;
 
     function formatBytes(bytes) {
@@ -201,31 +187,11 @@
       return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
-    function getGoogleDriveId(rawUrl) {
-      try {
-        const url = new URL(rawUrl);
-        if (/(^|\.)googleusercontent\.com$/i.test(url.hostname)) {
-          const parts = url.pathname.split('/');
-          const dIndex = parts.indexOf('d');
-          if (dIndex !== -1 && parts[dIndex + 1]) return parts[dIndex + 1];
-        }
-        if (!/(^|\.)drive\.google\.com$/i.test(url.hostname) && !/(^|\.)docs\.google\.com$/i.test(url.hostname)) {
-          return null;
-        }
-        const pathMatch = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-        if (pathMatch) return pathMatch[1];
-        const idParam = url.searchParams.get('id');
-        if (idParam && /^[a-zA-Z0-9_-]+$/.test(idParam)) return idParam;
-        return null;
-      } catch (_) {
-        return null;
-      }
-    }
-
     function selectVideo(item) {
       if (!item || !item.url) return;
       const id = String(item.id);
-      selectedId = id;
+      currentIndex = videoList.findIndex(v => String(v.id) === id);
+      if (currentIndex === -1) currentIndex = 0;
 
       grid.querySelectorAll('.rh-card').forEach(card => {
         const selected = card.dataset.id === id;
@@ -233,30 +199,23 @@
         card.setAttribute('aria-pressed', String(selected));
       });
 
-      const driveId = getGoogleDriveId(item.url);
-
-      if (driveId) {
-        featuredVideo.pause();
-        featuredVideo.removeAttribute('src');
-        featuredVideo.load();
-        featuredFrame.classList.add('is-embedded');
-        featuredEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview';
-      } else {
-        featuredEmbed.removeAttribute('src');
-        featuredFrame.classList.remove('is-embedded');
-        featuredVideo.pause();
-        featuredVideo.removeAttribute('src');
-        featuredVideo.load();
-        featuredVideo.src = item.url;
-        featuredVideo.load();
-        featuredVideo.play().catch(() => {});
-      }
+      featuredVideo.pause();
+      featuredVideo.src = item.url;
+      featuredVideo.load();
+      featuredVideo.play().catch(() => {});
 
       const selectedCard = Array.from(grid.querySelectorAll('.rh-card')).find(card => card.dataset.id === id);
       if (selectedCard) {
         selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       }
     }
+
+    // Automatically advance to the next video when the current one ends
+    featuredVideo.addEventListener('ended', () => {
+      if (videoList.length === 0) return;
+      currentIndex = (currentIndex + 1) % videoList.length;
+      selectVideo(videoList[currentIndex]);
+    });
 
     function createCard(item) {
       const card = document.createElement('button');
@@ -336,6 +295,7 @@
 
         const body = await response.json();
         const videos = Array.isArray(body.videos) ? body.videos : [];
+        videoList = videos;
         const incomingIds = new Set();
 
         videos.forEach(item => {
@@ -360,7 +320,7 @@
           }
         }
 
-        if (!selectedId && videos.length > 0) {
+        if (!featuredVideo.src && videos.length > 0) {
           selectVideo(videos[0]);
         }
 
