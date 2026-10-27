@@ -35,7 +35,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--rh-border); border-radius: 999px; outline: none; background: #fff; color: var(--rh-ink); font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease; }
     .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233,108,59,.12); }
 
-    /* INSTANT ZERO-LAG DUAL-IFRAME PLAYER */
+    /* INSTANT ZERO-LAG PLAYER */
     .rh-featured { margin-top: 34px; }
     .rh-feature-frame {
       position: relative;
@@ -287,9 +287,7 @@
 
       // Preload next video immediately in the background iframe
       preloadNextVideo();
-
-      // Detect exact video duration and switch right at the end
-      scheduleNextVideo(item.url);
+      setupRotationTimer();
     }
 
     function preloadNextVideo() {
@@ -301,21 +299,11 @@
       backgroundEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
     }
 
-    function scheduleNextVideo(videoUrl) {
-      if (rotationTimer) clearTimeout(rotationTimer);
-
-      // Probe exact video duration using a hidden metadata detector
-      const probe = document.createElement('video');
-      probe.preload = 'metadata';
-      probe.src = videoUrl;
-
-      let scheduled = false;
-
-      const triggerNext = () => {
-        if (scheduled) return;
-        scheduled = true;
+    function setupRotationTimer() {
+      if (rotationTimer) clearInterval(rotationTimer);
+      // Change 15000 (15 seconds) here if your videos are longer or shorter
+      rotationTimer = setInterval(() => {
         if (videoList.length <= 1) return;
-
         currentIndex = (currentIndex + 1) % videoList.length;
         const nextItem = videoList[currentIndex];
 
@@ -332,18 +320,7 @@
         inactiveE.classList.add('rh-embed-next');
 
         preloadNextVideo();
-        scheduleNextVideo(nextItem.url);
-      };
-
-      probe.onloadedmetadata = () => {
-        const durationMs = (probe.duration && !isNaN(probe.duration)) ? (probe.duration * 1000) : 15000;
-        rotationTimer = setTimeout(triggerNext, durationMs);
-      };
-
-      probe.onerror = () => {
-        // Fallback timer if metadata probe fails
-        rotationTimer = setTimeout(triggerNext, 15000);
-      };
+      }, 15000); 
     }
 
     function createCard(item) {
