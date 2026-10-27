@@ -61,6 +61,17 @@
       background: #171614;
       border: 0;
       outline: none;
+      pointer-events: none; /* Completely disables clicking/hover controls */
+    }
+
+    /* Completely hide native video controls across all browsers */
+    video::-webkit-media-controls,
+    video::-webkit-media-controls-enclosure,
+    video::-webkit-media-controls-panel,
+    video::-webkit-media-controls-play-button,
+    video::-webkit-media-controls-start-playback-button {
+      display: none !important;
+      -webkit-appearance: none !important;
     }
 
     .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 42px; }
@@ -212,12 +223,10 @@
       }
     }
 
-    // Automatically play as soon as enough data is buffered
     featuredVideo.addEventListener('canplay', () => {
       featuredVideo.play().catch(() => {});
     });
 
-    // Automatically advance to the next video when the current one finishes
     featuredVideo.addEventListener('ended', () => {
       if (videoList.length === 0) return;
       currentIndex = (currentIndex + 1) % videoList.length;
