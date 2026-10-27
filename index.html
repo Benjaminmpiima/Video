@@ -35,7 +35,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--rh-border); border-radius: 999px; outline: none; background: #fff; color: var(--rh-ink); font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease; }
     .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233,108,59,.12); }
 
-    /* DUAL-IFRAME FEATURED PLAYER WITH INSTANT SWITCHING & FULLSCREEN BUTTON */
+    /* INSTANT PRELOADING DUAL-IFRAME PLAYER */
     .rh-featured { margin-top: 34px; }
     .rh-feature-frame {
       position: relative;
@@ -53,14 +53,14 @@
     }
     .rh-feature-embed {
       position: absolute;
-      top: -65px;
+      top: -75px;
       left: 0;
       width: 100%;
-      height: calc(100% + 130px);
+      height: calc(100% + 150px);
       border: 0;
       background: #171614;
       pointer-events: none;
-      transition: opacity 0.25s ease-in-out;
+      transition: opacity 0.15s ease-in-out;
     }
     .rh-embed-active { z-index: 2; opacity: 1; }
     .rh-embed-next { z-index: 1; opacity: 0; }
@@ -204,7 +204,7 @@
     let videoList = [];
     let currentIndex = 0;
     let rotationTimer = null;
-    let activeEmbedIndex = 1; // 1 uses embed1, 2 uses embed2
+    let activeEmbedIndex = 1;
     let refreshInProgress = false;
 
     // Fullscreen Toggle
@@ -252,60 +252,79 @@
       }
     }
 
+    function highlightCard(id) {
+      grid.querySelectorAll('.rh-card').forEach(card => {
+        const selected = card.dataset.id === String(id);
+        card.classList.toggle('is-selected', selected);
+        card.setAttribute('aria-pressed', String(selected));
+      });
+      const selectedCard = Array.from(grid.querySelectorAll('.rh-card')).find(card => card.dataset.id === String(id));
+      if (selectedCard) {
+        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
+    }
+
     function selectVideo(item) {
       if (!item || !item.url) return;
       const id = String(item.id);
       currentIndex = videoList.findIndex(v => String(v.id) === id);
       if (currentIndex === -1) currentIndex = 0;
 
-      grid.querySelectorAll('.rh-card').forEach(card => {
-        const selected = card.dataset.id === id;
-        card.classList.toggle('is-selected', selected);
-        card.setAttribute('aria-pressed', String(selected));
-      });
+      highlightCard(id);
 
       const driveId = getGoogleDriveId(item.url) || item.id;
       const videoSrc = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
 
-      // Dual-iframe instant switching mechanism
       const currentEmbed = activeEmbedIndex === 1 ? embed1 : embed2;
       const nextEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
 
-      // Preload next video in background iframe
-      nextEmbed.src = videoSrc;
+      currentEmbed.src = videoSrc;
+      currentEmbed.classList.remove('rh-embed-next');
+      currentEmbed.classList.add('rh-embed-active');
 
-      // Instantly swap visibility classes for zero lag
-      nextEmbed.classList.remove('rh-embed-next');
-      nextEmbed.classList.add('rh-embed-active');
+      nextEmbed.classList.remove('rh-embed-active');
+      nextEmbed.classList.add('rh-embed-next');
 
-      currentEmbed.classList.remove('rh-embed-active');
-      currentEmbed.classList.add('rh-embed-next');
+      // Preload the next video immediately in the background iframe so it's fully ready when switching
+      if (videoList.length > 1) {
+        const nextIndex = (currentIndex + 1) % videoList.length;
+        const nextItem = videoList[nextIndex];
+        const nextDriveId = getGoogleDriveId(nextItem.url) || nextItem.id;
+        setTimeout(() => {
+          nextEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
+        }, 1000);
+      }
 
-      activeEmbedIndex = activeEmbedIndex === 1 ? 2 : 1;
+      setupRotationTimer();
+    }
 
-      // Pre-load the subsequent video in the background iframe after a short delay
-      setTimeout(() => {
-        if (videoList.length > 1) {
-          const nextIndex = (currentIndex + 1) % videoList.length;
-          const nextItem = videoList[nextIndex];
-          const nextDriveId = getGoogleDriveId(nextItem.url) || nextItem.id;
-          const backgroundEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
-          backgroundEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
-        }
-      }, 1000);
-
-      // Auto-rotate timer set to 35 seconds for seamless auto-advance
+    function setupRotationTimer() {
       if (rotationTimer) clearInterval(rotationTimer);
       rotationTimer = setInterval(() => {
         if (videoList.length <= 1) return;
         currentIndex = (currentIndex + 1) % videoList.length;
-        selectVideo(videoList[currentIndex]);
-      }, 35000);
+        const nextItem = videoList[currentIndex];
 
-      const selectedCard = Array.from(grid.querySelectorAll('.rh-card')).find(card => card.dataset.id === id);
-      if (selectedCard) {
-        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      }
+        highlightCard(nextItem.id);
+
+        // Instant swap between preloaded iframes
+        activeEmbedIndex = activeEmbedIndex === 1 ? 2 : 1;
+        const activeE = activeEmbedIndex === 1 ? embed1 : embed2;
+        const inactiveE = activeEmbedIndex === 1 ? embed2 : embed1;
+
+        activeE.classList.remove('rh-embed-next');
+        activeE.classList.add('rh-embed-active');
+
+        inactiveE.classList.remove('rh-embed-active');
+        inactiveE.classList.add('rh-embed-next');
+
+        // Preload the following video in the now-hidden background iframe
+        const followingIndex = (currentIndex + 1) % videoList.length;
+        const followingItem = videoList[followingIndex];
+        const folDriveId = getGoogleDriveId(followingItem.url) || followingItem.id;
+        inactiveE.src = 'https://drive.google.com/file/d/' + encodeURIComponent(folDriveId) + '/preview?autoplay=1';
+
+      }, 35000);
     }
 
     function createCard(item) {
