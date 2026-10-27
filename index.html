@@ -35,7 +35,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--rh-border); border-radius: 999px; outline: none; background: #fff; color: var(--rh-ink); font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease; }
     .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233,108,59,.12); }
 
-    /* FEATURED PLAYER + ORIGINAL ORANGE GLOW */
+    /* FEATURED PLAYER */
     .rh-featured { margin-top: 34px; }
     .rh-feature-frame {
       position: relative;
@@ -73,18 +73,6 @@
     }
     .rh-feature-frame.is-embedded .rh-feature-video { display: none; }
     .rh-feature-frame.is-embedded .rh-feature-embed { display: block; }
-
-    video::-webkit-media-controls,
-    video::-webkit-media-controls-enclosure,
-    video::-webkit-media-controls-panel,
-    video::-webkit-media-controls-play-button,
-    video::-webkit-media-controls-start-playback-button {
-      display: none !important;
-      -webkit-appearance: none !important;
-    }
-
-    /* Completely hide the title and status overlay */
-    .rh-feature-overlay { display: none !important; }
 
     .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 42px; }
     .rh-gallery-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(22px,3vw,28px); font-weight: 800; letter-spacing: -.035em; }
@@ -131,10 +119,6 @@
       .rh-card { flex-basis: 210px; }
       .rh-grid { gap: 12px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .rh-card { animation: none; transition: none; }
-      .rh-grid { scroll-behavior: auto; }
-    }
   </style>
 </head>
 <body>
@@ -164,14 +148,8 @@
 
         <section class="rh-featured" aria-label="Featured video">
           <div class="rh-feature-frame">
-            <video class="rh-feature-video" autoplay muted loop playsinline webkit-playsinline preload="auto" disablepictureinpicture controlslist="nodownload nofullscreen noremoteplayback" aria-label="Featured video"></video>
-            <iframe class="rh-feature-embed" title="Featured Reelhouse video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-            <div class="rh-feature-overlay">
-              <p class="rh-feature-label">Now featuring</p>
-              <h2 class="rh-feature-title">Loading first video…</h2>
-              <p class="rh-feature-status">Preparing your video</p>
-              <p class="rh-feature-error" role="status"></p>
-            </div>
+            <video class="rh-feature-video" autoplay muted loop playsinline preload="auto"></video>
+            <iframe class="rh-feature-embed" title="Featured Reelhouse video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
           </div>
         </section>
 
@@ -205,9 +183,6 @@
     const featuredFrame = root.querySelector('.rh-feature-frame');
     const featuredVideo = root.querySelector('.rh-feature-video');
     const featuredEmbed = root.querySelector('.rh-feature-embed');
-    const featuredTitle = root.querySelector('.rh-feature-title');
-    const featuredStatus = root.querySelector('.rh-feature-status');
-    const featuredError = root.querySelector('.rh-feature-error');
 
     const items = new Map();
     let selectedId = null;
@@ -223,97 +198,24 @@
       if (!value) return '';
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return '';
-      return date.toLocaleDateString(undefined, {
-        month: 'short', day: 'numeric', year: 'numeric'
-      });
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
     }
-
-    function prepareMutedAutoplay(video) {
-      video.muted = true;
-      video.defaultMuted = true;
-      video.autoplay = true;
-      video.playsInline = true;
-      video.controls = false;
-      video.loop = true;
-      video.setAttribute('muted', '');
-      video.setAttribute('autoplay', '');
-      video.setAttribute('playsinline', '');
-      video.setAttribute('webkit-playsinline', '');
-      video.setAttribute('disablepictureinpicture', '');
-      video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
-    }
-
-    function attemptAutoplay(video) {
-      prepareMutedAutoplay(video);
-      try {
-        const result = video.play();
-        if (result && typeof result.then === 'function') {
-          result.then(() => {
-            if (video === featuredVideo) {
-              featuredStatus.textContent = 'Now playing';
-              featuredError.classList.remove('is-visible');
-            }
-          }).catch(error => {
-            console.warn('Reelhouse playback attempt failed:', video.currentSrc || video.src, error.name, error.message);
-            if (video === featuredVideo && error.name === 'NotAllowedError') {
-              featuredStatus.textContent = 'Tap the video area to start playback';
-            }
-          });
-        }
-      } catch (error) {
-        console.warn('Reelhouse play error:', error);
-      }
-    }
-
-    function showFeaturedError(message) {
-      featuredStatus.textContent = 'Unable to play this video';
-      featuredError.textContent = message;
-      featuredError.classList.add('is-visible');
-    }
-
-    featuredVideo.addEventListener('error', () => {
-      if (featuredFrame.classList.contains('is-embedded')) return;
-      showFeaturedError(
-        'The browser could not load this video URL. Check that the video URL is publicly accessible and supports browser playback.'
-      );
-    });
-
-    featuredVideo.addEventListener('loadeddata', () => {
-      if (!featuredFrame.classList.contains('is-embedded')) attemptAutoplay(featuredVideo);
-    });
-
-    featuredVideo.addEventListener('canplay', () => {
-      if (!featuredFrame.classList.contains('is-embedded')) attemptAutoplay(featuredVideo);
-    });
-
-    featuredVideo.addEventListener('playing', () => {
-      featuredStatus.textContent = 'Now playing';
-      featuredError.classList.remove('is-visible');
-    });
 
     function getGoogleDriveId(rawUrl) {
       try {
         const url = new URL(rawUrl);
-
         if (/(^|\.)googleusercontent\.com$/i.test(url.hostname)) {
           const parts = url.pathname.split('/');
           const dIndex = parts.indexOf('d');
-          if (dIndex !== -1 && parts[dIndex + 1]) {
-            return parts[dIndex + 1];
-          }
+          if (dIndex !== -1 && parts[dIndex + 1]) return parts[dIndex + 1];
         }
-
-        if (!/(^|\.)drive\.google\.com$/i.test(url.hostname) &&
-            !/(^|\.)docs\.google\.com$/i.test(url.hostname)) {
+        if (!/(^|\.)drive\.google\.com$/i.test(url.hostname) && !/(^|\.)docs\.google\.com$/i.test(url.hostname)) {
           return null;
         }
-
         const pathMatch = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
         if (pathMatch) return pathMatch[1];
-
         const idParam = url.searchParams.get('id');
         if (idParam && /^[a-zA-Z0-9_-]+$/.test(idParam)) return idParam;
-
         return null;
       } catch (_) {
         return null;
@@ -322,7 +224,6 @@
 
     function selectVideo(item) {
       if (!item || !item.url) return;
-
       const id = String(item.id);
       selectedId = id;
 
@@ -332,46 +233,28 @@
         card.setAttribute('aria-pressed', String(selected));
       });
 
-      featuredTitle.textContent = item.title || 'Untitled video';
-      featuredStatus.textContent = 'Loading video…';
-      featuredError.textContent = '';
-      featuredError.classList.remove('is-visible');
-
       const driveId = getGoogleDriveId(item.url);
 
       if (driveId) {
         featuredVideo.pause();
         featuredVideo.removeAttribute('src');
         featuredVideo.load();
-
         featuredFrame.classList.add('is-embedded');
-        featuredEmbed.src =
-          'https://drive.google.com/file/d/' +
-          encodeURIComponent(driveId) + '/preview';
-
-        featuredStatus.textContent = 'Now playing';
+        featuredEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview';
       } else {
         featuredEmbed.removeAttribute('src');
         featuredFrame.classList.remove('is-embedded');
-
         featuredVideo.pause();
         featuredVideo.removeAttribute('src');
         featuredVideo.load();
         featuredVideo.src = item.url;
         featuredVideo.load();
-
-        attemptAutoplay(featuredVideo);
+        featuredVideo.play().catch(() => {});
       }
 
-      const selectedCard = Array.from(grid.querySelectorAll('.rh-card'))
-        .find(card => card.dataset.id === id);
-
+      const selectedCard = Array.from(grid.querySelectorAll('.rh-card')).find(card => card.dataset.id === id);
       if (selectedCard) {
-        selectedCard.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'nearest'
-        });
+        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
       }
     }
 
@@ -389,23 +272,14 @@
       const video = document.createElement('video');
       video.className = 'rh-video';
       video.muted = true;
-      video.defaultMuted = true;
       video.loop = true;
       video.playsInline = true;
       video.preload = 'metadata';
-      video.controls = false;
-      video.setAttribute('muted', '');
-      video.setAttribute('playsinline', '');
-      video.setAttribute('webkit-playsinline', '');
-      video.setAttribute('disablepictureinpicture', '');
-      video.setAttribute('aria-label', item.title || 'Video preview');
       video.src = item.url;
-      video.addEventListener('error', () => { video.style.opacity = '.35'; });
 
       const playIcon = document.createElement('span');
       playIcon.className = 'rh-card-play';
       playIcon.textContent = '▶';
-      playIcon.setAttribute('aria-hidden', 'true');
 
       frame.append(video, playIcon);
 
@@ -418,9 +292,7 @@
 
       const meta = document.createElement('span');
       meta.className = 'rh-card-meta';
-      meta.textContent =
-        dateText(item.date) +
-        (item.size ? ' · ' + formatBytes(item.size) : '');
+      meta.textContent = dateText(item.date) + (item.size ? ' · ' + formatBytes(item.size) : '');
 
       caption.append(title, meta);
       card.append(frame, caption);
@@ -440,15 +312,13 @@
         const item = items.get(card.dataset.id);
         const title = item ? item.title || '' : '';
         const matches = !query || title.toLocaleLowerCase().includes(query);
-
         card.hidden = !matches;
         if (matches) shown++;
       });
 
       countLabel.textContent = query && shown === 0
         ? 'No videos match your search'
-        : shown + ' video' + (shown === 1 ? '' : 's') +
-          ' · live from Google Form uploads';
+        : shown + ' video' + (shown === 1 ? '' : 's') + ' · live from Google Form uploads';
 
       emptyMessage.hidden = items.size !== 0;
     }
@@ -461,45 +331,20 @@
 
       try {
         if (!apiBase) throw new Error('Missing Google Apps Script Web App URL.');
-
-        const response = await fetch(apiBase, {
-          method: 'GET',
-          cache: 'no-store'
-        });
-
-        if (!response.ok) {
-          throw new Error('Could not retrieve videos. HTTP status: ' + response.status);
-        }
+        const response = await fetch(apiBase, { method: 'GET', cache: 'no-store' });
+        if (!response.ok) throw new Error('Could not retrieve videos.');
 
         const body = await response.json();
-        if (body.error) throw new Error(body.error);
-
         const videos = Array.isArray(body.videos) ? body.videos : [];
         const incomingIds = new Set();
 
         videos.forEach(item => {
           if (!item || item.id == null || !item.url) return;
-
           const id = String(item.id);
           incomingIds.add(id);
 
           if (items.has(id)) {
             items.set(id, item);
-
-            const existingCard = Array.from(grid.querySelectorAll('.rh-card'))
-              .find(card => card.dataset.id === id);
-
-            if (existingCard) {
-              const title = existingCard.querySelector('.rh-card-title');
-              const meta = existingCard.querySelector('.rh-card-meta');
-
-              if (title) title.textContent = item.title || 'Untitled video';
-              if (meta) {
-                meta.textContent =
-                  dateText(item.date) +
-                  (item.size ? ' · ' + formatBytes(item.size) : '');
-              }
-            }
             return;
           }
 
@@ -509,68 +354,29 @@
 
         for (const [id] of items) {
           if (!incomingIds.has(id)) {
-            const card = Array.from(grid.querySelectorAll('.rh-card'))
-              .find(element => element.dataset.id === id);
-
+            const card = Array.from(grid.querySelectorAll('.rh-card')).find(el => el.dataset.id === id);
             if (card) card.remove();
             items.delete(id);
-
-            if (selectedId === id) {
-              selectedId = null;
-              featuredVideo.pause();
-              featuredVideo.removeAttribute('src');
-              featuredVideo.load();
-              featuredEmbed.removeAttribute('src');
-              featuredFrame.classList.remove('is-embedded');
-              featuredTitle.textContent = 'Select a video';
-              featuredStatus.textContent = 'Choose a reel below';
-              featuredError.textContent = '';
-              featuredError.classList.remove('is-visible');
-            }
           }
         }
 
-        if (!selectedId) {
-          const firstVideo = videos.find(item => item && item.id != null && item.url);
-          if (firstVideo) selectVideo(firstVideo);
-        }
-
-        if (selectedId && items.has(selectedId)) {
-          featuredTitle.textContent =
-            items.get(selectedId).title || 'Untitled video';
+        if (!selectedId && videos.length > 0) {
+          selectVideo(videos[0]);
         }
 
         galleryError.hidden = true;
         renderFilter();
-
       } catch (error) {
-        console.error('Reelhouse gallery error:', error);
-        galleryError.textContent =
-          error.message || 'Could not load videos. Please try again later.';
+        galleryError.textContent = 'Could not load videos.';
         galleryError.hidden = false;
-
-        if (items.size === 0) countLabel.textContent = 'Unable to load videos';
+        countLabel.textContent = 'Unable to load videos';
       } finally {
         refreshInProgress = false;
       }
     }
 
-    featuredVideo.addEventListener('click', () => {
-      if (!featuredFrame.classList.contains('is-embedded')) {
-        attemptAutoplay(featuredVideo);
-      }
-    });
-
     refreshGallery();
     window.setInterval(refreshGallery, 20000);
-
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden &&
-          !featuredFrame.classList.contains('is-embedded') &&
-          featuredVideo.getAttribute('src')) {
-        attemptAutoplay(featuredVideo);
-      }
-    });
   })();
   </script>
 </body>
