@@ -35,7 +35,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--rh-border); border-radius: 999px; outline: none; background: #fff; color: var(--rh-ink); font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease; }
     .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233,108,59,.12); }
 
-    /* INSTANT PRELOADING DUAL-IFRAME PLAYER */
+    /* INSTANT ZERO-LAG DUAL-IFRAME PLAYER */
     .rh-featured { margin-top: 34px; }
     .rh-feature-frame {
       position: relative;
@@ -60,7 +60,7 @@
       border: 0;
       background: #171614;
       pointer-events: none;
-      transition: opacity 0.15s ease-in-out;
+      transition: opacity 0.1s ease-in-out;
     }
     .rh-embed-active { z-index: 2; opacity: 1; }
     .rh-embed-next { z-index: 1; opacity: 0; }
@@ -285,29 +285,42 @@
       nextEmbed.classList.remove('rh-embed-active');
       nextEmbed.classList.add('rh-embed-next');
 
-      // Preload the next video immediately in the background iframe so it's fully ready when switching
-      if (videoList.length > 1) {
-        const nextIndex = (currentIndex + 1) % videoList.length;
-        const nextItem = videoList[nextIndex];
-        const nextDriveId = getGoogleDriveId(nextItem.url) || nextItem.id;
-        setTimeout(() => {
-          nextEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
-        }, 1000);
-      }
+      // Preload next video immediately in the background iframe
+      preloadNextVideo();
 
-      setupRotationTimer();
+      // Detect exact video duration and switch right at the end
+      scheduleNextVideo(item.url);
     }
 
-    function setupRotationTimer() {
-      if (rotationTimer) clearInterval(rotationTimer);
-      rotationTimer = setInterval(() => {
+    function preloadNextVideo() {
+      if (videoList.length <= 1) return;
+      const nextIndex = (currentIndex + 1) % videoList.length;
+      const nextItem = videoList[nextIndex];
+      const nextDriveId = getGoogleDriveId(nextItem.url) || nextItem.id;
+      const backgroundEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
+      backgroundEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
+    }
+
+    function scheduleNextVideo(videoUrl) {
+      if (rotationTimer) clearTimeout(rotationTimer);
+
+      // Probe exact video duration using a hidden metadata detector
+      const probe = document.createElement('video');
+      probe.preload = 'metadata';
+      probe.src = videoUrl;
+
+      let scheduled = false;
+
+      const triggerNext = () => {
+        if (scheduled) return;
+        scheduled = true;
         if (videoList.length <= 1) return;
+
         currentIndex = (currentIndex + 1) % videoList.length;
         const nextItem = videoList[currentIndex];
 
         highlightCard(nextItem.id);
 
-        // Instant swap between preloaded iframes
         activeEmbedIndex = activeEmbedIndex === 1 ? 2 : 1;
         const activeE = activeEmbedIndex === 1 ? embed1 : embed2;
         const inactiveE = activeEmbedIndex === 1 ? embed2 : embed1;
@@ -318,13 +331,19 @@
         inactiveE.classList.remove('rh-embed-active');
         inactiveE.classList.add('rh-embed-next');
 
-        // Preload the following video in the now-hidden background iframe
-        const followingIndex = (currentIndex + 1) % videoList.length;
-        const followingItem = videoList[followingIndex];
-        const folDriveId = getGoogleDriveId(followingItem.url) || followingItem.id;
-        inactiveE.src = 'https://drive.google.com/file/d/' + encodeURIComponent(folDriveId) + '/preview?autoplay=1';
+        preloadNextVideo();
+        scheduleNextVideo(nextItem.url);
+      };
 
-      }, 35000);
+      probe.onloadedmetadata = () => {
+        const durationMs = (probe.duration && !isNaN(probe.duration)) ? (probe.duration * 1000) : 15000;
+        rotationTimer = setTimeout(triggerNext, durationMs);
+      };
+
+      probe.onerror = () => {
+        // Fallback timer if metadata probe fails
+        rotationTimer = setTimeout(triggerNext, 15000);
+      };
     }
 
     function createCard(item) {
