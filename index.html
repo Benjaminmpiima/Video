@@ -35,7 +35,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--rh-border); border-radius: 999px; outline: none; background: #fff; color: var(--rh-ink); font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease; }
     .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233,108,59,.12); }
 
-    /* FEATURED PLAYER WITH CLEAN PROGRESS-BAR CROPPING */
+    /* DUAL-IFRAME FEATURED PLAYER WITH INSTANT SWITCHING & FULLSCREEN BUTTON */
     .rh-featured { margin-top: 34px; }
     .rh-feature-frame {
       position: relative;
@@ -53,13 +53,38 @@
     }
     .rh-feature-embed {
       position: absolute;
-      top: -75px;
+      top: -65px;
       left: 0;
       width: 100%;
-      height: calc(100% + 150px);
+      height: calc(100% + 130px);
       border: 0;
       background: #171614;
       pointer-events: none;
+      transition: opacity 0.25s ease-in-out;
+    }
+    .rh-embed-active { z-index: 2; opacity: 1; }
+    .rh-embed-next { z-index: 1; opacity: 0; }
+
+    .rh-fullscreen-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      z-index: 20;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .rh-fullscreen-btn:hover {
+      background: var(--rh-primary);
+      transform: scale(1.06);
     }
 
     .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 42px; }
@@ -134,8 +159,12 @@
         </div>
 
         <section class="rh-featured" aria-label="Featured video">
-          <div class="rh-feature-frame">
-            <iframe class="rh-feature-embed" title="Featured Reelhouse video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          <div class="rh-feature-frame" id="rh-feature-frame">
+            <iframe class="rh-feature-embed rh-embed-active" id="rh-embed-1" title="Featured video 1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="rh-feature-embed rh-embed-next" id="rh-embed-2" title="Featured video 2" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
           </div>
         </section>
 
@@ -165,13 +194,29 @@
     const search = root.querySelector('.rh-search');
     const galleryError = root.querySelector('.rh-error');
     const emptyMessage = root.querySelector('.rh-empty');
-    const featuredEmbed = root.querySelector('.rh-feature-embed');
+    
+    const embed1 = document.getElementById('rh-embed-1');
+    const embed2 = document.getElementById('rh-embed-2');
+    const featureFrame = document.getElementById('rh-feature-frame');
+    const fsBtn = document.getElementById('rh-fs-btn');
 
     const items = new Map();
     let videoList = [];
     let currentIndex = 0;
     let rotationTimer = null;
+    let activeEmbedIndex = 1; // 1 uses embed1, 2 uses embed2
     let refreshInProgress = false;
+
+    // Fullscreen Toggle
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        featureFrame.requestFullscreen().catch(err => {
+          console.warn('Fullscreen error:', err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
 
     function formatBytes(bytes) {
       const n = Number(bytes || 0);
@@ -220,10 +265,36 @@
       });
 
       const driveId = getGoogleDriveId(item.url) || item.id;
-      if (driveId) {
-        featuredEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
-      }
+      const videoSrc = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
 
+      // Dual-iframe instant switching mechanism
+      const currentEmbed = activeEmbedIndex === 1 ? embed1 : embed2;
+      const nextEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
+
+      // Preload next video in background iframe
+      nextEmbed.src = videoSrc;
+
+      // Instantly swap visibility classes for zero lag
+      nextEmbed.classList.remove('rh-embed-next');
+      nextEmbed.classList.add('rh-embed-active');
+
+      currentEmbed.classList.remove('rh-embed-active');
+      currentEmbed.classList.add('rh-embed-next');
+
+      activeEmbedIndex = activeEmbedIndex === 1 ? 2 : 1;
+
+      // Pre-load the subsequent video in the background iframe after a short delay
+      setTimeout(() => {
+        if (videoList.length > 1) {
+          const nextIndex = (currentIndex + 1) % videoList.length;
+          const nextItem = videoList[nextIndex];
+          const nextDriveId = getGoogleDriveId(nextItem.url) || nextItem.id;
+          const backgroundEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
+          backgroundEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
+        }
+      }, 1000);
+
+      // Auto-rotate timer set to 35 seconds for seamless auto-advance
       if (rotationTimer) clearInterval(rotationTimer);
       rotationTimer = setInterval(() => {
         if (videoList.length <= 1) return;
@@ -253,7 +324,6 @@
       img.className = 'rh-thumb';
       img.alt = item.title || 'Video preview';
       img.loading = 'lazy';
-      // Use Google Drive's high-performance thumbnail endpoint for clear image previews
       img.src = 'https://lh3.googleusercontent.com/d/' + driveId;
       img.addEventListener('error', () => {
         img.src = 'https://drive.google.com/thumbnail?id=' + driveId + '&sz=w640';
@@ -343,7 +413,7 @@
           }
         }
 
-        if (!featuredEmbed.src && videos.length > 0) {
+        if (!embed1.src && videos.length > 0) {
           selectVideo(videos[0]);
         }
 
