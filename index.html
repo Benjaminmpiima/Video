@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reelhouse · Video Portal & Uploads</title>
+    <title>Reelhouse · Video Gallery</title>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@750&family=Inter:wght@400;550;600;650;700&display=swap" rel="stylesheet">
     <style>
       :root {
@@ -65,29 +65,6 @@
         color: #fff;
       }
       .rh-brand-mark svg { width: 14px; height: 14px; margin-left: 2px; }
-      .rh-tabs {
-        display: flex;
-        align-items: center;
-        gap: 3px;
-        padding: 4px;
-        border: 1px solid var(--rh-border);
-        border-radius: 999px;
-        background: #fff;
-      }
-      .rh-tab {
-        min-height: 31px;
-        padding: 5px 16px;
-        border: 0;
-        border-radius: 999px;
-        background: transparent;
-        color: #77716b;
-        font-size: 13px;
-        font-weight: 550;
-        cursor: pointer;
-        transition: all .15s ease;
-      }
-      .rh-tab:hover { color: var(--rh-ink); }
-      .rh-tab[aria-selected="true"] { background: var(--rh-ink); color: #fff; }
 
       /* Main Layout */
       .rh-main { padding: 48px 20px 96px; }
@@ -247,110 +224,14 @@
       .rh-card-meta { display: block; margin-top: 2px; color: var(--rh-muted); font-size: 13px; }
       .rh-error { margin-top: 32px; padding: 18px 20px; border-radius: 16px; background: #fce9e6; color: #a8352a; font-size: 14px; }
 
-      /* Upload Panel & Form */
-      .rh-upload-view { display: none; }
-      .rh-upload-panel {
-        max-width: 760px;
-        margin: 5px auto 0;
-        padding: clamp(24px, 5vw, 44px);
-        border: 1px solid var(--rh-border);
-        border-radius: 25px;
-        background: #fff;
-        box-shadow: 0 1px 2px rgba(48, 44, 40, .04), 0 15px 42px -24px rgba(48, 44, 40, .18);
-      }
-      .rh-upload-title {
-        margin: 0;
-        color: var(--rh-ink);
-        font-family: 'Bricolage Grotesque', sans-serif;
-        font-size: clamp(28px, 4vw, 38px);
-        font-weight: 750;
-        letter-spacing: -.045em;
-        line-height: 1.15;
-      }
-      .rh-upload-copy { margin: 9px 0 25px; color: var(--rh-muted); font-size: 14px; }
-      .rh-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
-      .rh-field-full { grid-column: span 2; }
-      .rh-input-group { display: flex; flex-direction: column; gap: 6px; }
-      .rh-input-group label { font-size: 13px; font-weight: 600; color: var(--rh-ink); }
-      .rh-input {
-        width: 100%;
-        height: 44px;
-        padding: 0 14px;
-        border: 1px solid var(--rh-border);
-        border-radius: 12px;
-        background: #fbfaf8;
-        color: var(--rh-ink);
-        font-size: 14px;
-        outline: none;
-        transition: border-color .18s, background .18s;
-      }
-      .rh-input:focus { border-color: var(--rh-primary); background: #fff; box-shadow: 0 0 0 3px rgba(233, 108, 59, .12); }
-      .rh-drop {
-        display: flex;
-        min-height: 200px;
-        align-items: center;
-        justify-content: center;
-        padding: 25px;
-        border: 1.5px dashed #d6d0c8;
-        border-radius: 18px;
-        background: #fbfaf8;
-        text-align: center;
-        cursor: pointer;
-        outline: none;
-        transition: border-color .18s, background .18s;
-      }
-      .rh-drop:hover, .rh-drop.rh-drag { border-color: var(--rh-primary); background: #fff8f4; }
-      .rh-drop-inner { pointer-events: none; }
-      .rh-drop-icon {
-        width: 54px;
-        height: 54px;
-        display: grid;
-        place-items: center;
-        margin: 0 auto 14px;
-        border-radius: 17px;
-        background: rgba(233, 108, 59, .12);
-        color: var(--rh-primary);
-      }
-      .rh-drop-icon svg { width: 25px; height: 25px; }
-      .rh-drop strong { display: block; margin-bottom: 5px; font-size: 16px; }
-      .rh-drop small { color: var(--rh-muted); font-size: 13px; }
-      .rh-selected { display: none; margin-top: 14px; padding: 12px 14px; border: 1px solid var(--rh-border); border-radius: 12px; background: #fbfaf8; font-size: 13px; overflow-wrap: anywhere; }
-      .rh-preview { display: none; width: 100%; max-height: 320px; margin-top: 14px; border-radius: 13px; background: var(--rh-player); object-fit: contain; }
-      .rh-upload-actions { display: flex; gap: 10px; align-items: center; margin-top: 18px; }
-      .rh-button {
-        min-height: 44px;
-        padding: 11px 18px;
-        border: 0;
-        border-radius: 999px;
-        background: var(--rh-primary);
-        color: white;
-        font-size: 14px;
-        font-weight: 650;
-        cursor: pointer;
-        transition: filter .15s ease;
-      }
-      .rh-button:hover { filter: brightness(.96); }
-      .rh-button:disabled { opacity: .48; cursor: not-allowed; }
-      .rh-cancel { display: none; background: #efede9; color: var(--rh-ink); }
-      .rh-progress-wrap { display: none; margin-top: 17px; }
-      .rh-progress-head { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--rh-muted); font-size: 12px; }
-      .rh-progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #eeeae5; }
-      .rh-progress-bar { width: 0; height: 100%; border-radius: inherit; background: var(--rh-primary); }
-      .rh-status { min-height: 22px; margin: 13px 0 0; color: var(--rh-muted); font-size: 13px; }
-      .rh-status[data-kind="error"] { color: #b42318; }
-      .rh-status[data-kind="success"] { color: #067647; }
-
       @media (max-width: 900px) { .rh-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
       @media (max-width: 640px) {
         .rh-nav { height: 60px; padding: 0 15px; }
         .rh-brand { font-size: 17px; }
-        .rh-tab { padding-right: 12px; padding-left: 12px; font-size: 12px; }
         .rh-main { padding: 34px 15px 70px; }
         .rh-head { align-items: stretch; flex-direction: column; gap: 18px; }
         .rh-search-wrap { width: 100%; }
         .rh-grid { grid-template-columns: minmax(0, 1fr); gap: 26px; margin-top: 28px; }
-        .rh-form-grid { grid-template-columns: minmax(0, 1fr); }
-        .rh-field-full { grid-column: span 1; }
       }
     </style>
 </head>
@@ -364,14 +245,9 @@
         </span>
         <span>Reelhouse</span>
       </div>
-      <nav class="rh-tabs" aria-label="Main navigation">
-        <button class="rh-tab" type="button" data-view="upload" aria-selected="false">Upload</button>
-        <button class="rh-tab" type="button" data-view="gallery" aria-selected="true">Gallery</button>
-      </nav>
     </header>
 
     <main class="rh-main">
-      <!-- GALLERY VIEW -->
       <section class="rh-gallery-view">
         <div class="rh-head">
           <div>
@@ -387,57 +263,6 @@
         <div class="rh-error" hidden></div>
         <div class="rh-grid" aria-live="polite"></div>
       </section>
-
-      <!-- UPLOAD VIEW -->
-      <section class="rh-upload-view">
-        <div class="rh-upload-panel">
-          <h1 class="rh-upload-title">Upload a video</h1>
-          <p class="rh-upload-copy">Provide your contact details and upload a video file. MP4, WebM, or MOV, up to 50 MB.</p>
-          
-          <form class="rh-form">
-            <div class="rh-form-grid">
-              <div class="rh-input-group">
-                <label for="rh-user-name">Full Name *</label>
-                <input class="rh-input" id="rh-user-name" type="text" placeholder="John Doe" required>
-              </div>
-              <div class="rh-input-group">
-                <label for="rh-user-phone">Phone Number *</label>
-                <input class="rh-input" id="rh-user-phone" type="tel" placeholder="+1 (555) 000-0000" required>
-              </div>
-              <div class="rh-input-group rh-field-full">
-                <label for="rh-user-address">Address *</label>
-                <input class="rh-input" id="rh-user-address" type="text" placeholder="123 Main Street, City" required>
-              </div>
-            </div>
-
-            <input class="rh-file-input" type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" hidden>
-            
-            <div class="rh-drop" role="button" tabindex="0" aria-label="Choose a video file or drop one here">
-              <div class="rh-drop-inner">
-                <span class="rh-drop-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/></svg>
-                </span>
-                <strong>Drop your video here</strong>
-                <small>or click to browse your device</small>
-              </div>
-            </div>
-            
-            <div class="rh-selected"></div>
-            <video class="rh-preview" controls playsinline muted></video>
-            
-            <div class="rh-upload-actions">
-              <button class="rh-button rh-submit" type="submit" disabled>Upload video</button>
-              <button class="rh-button rh-cancel" type="button">Cancel upload</button>
-            </div>
-            
-            <div class="rh-progress-wrap" aria-live="polite">
-              <div class="rh-progress-head"><span>Uploading</span><span class="rh-percent">0%</span></div>
-              <div class="rh-progress-track" role="progressbar" aria-label="Video upload progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="rh-progress-bar"></div></div>
-            </div>
-            <p class="rh-status" role="status" aria-live="polite"></p>
-          </form>
-        </div>
-      </section>
     </main>
   </div>
 
@@ -448,39 +273,17 @@
     root.dataset.initialized = '1';
     
     const apiBase = root.dataset.apiBase || '';
-    const galleryView = root.querySelector('.rh-gallery-view');
-    const uploadView = root.querySelector('.rh-upload-view');
-    const tabs = [...root.querySelectorAll('.rh-tab')];
     const grid = root.querySelector('.rh-grid');
     const countLabel = root.querySelector('.rh-count');
     const search = root.querySelector('.rh-search');
     const galleryError = root.querySelector('.rh-error');
     
-    const form = root.querySelector('.rh-form');
-    const userNameInput = root.querySelector('#rh-user-name');
-    const userPhoneInput = root.querySelector('#rh-user-phone');
-    const userAddressInput = root.querySelector('#rh-user-address');
-    
-    const fileInput = root.querySelector('.rh-file-input');
-    const drop = root.querySelector('.rh-drop');
-    const selectedLabel = root.querySelector('.rh-selected');
-    const preview = root.querySelector('.rh-preview');
-    const submit = root.querySelector('.rh-submit');
-    const cancel = root.querySelector('.rh-cancel');
-    const status = root.querySelector('.rh-status');
-    const progressWrap = root.querySelector('.rh-progress-wrap');
-    const progressBar = root.querySelector('.rh-progress-bar');
-    const progressTrack = root.querySelector('.rh-progress-track');
-    const percent = root.querySelector('.rh-percent');
-    
     const maxBytes = 50 * 1024 * 1024;
     const items = new Map();
     const ratios = new Map();
-    let selectedFile = null;
     let activeVideo = null;
     let observer = null;
 
-    function setStatus(text, kind) { status.textContent = text || ''; status.dataset.kind = kind || ''; }
     function formatBytes(bytes) {
       const n = Number(bytes || 0);
       if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + ' KB';
@@ -496,15 +299,7 @@
       const date = new Date(value);
       return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString(undefined, {month:'short',day:'numeric',year:'numeric'});
     }
-    function showView(view) {
-      const upload = view === 'upload';
-      galleryView.style.display = upload ? 'none' : 'block';
-      uploadView.style.display = upload ? 'block' : 'none';
-      tabs.forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.view === view)));
-      if (upload) window.scrollTo({top: root.getBoundingClientRect().top + window.scrollY, behavior:'smooth'});
-    }
     
-    tabs.forEach(tab => tab.addEventListener('click', () => showView(tab.dataset.view)));
     search.addEventListener('input', renderFilter);
 
     function setPlayOverlay(button, visible) { button.classList.toggle('rh-show', visible); }
@@ -580,7 +375,7 @@
       const query=search.value.trim().toLocaleLowerCase();let shown=0;
       grid.querySelectorAll('.rh-card').forEach(card=>{const title=items.get(card.dataset.id)?.title||'';const match=!query||title.toLocaleLowerCase().includes(query);card.style.display=match?'':'none';if(match)shown++;});
       if(query && shown===0 && items.size>0) countLabel.textContent='No videos match your search';
-      else countLabel.textContent=items.size+' video'+(items.size===1?'':'s')+' · new uploads appear live';
+      else countLabel.textContent=items.size+' video'+(items.size===1?'':'s')+' · live from Google Form uploads';
     }
 
     async function refreshGallery(){
@@ -606,95 +401,6 @@
       if(bestId&&bestRatio>=0.58){const card=grid.querySelector('.rh-card[data-id="'+CSS.escape(bestId)+'"]');const video=card&&card.querySelector('.rh-video');const overlay=card&&card.querySelector('.rh-play-overlay');if(video&&video.paused)attemptPlay(video,overlay);else if(video&&activeVideo!==video){pauseAll(video);activeVideo=video;}}
       else if(activeVideo){activeVideo.pause();}
     },{threshold:[0,0.2,0.4,0.58,0.75,0.9,1]});
-
-    function validateFormInputs() {
-      return userNameInput.value.trim() && userPhoneInput.value.trim() && userAddressInput.value.trim() && selectedFile !== null;
-    }
-
-    function checkSubmitState() { submit.disabled = !validateFormInputs(); }
-    [userNameInput, userPhoneInput, userAddressInput].forEach(input => input.addEventListener('input', checkSubmitState));
-
-    function selectFile(file){
-      if(!file)return;
-      const ext=(file.name.split('.').pop()||'').toLowerCase();
-      if(!['mp4','webm','mov'].includes(ext)){setStatus('Please select an MP4, WebM, or MOV video.','error');return;}
-      if(file.size>maxBytes){setStatus('This video is over 50 MB. Choose a smaller file.','error');return;}
-      selectedFile=file;
-      selectedLabel.style.display='block';
-      selectedLabel.textContent=file.name+' · '+formatBytes(file.size);
-      if(localPreviewUrl)URL.revokeObjectURL(localPreviewUrl);
-      localPreviewUrl=URL.createObjectURL(file);
-      preview.src=localPreviewUrl;
-      preview.style.display='block';
-      checkSubmitState();
-      setStatus('','');
-    }
-
-    function clearFile(){
-      selectedFile=null;
-      fileInput.value='';
-      form.reset();
-      submit.disabled=true;
-      selectedLabel.style.display='none';
-      preview.pause();
-      preview.removeAttribute('src');
-      preview.load();
-      preview.style.display='none';
-    }
-
-    drop.addEventListener('click',()=>fileInput.click());
-    fileInput.addEventListener('change',()=>selectFile(fileInput.files&&fileInput.files[0]));
-    ['dragenter','dragover'].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.add('rh-drag');}));
-    ['dragleave','drop'].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.remove('rh-drag');}));
-    drop.addEventListener('drop',e=>selectFile(e.dataTransfer&&e.dataTransfer.files[0]));
-
-    form.addEventListener('submit',event=>{
-      event.preventDefault();
-      if(!validateFormInputs()) return;
-
-      setStatus('Processing and uploading to Google Drive...', '');
-      submit.disabled = true;
-      progressWrap.style.display = 'block';
-      progressBar.style.width = '50%';
-      percent.textContent = 'Uploading...';
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Bytes = e.target.result.split(',')[1];
-        const payload = {
-          name: userNameInput.value.trim(),
-          phone: userPhoneInput.value.trim(),
-          address: userAddressInput.value.trim(),
-          filename: selectedFile.name,
-          mimeType: selectedFile.type || 'video/mp4',
-          bytes: base64Bytes
-        };
-
-        fetch(apiBase, {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        })
-        .then(res => res.json())
-        .then(async data => {
-          if(data.status === 'success') {
-            setStatus('Video uploaded successfully to Google Drive!', 'success');
-            clearFile();
-            progressBar.style.width = '100%';
-            percent.textContent = '100%';
-            showView('gallery');
-            await refreshGallery();
-          } else {
-            setStatus('Upload failed: ' + (data.message || 'Unknown error'), 'error');
-            submit.disabled = false;
-          }
-        })
-        .catch(err => {
-          setStatus('Network error during upload.', 'error');
-          submit.disabled = false;
-        });
-      };
-      reader.readAsDataURL(selectedFile);
-    });
 
     refreshGallery().catch(error => {
       galleryError.textContent = error.message || 'Could not load videos.';
