@@ -83,12 +83,8 @@
       -webkit-appearance: none !important;
     }
 
-    .rh-feature-overlay { position: absolute; inset: auto 0 0; z-index: 2; padding: 65px 28px 24px; color: #fff; pointer-events: none; background: linear-gradient(to bottom,transparent,rgba(0,0,0,.72)); }
-    .rh-feature-label { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    .rh-feature-title { margin-top: 5px; font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(22px,3vw,32px); font-weight: 800; line-height: 1.15; overflow-wrap: anywhere; }
-    .rh-feature-status { margin-top: 7px; color: rgba(255,255,255,.78); font-size: 13px; }
-    .rh-feature-error { display: none; margin-top: 10px; color: #ffd0bf; font-size: 12px; line-height: 1.5; }
-    .rh-feature-error.is-visible { display: block; }
+    /* Completely hide the title and status overlay */
+    .rh-feature-overlay { display: none !important; }
 
     .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 42px; }
     .rh-gallery-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: clamp(22px,3vw,28px); font-weight: 800; letter-spacing: -.035em; }
@@ -131,7 +127,6 @@
       .rh-search-wrap { width: 100%; flex-basis: auto; }
       .rh-featured { margin-top: 26px; }
       .rh-feature-frame { aspect-ratio: 4 / 3; min-height: 220px; border-radius: 16px; }
-      .rh-feature-overlay { padding: 48px 16px 16px; }
       .rh-gallery-heading { align-items: flex-start; flex-direction: column; gap: 5px; margin-top: 32px; }
       .rh-card { flex-basis: 210px; }
       .rh-grid { gap: 12px; }
@@ -296,12 +291,10 @@
       featuredError.classList.remove('is-visible');
     });
 
-    // Recognise Google Drive & CDN streaming file IDs.
     function getGoogleDriveId(rawUrl) {
       try {
         const url = new URL(rawUrl);
 
-        // Check for Googleusercontent CDN links (e.g. lh3.googleusercontent.com/d/FILE_ID)
         if (/(^|\.)googleusercontent\.com$/i.test(url.hostname)) {
           const parts = url.pathname.split('/');
           const dIndex = parts.indexOf('d');
@@ -311,7 +304,7 @@
         }
 
         if (!/(^|\.)drive\.google\.com$/i.test(url.hostname) &&
-            !(^|\.)docs\.google\.com$/i.test(url.hostname)) {
+            !/(^|\.)docs\.google\.com$/i.test(url.hostname)) {
           return null;
         }
 
@@ -347,7 +340,6 @@
       const driveId = getGoogleDriveId(item.url);
 
       if (driveId) {
-        // Use the official embedded player for seamless Google Drive streaming
         featuredVideo.pause();
         featuredVideo.removeAttribute('src');
         featuredVideo.load();
