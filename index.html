@@ -1,0 +1,725 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.7">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Reelhouse · Video Portal &amp; Uploads&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@750&amp;family=Inter:wght@400;550;600;650;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-bg: #faf9f6;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-ink: #302c28;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-muted: #77716b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-primary: #e96c3b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-border: #e8e4df;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-card: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>--rh-player: #24211f;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>* { box-sizing: border-box; margin: 0; padding: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background-color: var(--rh-bg);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-family: 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>line-height: 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>button, input { font: inherit; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>#reelhouse-widget {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>max-width: 1152px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 0 auto;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Navigation Header */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-nav {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: sticky;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>z-index: 40;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 64px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 0 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-bottom: 1px solid rgba(224, 220, 214, .8);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: rgba(250, 249, 246, .92);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>backdrop-filter: blur(8px);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-brand {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gap: 9px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-family: 'Bricolage Grotesque', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 19px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-weight: 750;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>letter-spacing: -.04em;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text-decoration: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-brand-mark {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 29px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 29px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>place-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 9px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: var(--rh-primary);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-brand-mark svg { width: 14px; height: 14px; margin-left: 2px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-tabs {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gap: 3px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 1px solid var(--rh-border);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 999px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-tab {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>min-height: 31px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 5px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 999px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: transparent;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #77716b;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-weight: 550;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: all .15s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-tab:hover { color: var(--rh-ink); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-tab[aria-selected="true"] { background: var(--rh-ink); color: #fff; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Main Layout */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-main { padding: 48px 20px 96px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-eyebrow { margin: 0; color: var(--rh-primary); font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-title {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 9px 0 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-family: 'Bricolage Grotesque', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: clamp(38px, 5vw, 52px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-weight: 750;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>letter-spacing: -.055em;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>line-height: 1.08;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-count { margin: 9px 0 0; color: var(--rh-muted); font-size: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-search-wrap { position: relative; width: 288px; flex: 0 0 288px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-search-icon {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>top: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>left: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transform: translateY(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #87827c;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>pointer-events: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-search {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 44px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 0 16px 0 40px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 1px solid var(--rh-border);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 999px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outline: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: border-color .15s ease, box-shadow .15s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233, 108, 59, .12); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Grid &amp; Video Cards */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; row-gap: 38px; margin-top: 40px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-card { min-width: 0; animation: rh-enter .42s ease both; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>@keyframes rh-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-frame {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>aspect-ratio: 16/9;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: var(--rh-player);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>box-shadow: 0 1px 2px rgba(48, 44, 40, .06), 0 8px 24px -12px rgba(48, 44, 40, .18);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: box-shadow .22s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-card:hover .rh-frame { box-shadow: 0 2px 4px rgba(48, 44, 40, .08), 0 18px 40px -16px rgba(48, 44, 40, .3); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-video { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--rh-player); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-play-overlay {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>inset: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>place-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: rgba(20, 18, 17, .22);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: opacity .18s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-play-overlay.rh-show { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-play-circle {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 58px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 58px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>place-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: var(--rh-primary);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>box-shadow: 0 5px 18px rgba(0, 0, 0, .22);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-play-circle svg { width: 24px; height: 24px; margin-left: 3px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-tools {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>right: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>bottom: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>gap: 9px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 30px 11px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: linear-gradient(transparent, rgba(0, 0, 0, .78));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: opacity .18s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-frame:hover .rh-tools, .rh-frame:focus-within .rh-tools { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-control {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 28px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 28px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>place-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>flex: 0 0 auto;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 7px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: transparent;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-control:hover { background: rgba(255, 255, 255, .18); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-control svg { width: 17px; height: 17px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-progress { min-width: 30px; flex: 1; height: 4px; accent-color: var(--rh-primary); cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-time { flex: 0 0 auto; color: #fff; font-size: 11px; font-variant-numeric: tabular-nums; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-volume { width: 52px; height: 4px; flex: 0 0 52px; accent-color: var(--rh-primary); cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-spinner {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>top: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>left: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: -15px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 3px solid rgba(255, 255, 255, .35);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-top-color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>animation: rh-spin .8s linear infinite;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>pointer-events: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>@keyframes rh-spin { to { transform: rotate(360deg); } }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-full {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>right: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 29px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 29px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>place-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 999px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: rgba(28, 25, 23, .62);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: opacity .18s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-frame:hover .rh-full, .rh-frame:focus-within .rh-full { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-full svg { width: 15px; height: 15px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-card-caption {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin-top: 11px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text-align: left;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-card-title { display: block; overflow: hidden; font-size: 15px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-card-meta { display: block; margin-top: 2px; color: var(--rh-muted); font-size: 13px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-error { margin-top: 32px; padding: 18px 20px; border-radius: 16px; background: #fce9e6; color: #a8352a; font-size: 14px; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>/* Upload Panel &amp; Form */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-upload-view { display: none; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-upload-panel {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>max-width: 760px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 5px auto 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: clamp(24px, 5vw, 44px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 1px solid var(--rh-border);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 25px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>box-shadow: 0 1px 2px rgba(48, 44, 40, .04), 0 15px 42px -24px rgba(48, 44, 40, .18);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-upload-title {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-family: 'Bricolage Grotesque', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: clamp(28px, 4vw, 38px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-weight: 750;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>letter-spacing: -.045em;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>line-height: 1.15;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-upload-copy { margin: 9px 0 25px; color: var(--rh-muted); font-size: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-field-full { grid-column: span 2; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-input-group { display: flex; flex-direction: column; gap: 6px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-input-group label { font-size: 13px; font-weight: 600; color: var(--rh-ink); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-input {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 44px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 0 14px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 1px solid var(--rh-border);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #fbfaf8;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-ink);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outline: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: border-color .18s, background .18s;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-input:focus { border-color: var(--rh-primary); background: #fff; box-shadow: 0 0 0 3px rgba(233, 108, 59, .12); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>min-height: 200px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 25px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 1.5px dashed #d6d0c8;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: #fbfaf8;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>outline: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: border-color .18s, background .18s;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop:hover, .rh-drop.rh-drag { border-color: var(--rh-primary); background: #fff8f4; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop-inner { pointer-events: none; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop-icon {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>width: 54px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>height: 54px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>place-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>margin: 0 auto 14px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 17px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: rgba(233, 108, 59, .12);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: var(--rh-primary);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop-icon svg { width: 25px; height: 25px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop strong { display: block; margin-bottom: 5px; font-size: 16px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-drop small { color: var(--rh-muted); font-size: 13px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-selected { display: none; margin-top: 14px; padding: 12px 14px; border: 1px solid var(--rh-border); border-radius: 12px; background: #fbfaf8; font-size: 13px; overflow-wrap: anywhere; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-preview { display: none; width: 100%; max-height: 320px; margin-top: 14px; border-radius: 13px; background: var(--rh-player); object-fit: contain; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-upload-actions { display: flex; gap: 10px; align-items: center; margin-top: 18px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-button {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>min-height: 44px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 11px 18px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border: 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>border-radius: 999px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>background: var(--rh-primary);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-size: 14px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>font-weight: 650;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>transition: filter .15s ease;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-button:hover { filter: brightness(.96); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-button:disabled { opacity: .48; cursor: not-allowed; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-cancel { display: none; background: #efede9; color: var(--rh-ink); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-progress-wrap { display: none; margin-top: 17px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-progress-head { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--rh-muted); font-size: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #eeeae5; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-progress-bar { width: 0; height: 100%; border-radius: inherit; background: var(--rh-primary); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-status { min-height: 22px; margin: 13px 0 0; color: var(--rh-muted); font-size: 13px; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-status[data-kind="error"] { color: #b42318; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.rh-status[data-kind="success"] { color: #067647; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>@media (max-width: 900px) { .rh-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>@media (max-width: 640px) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-nav { height: 60px; padding: 0 15px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-brand { font-size: 17px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-tab { padding-right: 12px; padding-left: 12px; font-size: 12px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-main { padding: 34px 15px 70px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-head { align-items: stretch; flex-direction: column; gap: 18px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-search-wrap { width: 100%; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-grid { grid-template-columns: minmax(0, 1fr); gap: 26px; margin-top: 28px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-form-grid { grid-template-columns: minmax(0, 1fr); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.rh-field-full { grid-column: span 1; }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="reelhouse-widget" data-api-base="YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="rh-nav"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="rh-brand"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="rh-brand-mark" aria-hidden="true"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;svg viewBox="0 0 24 24" fill="currentColor"&gt;&lt;path d="M7 4.8c0-.78.85-1.26 1.52-.86l11.1 6.7a1 1 0 0 1 0 1.72l-11.1 6.7A1 1 0 0 1 7 18.2V4.8Z"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span&gt;Reelhouse&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;nav class="rh-tabs" aria-label="Main navigation"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="rh-tab" type="button" data-view="upload" aria-selected="false"&gt;Upload&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="rh-tab" type="button" data-view="gallery" aria-selected="true"&gt;Gallery&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;main class="rh-main"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- GALLERY VIEW --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;section class="rh-gallery-view"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rh-head"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="rh-eyebrow"&gt;Gallery&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="rh-title"&gt;Fresh reels&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="rh-count" aria-live="polite"&gt;Loading videos…&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;label class="rh-search-wrap"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"&gt;&lt;circle cx="10.8" cy="10.8" r="6.8"/&gt;&lt;path d="m16 16 5 5"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input class="rh-search" type="search" placeholder="Search videos" aria-label="Search videos"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rh-error" hidden&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rh-grid" aria-live="polite"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/section&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- UPLOAD VIEW --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;section class="rh-upload-view"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="rh-upload-panel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;h1 class="rh-upload-title"&gt;Upload a video&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;p class="rh-upload-copy"&gt;Provide your contact details and upload a video file. MP4, WebM, or MOV, up to 50 MB.&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">          </span></p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;form class="rh-form"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="rh-form-grid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="rh-input-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="rh-user-name"&gt;Full Name *&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input class="rh-input" id="rh-user-name" type="text" placeholder="John Doe" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="rh-input-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="rh-user-phone"&gt;Phone Number *&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input class="rh-input" id="rh-user-phone" type="tel" placeholder="+1 (555) 000-0000" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="rh-input-group rh-field-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="rh-user-address"&gt;Address *&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input class="rh-input" id="rh-user-address" type="text" placeholder="123 Main Street, City" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input class="rh-file-input" type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" hidden&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="rh-drop" role="button" tabindex="0" aria-label="Choose a video file or drop one here"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="rh-drop-inner"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span class="rh-drop-icon" aria-hidden="true"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                  </span>&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"&gt;&lt;path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;strong&gt;Drop your video here&lt;/strong&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;small&gt;or click to browse your device&lt;/small&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="rh-selected"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;video class="rh-preview" controls playsinline muted&gt;&lt;/video&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="rh-upload-actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="rh-button rh-submit" type="submit" disabled&gt;Upload video&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;button class="rh-button rh-cancel" type="button"&gt;Cancel upload&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="rh-progress-wrap" aria-live="polite"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="rh-progress-head"&gt;&lt;span&gt;Uploading&lt;/span&gt;&lt;span class="rh-percent"&gt;0%&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="rh-progress-track" role="progressbar" aria-label="Video upload progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"&gt;&lt;div class="rh-progress-bar"&gt;&lt;/div&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="rh-status" role="status" aria-live="polite"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/form&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const root = document.getElementById('reelhouse-widget');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!root || root.dataset.initialized === '1') return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>root.dataset.initialized = '1';</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const apiBase = root.dataset.apiBase || '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const galleryView = root.querySelector('.rh-gallery-view');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const uploadView = root.querySelector('.rh-upload-view');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const tabs = [...root.querySelectorAll('.rh-tab')];</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const grid = root.querySelector('.rh-grid');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const countLabel = root.querySelector('.rh-count');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const search = root.querySelector('.rh-search');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const galleryError = root.querySelector('.rh-error');</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const form = root.querySelector('.rh-form');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const userNameInput = root.querySelector('#rh-user-name');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const userPhoneInput = root.querySelector('#rh-user-phone');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const userAddressInput = root.querySelector('#rh-user-address');</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const fileInput = root.querySelector('.rh-file-input');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const drop = root.querySelector('.rh-drop');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const selectedLabel = root.querySelector('.rh-selected');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const preview = root.querySelector('.rh-preview');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const submit = root.querySelector('.rh-submit');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const cancel = root.querySelector('.rh-cancel');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const status = root.querySelector('.rh-status');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const progressWrap = root.querySelector('.rh-progress-wrap');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const progressBar = root.querySelector('.rh-progress-bar');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const progressTrack = root.querySelector('.rh-progress-track');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const percent = root.querySelector('.rh-percent');</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const maxBytes = 50 * 1024 * 1024;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const items = new Map();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const ratios = new Map();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let selectedFile = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let activeVideo = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let observer = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function setStatus(text, kind) { status.textContent = text || ''; status.dataset.kind = kind || ''; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function formatBytes(bytes) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const n = Number(bytes || 0);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (n &lt; 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + ' KB';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return (n / (1024 * 1024)).toFixed(1) + ' MB';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function formatTime(value) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!Number.isFinite(value)) return '0:00';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const minutes = Math.floor(value / 60);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const seconds = Math.floor(value % 60).toString().padStart(2, '0');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return minutes + ':' + seconds;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function dateText(value) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const date = new Date(value);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString(undefined, {month:'short',day:'numeric',year:'numeric'});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function showView(view) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const upload = view === 'upload';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>galleryView.style.display = upload ? 'none' : 'block';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>uploadView.style.display = upload ? 'block' : 'none';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tabs.forEach(tab =&gt; tab.setAttribute('aria-selected', String(tab.dataset.view === view)));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (upload) window.scrollTo({top: root.getBoundingClientRect().top + window.scrollY, behavior:'smooth'});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>tabs.forEach(tab =&gt; tab.addEventListener('click', () =&gt; showView(tab.dataset.view)));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>search.addEventListener('input', renderFilter);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function setPlayOverlay(button, visible) { button.classList.toggle('rh-show', visible); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function pauseAll(except) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>root.querySelectorAll('.rh-video').forEach(video =&gt; { if (video !== except) video.pause(); });</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function attemptPlay(video, overlay) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>pauseAll(video);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.muted = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>activeVideo = video;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const promise = video.play();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (promise &amp;&amp; promise.catch) promise.catch(() =&gt; setPlayOverlay(overlay, true));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createIcon(name) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const paths = {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>play:'&lt;path d="m8 5 12 7-12 7V5Z" fill="currentColor" stroke="none"/&gt;',</p>
+<p class="p1"><span class="Apple-converted-space">        </span>pause:'&lt;path d="M8 5h3v14H8zM15 5h3v14h-3z" fill="currentColor" stroke="none"/&gt;',</p>
+<p class="p1"><span class="Apple-converted-space">        </span>volume:'&lt;path d="M4 10v4h3l4 3V7l-4 3H4Z"/&gt;&lt;path d="M15 9a5 5 0 0 1 0 6M17.5 6.5a9 9 0 0 1 0 11"/&gt;',</p>
+<p class="p1"><span class="Apple-converted-space">        </span>mute:'&lt;path d="M4 10v4h3l4 3V7l-4 3H4Z"/&gt;&lt;path d="m16 9 5 6m0-6-5 6"/&gt;',</p>
+<p class="p1"><span class="Apple-converted-space">        </span>full:'&lt;path d="M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m10 1v5h-5m5 0-6-6"/&gt;'</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>svg.setAttribute('viewBox','0 0 24 24'); svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor'); svg.setAttribute('stroke-width','2'); svg.setAttribute('stroke-linecap','round'); svg.setAttribute('stroke-linejoin','round'); svg.innerHTML = paths[name];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return svg;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function makeButton(className, label, icon) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const button = document.createElement('button'); button.type='button'; button.className=className; button.setAttribute('aria-label',label); button.title=label; if(icon) button.append(createIcon(icon)); return button;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createCard(item) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const article = document.createElement('article'); article.className='rh-card'; article.dataset.id=String(item.id);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const frame = document.createElement('div'); frame.className='rh-frame';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const video = document.createElement('video'); video.className='rh-video'; video.src=item.url; video.playsInline=true; video.muted=true; video.loop=true; video.preload='metadata'; video.setAttribute('aria-label',item.title || 'Uploaded video');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const playOverlay = document.createElement('button'); playOverlay.type='button'; playOverlay.className='rh-play-overlay'; playOverlay.setAttribute('aria-label','Play video');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const playCircle=document.createElement('span');playCircle.className='rh-play-circle';playCircle.append(createIcon('play'));playOverlay.append(playCircle);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const spinner=document.createElement('span');spinner.className='rh-spinner';spinner.hidden=true;spinner.setAttribute('aria-label','Loading video');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const fullscreen=makeButton('rh-full','Open fullscreen','full');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const tools=document.createElement('div');tools.className='rh-tools';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const playButton=makeButton('rh-control','Play','play');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const timeline=document.createElement('input');timeline.type='range';timeline.min='0';timeline.max='1000';timeline.value='0';timeline.className='rh-progress';timeline.setAttribute('aria-label','Seek video');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const time=document.createElement('span');time.className='rh-time';time.textContent='0:00';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const muteButton=makeButton('rh-control','Unmute video','mute');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const volume=document.createElement('input');volume.type='range';volume.min='0';volume.max='1';volume.step='0.05';volume.value='1';volume.className='rh-volume';volume.setAttribute('aria-label','Video volume');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>tools.append(playButton,timeline,time,muteButton,volume);frame.append(video,playOverlay,spinner,fullscreen,tools);</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const caption=document.createElement('button');caption.type='button';caption.className='rh-card-caption';caption.setAttribute('aria-label','Play '+(item.title || 'video'));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const title=document.createElement('span');title.className='rh-card-title';title.textContent=item.title || 'Untitled video';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const meta=document.createElement('span');meta.className='rh-card-meta';meta.textContent=dateText(item.date)+(item.size ? ' · '+formatBytes(item.size) : '');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>caption.append(title,meta);article.append(frame,caption);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const toggle=()=&gt;{if(video.paused)attemptPlay(video,playOverlay);else video.pause();};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>playOverlay.addEventListener('click',event=&gt;{event.stopPropagation();toggle();});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('click',toggle);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>playButton.addEventListener('click',event=&gt;{event.stopPropagation();toggle();});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>caption.addEventListener('click',()=&gt;{if(video.paused)attemptPlay(video,playOverlay);});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>muteButton.addEventListener('click',event=&gt;{event.stopPropagation();video.muted=!video.muted;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>volume.addEventListener('input',()=&gt;{video.volume=Number(volume.value);if(video.volume&gt;0)video.muted=false;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>fullscreen.addEventListener('click',event=&gt;{event.stopPropagation();if(document.fullscreenElement)document.exitFullscreen();else if(frame.requestFullscreen)frame.requestFullscreen();else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timeline.addEventListener('input',()=&gt;{if(Number.isFinite(video.duration)&amp;&amp;video.duration&gt;0)video.currentTime=(Number(timeline.value)/1000)*video.duration;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('play',()=&gt;{setPlayOverlay(playOverlay,false);playButton.replaceChildren(createIcon('pause'));playButton.setAttribute('aria-label','Pause video');playButton.title='Pause video';});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('pause',()=&gt;{playButton.replaceChildren(createIcon('play'));playButton.setAttribute('aria-label','Play video');playButton.title='Play video';if(activeVideo===video)activeVideo=null;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('waiting',()=&gt;{spinner.hidden=false;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('playing',()=&gt;{spinner.hidden=true;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('canplay',()=&gt;{spinner.hidden=true;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('error',()=&gt;{spinner.hidden=true;setPlayOverlay(playOverlay,true);});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('timeupdate',()=&gt;{if(video.duration){timeline.value=String(Math.round((video.currentTime/video.duration)*1000));time.textContent=formatTime(video.currentTime)+' / '+formatTime(video.duration);}});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>video.addEventListener('volumechange',()=&gt;{muteButton.replaceChildren(createIcon(video.muted||video.volume===0?'mute':'volume'));muteButton.setAttribute('aria-label',video.muted?'Unmute video':'Mute video');muteButton.title=video.muted?'Unmute video':'Mute video';volume.value=String(video.volume);});</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(observer)observer.observe(article);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return article;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function renderFilter(){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const query=search.value.trim().toLocaleLowerCase();let shown=0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>grid.querySelectorAll('.rh-card').forEach(card=&gt;{const title=items.get(card.dataset.id)?.title||'';const match=!query||title.toLocaleLowerCase().includes(query);card.style.display=match?'':'none';if(match)shown++;});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(query &amp;&amp; shown===0 &amp;&amp; items.size&gt;0) countLabel.textContent='No videos match your search';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>else countLabel.textContent=items.size+' video'+(items.size===1?'':'s')+' · new uploads appear live';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function refreshGallery(){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(!apiBase)throw new Error('Missing Google Apps Script Web App URL.');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const response=await fetch(apiBase,{cache:'no-store'});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(!response.ok)throw new Error('Could not load videos from Google Drive.');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const body=await response.json();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const videos=Array.isArray(body.videos)?body.videos:[];</p>
+<p class="p1"><span class="Apple-converted-space">      </span>grid.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>items.clear();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>videos.forEach(item=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if(!item||item.id==null||!item.url||items.has(String(item.id)))return;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>items.set(String(item.id),item);grid.prepend(createCard(item));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>galleryError.hidden=true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>renderFilter();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>observer=new IntersectionObserver(entries=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>entries.forEach(entry=&gt;ratios.set(entry.target.dataset.id,entry.isIntersecting?entry.intersectionRatio:0));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let bestId=null,bestRatio=0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>ratios.forEach((ratio,id)=&gt;{if(ratio&gt;bestRatio){bestRatio=ratio;bestId=id;}});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(bestId&amp;&amp;bestRatio&gt;=0.58){const card=grid.querySelector('.rh-card[data-id="'+CSS.escape(bestId)+'"]');const video=card&amp;&amp;card.querySelector('.rh-video');const overlay=card&amp;&amp;card.querySelector('.rh-play-overlay');if(video&amp;&amp;video.paused)attemptPlay(video,overlay);else if(video&amp;&amp;activeVideo!==video){pauseAll(video);activeVideo=video;}}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>else if(activeVideo){activeVideo.pause();}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>},{threshold:[0,0.2,0.4,0.58,0.75,0.9,1]});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function validateFormInputs() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>return userNameInput.value.trim() &amp;&amp; userPhoneInput.value.trim() &amp;&amp; userAddressInput.value.trim() &amp;&amp; selectedFile !== null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function checkSubmitState() { submit.disabled = !validateFormInputs(); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>[userNameInput, userPhoneInput, userAddressInput].forEach(input =&gt; input.addEventListener('input', checkSubmitState));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function selectFile(file){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(!file)return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const ext=(file.name.split('.').pop()||'').toLowerCase();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(!['mp4','webm','mov'].includes(ext)){setStatus('Please select an MP4, WebM, or MOV video.','error');return;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(file.size&gt;maxBytes){setStatus('This video is over 50 MB. Choose a smaller file.','error');return;}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedFile=file;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedLabel.style.display='block';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedLabel.textContent=file.name+' · '+formatBytes(file.size);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(localPreviewUrl)URL.revokeObjectURL(localPreviewUrl);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>localPreviewUrl=URL.createObjectURL(file);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preview.src=localPreviewUrl;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preview.style.display='block';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>checkSubmitState();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>setStatus('','');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function clearFile(){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedFile=null;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>fileInput.value='';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>form.reset();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>submit.disabled=true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>selectedLabel.style.display='none';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preview.pause();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preview.removeAttribute('src');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preview.load();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>preview.style.display='none';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>drop.addEventListener('click',()=&gt;fileInput.click());</p>
+<p class="p1"><span class="Apple-converted-space">    </span>fileInput.addEventListener('change',()=&gt;selectFile(fileInput.files&amp;&amp;fileInput.files[0]));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>['dragenter','dragover'].forEach(type=&gt;drop.addEventListener(type,e=&gt;{e.preventDefault();drop.classList.add('rh-drag');}));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>['dragleave','drop'].forEach(type=&gt;drop.addEventListener(type,e=&gt;{e.preventDefault();drop.classList.remove('rh-drag');}));</p>
+<p class="p1"><span class="Apple-converted-space">    </span>drop.addEventListener('drop',e=&gt;selectFile(e.dataTransfer&amp;&amp;e.dataTransfer.files[0]));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>form.addEventListener('submit',event=&gt;{</p>
+<p class="p1"><span class="Apple-converted-space">      </span>event.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if(!validateFormInputs()) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>setStatus('Processing and uploading to Google Drive...', '');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>submit.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>progressWrap.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>progressBar.style.width = '50%';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>percent.textContent = 'Uploading...';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const reader = new FileReader();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>reader.onload = function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const base64Bytes = e.target.result.split(',')[1];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const payload = {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>name: userNameInput.value.trim(),</p>
+<p class="p1"><span class="Apple-converted-space">          </span>phone: userPhoneInput.value.trim(),</p>
+<p class="p1"><span class="Apple-converted-space">          </span>address: userAddressInput.value.trim(),</p>
+<p class="p1"><span class="Apple-converted-space">          </span>filename: selectedFile.name,</p>
+<p class="p1"><span class="Apple-converted-space">          </span>mimeType: selectedFile.type || 'video/mp4',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>bytes: base64Bytes</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>fetch(apiBase, {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">          </span>body: JSON.stringify(payload)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>})</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.then(res =&gt; res.json())</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.then(async data =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>if(data.status === 'success') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setStatus('Video uploaded successfully to Google Drive!', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearFile();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>progressBar.style.width = '100%';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>percent.textContent = '100%';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showView('gallery');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>await refreshGallery();</p>
+<p class="p1"><span class="Apple-converted-space">          </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setStatus('Upload failed: ' + (data.message || 'Unknown error'), 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>submit.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>})</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.catch(err =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>setStatus('Network error during upload.', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">          </span>submit.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>};</p>
+<p class="p1"><span class="Apple-converted-space">      </span>reader.readAsDataURL(selectedFile);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>refreshGallery().catch(error =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>galleryError.textContent = error.message || 'Could not load videos.';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>galleryError.hidden = false;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>countLabel.textContent = '';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>window.setInterval(() =&gt; refreshGallery().catch(() =&gt; {}), 20000);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>})();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
