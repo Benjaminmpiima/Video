@@ -35,7 +35,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--rh-border); border-radius: 999px; outline: none; background: #fff; color: var(--rh-ink); font-size: 14px; transition: border-color .2s ease, box-shadow .2s ease; }
     .rh-search:focus { border-color: var(--rh-primary); box-shadow: 0 0 0 3px rgba(233,108,59,.12); }
 
-    /* INSTANT ZERO-LAG PLAYER */
+    /* FAST SINGLE-IFRAME PLAYER */
     .rh-featured { margin-top: 34px; }
     .rh-feature-frame {
       position: relative;
@@ -59,11 +59,7 @@
       height: calc(100% + 150px);
       border: 0;
       background: #171614;
-      pointer-events: none;
-      transition: opacity 0.1s ease-in-out;
     }
-    .rh-embed-active { z-index: 2; opacity: 1; }
-    .rh-embed-next { z-index: 1; opacity: 0; }
 
     .rh-fullscreen-btn {
       position: absolute;
@@ -160,8 +156,7 @@
 
         <section class="rh-featured" aria-label="Featured video">
           <div class="rh-feature-frame" id="rh-feature-frame">
-            <iframe class="rh-feature-embed rh-embed-active" id="rh-embed-1" title="Featured video 1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-            <iframe class="rh-feature-embed rh-embed-next" id="rh-embed-2" title="Featured video 2" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
             </button>
@@ -195,8 +190,7 @@
     const galleryError = root.querySelector('.rh-error');
     const emptyMessage = root.querySelector('.rh-empty');
     
-    const embed1 = document.getElementById('rh-embed-1');
-    const embed2 = document.getElementById('rh-embed-2');
+    const featureEmbed = document.getElementById('rh-feature-embed');
     const featureFrame = document.getElementById('rh-feature-frame');
     const fsBtn = document.getElementById('rh-fs-btn');
 
@@ -204,7 +198,6 @@
     let videoList = [];
     let currentIndex = 0;
     let rotationTimer = null;
-    let activeEmbedIndex = 1;
     let refreshInProgress = false;
 
     // Fullscreen Toggle
@@ -273,54 +266,19 @@
       highlightCard(id);
 
       const driveId = getGoogleDriveId(item.url) || item.id;
-      const videoSrc = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
+      featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
 
-      const currentEmbed = activeEmbedIndex === 1 ? embed1 : embed2;
-      const nextEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
-
-      currentEmbed.src = videoSrc;
-      currentEmbed.classList.remove('rh-embed-next');
-      currentEmbed.classList.add('rh-embed-active');
-
-      nextEmbed.classList.remove('rh-embed-active');
-      nextEmbed.classList.add('rh-embed-next');
-
-      // Preload next video immediately in the background iframe
-      preloadNextVideo();
       setupRotationTimer();
-    }
-
-    function preloadNextVideo() {
-      if (videoList.length <= 1) return;
-      const nextIndex = (currentIndex + 1) % videoList.length;
-      const nextItem = videoList[nextIndex];
-      const nextDriveId = getGoogleDriveId(nextItem.url) || nextItem.id;
-      const backgroundEmbed = activeEmbedIndex === 1 ? embed2 : embed1;
-      backgroundEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(nextDriveId) + '/preview?autoplay=1';
     }
 
     function setupRotationTimer() {
       if (rotationTimer) clearInterval(rotationTimer);
-      // Change 15000 (15 seconds) here if your videos are longer or shorter
+      // Automatically advance to the next video every 15 seconds (adjust if your videos are longer)
       rotationTimer = setInterval(() => {
         if (videoList.length <= 1) return;
         currentIndex = (currentIndex + 1) % videoList.length;
-        const nextItem = videoList[currentIndex];
-
-        highlightCard(nextItem.id);
-
-        activeEmbedIndex = activeEmbedIndex === 1 ? 2 : 1;
-        const activeE = activeEmbedIndex === 1 ? embed1 : embed2;
-        const inactiveE = activeEmbedIndex === 1 ? embed2 : embed1;
-
-        activeE.classList.remove('rh-embed-next');
-        activeE.classList.add('rh-embed-active');
-
-        inactiveE.classList.remove('rh-embed-active');
-        inactiveE.classList.add('rh-embed-next');
-
-        preloadNextVideo();
-      }, 15000); 
+        selectVideo(videoList[currentIndex]);
+      }, 15000);
     }
 
     function createCard(item) {
@@ -428,7 +386,7 @@
           }
         }
 
-        if (!embed1.src && videos.length > 0) {
+        if (!featureEmbed.src && videos.length > 0) {
           selectVideo(videos[0]);
         }
 
