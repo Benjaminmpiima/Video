@@ -18,11 +18,7 @@
       --rh-player: #24211f;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: var(--rh-bg);
@@ -32,9 +28,7 @@
       line-height: 1.5;
     }
 
-    button, input {
-      font: inherit;
-    }
+    button, input { font: inherit; }
 
     #reelhouse-widget {
       max-width: 1152px;
@@ -83,9 +77,7 @@
     }
 
     /* MAIN */
-    .rh-main {
-      padding: 42px 20px 80px;
-    }
+    .rh-main { padding: 42px 20px 80px; }
 
     .rh-head {
       display: flex;
@@ -154,9 +146,7 @@
     }
 
     /* FEATURED VIDEO */
-    .rh-featured {
-      margin-top: 34px;
-    }
+    .rh-featured { margin-top: 34px; }
 
     .rh-feature-frame {
       position: relative;
@@ -167,8 +157,6 @@
       overflow: hidden;
       border-radius: 24px;
       background: #171614;
-
-      /* Original Reelhouse orange glow */
       box-shadow:
         0 16px 48px rgba(35, 29, 24, .13),
         0 0 0 1px rgba(233, 108, 59, .16),
@@ -176,6 +164,8 @@
     }
 
     .rh-feature-video {
+      position: absolute;
+      inset: 0;
       display: block;
       width: 100%;
       height: 100%;
@@ -185,7 +175,7 @@
       outline: none;
     }
 
-    /* Remove native player controls */
+    /* Hide native video controls */
     video::-webkit-media-controls,
     video::-webkit-media-controls-enclosure,
     video::-webkit-media-controls-panel,
@@ -198,6 +188,7 @@
     .rh-feature-overlay {
       position: absolute;
       inset: auto 0 0;
+      z-index: 2;
       padding: 65px 28px 24px;
       color: #fff;
       pointer-events: none;
@@ -238,9 +229,7 @@
       line-height: 1.5;
     }
 
-    .rh-feature-error.is-visible {
-      display: block;
-    }
+    .rh-feature-error.is-visible { display: block; }
 
     /* GALLERY HEADING */
     .rh-gallery-heading {
@@ -270,7 +259,7 @@
       font-size: 12px;
     }
 
-    /* HORIZONTAL SLIDING CARDS */
+    /* HORIZONTAL VIDEO CARDS */
     .rh-grid {
       display: flex;
       flex-wrap: nowrap;
@@ -288,13 +277,8 @@
       scrollbar-color: #d6cfc7 transparent;
     }
 
-    .rh-grid::-webkit-scrollbar {
-      height: 6px;
-    }
-
-    .rh-grid::-webkit-scrollbar-track {
-      background: transparent;
-    }
+    .rh-grid::-webkit-scrollbar { height: 6px; }
+    .rh-grid::-webkit-scrollbar-track { background: transparent; }
 
     .rh-grid::-webkit-scrollbar-thumb {
       background: #d6cfc7;
@@ -344,14 +328,8 @@
     }
 
     @keyframes rh-enter {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .rh-frame {
@@ -436,34 +414,18 @@
       font-size: 14px;
     }
 
-    [hidden] {
-      display: none !important;
-    }
+    [hidden] { display: none !important; }
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
-      .rh-card {
-        flex-basis: 240px;
-      }
-
-      .rh-feature-frame {
-        aspect-ratio: 16 / 9;
-      }
+      .rh-card { flex-basis: 240px; }
+      .rh-feature-frame { aspect-ratio: 16 / 9; }
     }
 
     @media (max-width: 640px) {
-      .rh-nav {
-        height: 60px;
-        padding: 0 15px;
-      }
-
-      .rh-brand {
-        font-size: 17px;
-      }
-
-      .rh-main {
-        padding: 34px 15px 60px;
-      }
+      .rh-nav { height: 60px; padding: 0 15px; }
+      .rh-brand { font-size: 17px; }
+      .rh-main { padding: 34px 15px 60px; }
 
       .rh-head {
         align-items: stretch;
@@ -476,9 +438,7 @@
         flex-basis: auto;
       }
 
-      .rh-featured {
-        margin-top: 26px;
-      }
+      .rh-featured { margin-top: 26px; }
 
       .rh-feature-frame {
         aspect-ratio: 4 / 3;
@@ -486,9 +446,7 @@
         border-radius: 16px;
       }
 
-      .rh-feature-overlay {
-        padding: 48px 16px 16px;
-      }
+      .rh-feature-overlay { padding: 48px 16px 16px; }
 
       .rh-gallery-heading {
         align-items: flex-start;
@@ -497,24 +455,13 @@
         margin-top: 32px;
       }
 
-      .rh-card {
-        flex-basis: 210px;
-      }
-
-      .rh-grid {
-        gap: 12px;
-      }
+      .rh-card { flex-basis: 210px; }
+      .rh-grid { gap: 12px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .rh-card {
-        animation: none;
-        transition: none;
-      }
-
-      .rh-grid {
-        scroll-behavior: auto;
-      }
+      .rh-card { animation: none; transition: none; }
+      .rh-grid { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -524,8 +471,6 @@
     id="reelhouse-widget"
     data-api-base="https://script.google.com/macros/s/AKfycbyHh9H4rI91gZC5SeQiAK-9Qhjl930EX9JDfkJS7aDEJf9lvEuOCcb-BsJyP1Rn3oXy/exec"
   >
-
-    <!-- HEADER -->
     <header class="rh-nav">
       <div class="rh-brand">
         <span class="rh-brand-mark" aria-hidden="true">
@@ -537,11 +482,8 @@
       </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main class="rh-main">
       <section class="rh-gallery-view">
-
-        <!-- PAGE TITLE AND SEARCH -->
         <div class="rh-head">
           <div>
             <p class="rh-eyebrow">Gallery</p>
@@ -550,28 +492,14 @@
           </div>
 
           <label class="rh-search-wrap">
-            <svg
-              class="rh-search-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-            >
+            <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <circle cx="10.8" cy="10.8" r="6.8"/>
               <path d="m16 16 5 5"/>
             </svg>
-
-            <input
-              class="rh-search"
-              type="search"
-              placeholder="Search videos"
-              aria-label="Search videos"
-            >
+            <input class="rh-search" type="search" placeholder="Search videos" aria-label="Search videos">
           </label>
         </div>
 
-        <!-- FEATURED PLAYER -->
         <section class="rh-featured" aria-label="Featured video">
           <div class="rh-feature-frame">
             <video
@@ -581,7 +509,7 @@
               loop
               playsinline
               webkit-playsinline
-              preload="metadata"
+              preload="auto"
               disablepictureinpicture
               controlslist="nodownload nofullscreen noremoteplayback"
               aria-label="Featured video"
@@ -596,22 +524,17 @@
           </div>
         </section>
 
-        <!-- SLIDING VIDEO CARDS -->
         <div class="rh-gallery-heading">
           <div>
             <h2 class="rh-gallery-title">Explore videos</h2>
-            <p class="rh-gallery-subtitle">
-              Select a reel to play it above.
-            </p>
+            <p class="rh-gallery-subtitle">Select a reel to play it above.</p>
           </div>
-
           <p class="rh-scroll-hint">Scroll sideways →</p>
         </div>
 
         <div class="rh-error" role="alert" hidden></div>
         <div class="rh-grid" aria-label="Video gallery"></div>
         <p class="rh-empty" hidden>No videos have been uploaded yet.</p>
-
       </section>
     </main>
   </div>
@@ -619,7 +542,6 @@
   <script>
   (() => {
     const root = document.getElementById('reelhouse-widget');
-
     if (!root || root.dataset.initialized === '1') return;
     root.dataset.initialized = '1';
 
@@ -636,27 +558,21 @@
     const featuredError = root.querySelector('.rh-feature-error');
 
     const items = new Map();
-
     let selectedId = null;
     let refreshInProgress = false;
 
     function formatBytes(bytes) {
       const n = Number(bytes || 0);
-
       if (n < 1024 * 1024) {
         return Math.max(1, Math.round(n / 1024)) + ' KB';
       }
-
       return (n / (1024 * 1024)).toFixed(1) + ' MB';
     }
 
     function dateText(value) {
       if (!value) return '';
-
       const date = new Date(value);
-
       if (Number.isNaN(date.getTime())) return '';
-
       return date.toLocaleDateString(undefined, {
         month: 'short',
         day: 'numeric',
@@ -664,13 +580,14 @@
       });
     }
 
-    /* PLAY VIDEO WITHOUT CONTROLS */
-    function playMuted(video) {
+    /* SET AUTOPLAY ATTRIBUTES BEFORE REQUESTING PLAYBACK */
+    function prepareMutedAutoplay(video) {
       video.muted = true;
       video.defaultMuted = true;
       video.autoplay = true;
       video.playsInline = true;
       video.controls = false;
+      video.loop = true;
 
       video.setAttribute('muted', '');
       video.setAttribute('autoplay', '');
@@ -681,20 +598,59 @@
         'controlslist',
         'nodownload nofullscreen noremoteplayback'
       );
+    }
 
-      const promise = video.play();
+    /* TRY PLAYBACK NOW AND AGAIN WHEN READY */
+    function attemptAutoplay(video) {
+      prepareMutedAutoplay(video);
 
-      if (promise && typeof promise.catch === 'function') {
-        promise.catch(error => {
-          console.warn(
-            'Reelhouse video playback failed:',
-            video.currentSrc || video.src,
-            error.name,
-            error.message
-          );
-        });
+      try {
+        const result = video.play();
+
+        if (result && typeof result.then === 'function') {
+          result.then(() => {
+            if (video === featuredVideo) {
+              featuredStatus.textContent = 'Now playing';
+              featuredError.classList.remove('is-visible');
+            }
+          }).catch(error => {
+            console.warn(
+              'Reelhouse autoplay attempt failed:',
+              video.currentSrc || video.src,
+              error.name,
+              error.message
+            );
+
+            if (video === featuredVideo && error.name === 'NotAllowedError') {
+              featuredStatus.textContent = 'Tap the video area to start playback';
+            }
+          });
+        }
+      } catch (error) {
+        console.warn('Reelhouse play error:', error);
       }
     }
+
+    /* SHOW A CLEAR MESSAGE IF THE SOURCE CANNOT PLAY */
+    featuredVideo.addEventListener('error', () => {
+      featuredStatus.textContent = 'Unable to play this video';
+      featuredError.textContent =
+        'The browser could not load this video source. If this is a Google Drive download link, it may not support direct video streaming. A browser-compatible video URL is required.';
+      featuredError.classList.add('is-visible');
+    });
+
+    featuredVideo.addEventListener('loadeddata', () => {
+      attemptAutoplay(featuredVideo);
+    });
+
+    featuredVideo.addEventListener('canplay', () => {
+      attemptAutoplay(featuredVideo);
+    });
+
+    featuredVideo.addEventListener('playing', () => {
+      featuredStatus.textContent = 'Now playing';
+      featuredError.classList.remove('is-visible');
+    });
 
     /* SELECT A VIDEO FOR THE LARGE PLAYER */
     function selectVideo(item) {
@@ -703,26 +659,21 @@
       const id = String(item.id);
       selectedId = id;
 
-      // Highlight the selected card.
       grid.querySelectorAll('.rh-card').forEach(card => {
         const isSelected = card.dataset.id === id;
-
         card.classList.toggle('is-selected', isSelected);
         card.setAttribute('aria-pressed', String(isSelected));
       });
 
-      // Update the large video title.
       featuredTitle.textContent = item.title || 'Untitled video';
       featuredStatus.textContent = 'Loading video…';
-
       featuredError.textContent = '';
       featuredError.classList.remove('is-visible');
 
-      // Only replace the source if the selected video has changed.
       if (featuredVideo.dataset.videoId !== id) {
         featuredVideo.pause();
         featuredVideo.removeAttribute('src');
-
+        featuredVideo.removeAttribute('srcset');
         featuredVideo.dataset.videoId = id;
         featuredVideo.load();
 
@@ -730,28 +681,12 @@
         featuredVideo.load();
       }
 
-      playMuted(featuredVideo);
+      // Attempt immediately and again when the media is ready.
+      attemptAutoplay(featuredVideo);
 
-      // Show playback errors clearly.
-      featuredVideo.onerror = () => {
-        featuredStatus.textContent = 'Unable to play this video';
-
-        featuredError.textContent =
-          'The video source could not be played directly in the browser. ' +
-          'The source may require a direct streaming URL.';
-
-        featuredError.classList.add('is-visible');
-      };
-
-      featuredVideo.onplaying = () => {
-        featuredStatus.textContent = 'Now playing';
-        featuredError.classList.remove('is-visible');
-      };
-
-      // Keep the selected card visible in the slider.
-      const selectedCard = grid.querySelector(
-        '.rh-card[data-id="' + CSS.escape(id) + '"]'
-      );
+      const selectedCard = Array.from(
+        grid.querySelectorAll('.rh-card')
+      ).find(card => card.dataset.id === id);
 
       if (selectedCard) {
         selectedCard.scrollIntoView({
@@ -762,24 +697,19 @@
       }
     }
 
-    /* BUILD EACH SLIDING CARD */
+    /* CREATE HORIZONTAL VIDEO CARDS */
     function createCard(item) {
       const card = document.createElement('button');
-
       card.type = 'button';
       card.className = 'rh-card';
       card.dataset.id = String(item.id);
       card.setAttribute('aria-pressed', 'false');
-      card.setAttribute(
-        'aria-label',
-        'Play ' + (item.title || 'video')
-      );
+      card.setAttribute('aria-label', 'Play ' + (item.title || 'video'));
 
       const frame = document.createElement('div');
       frame.className = 'rh-frame';
 
       const video = document.createElement('video');
-
       video.className = 'rh-video';
       video.muted = true;
       video.defaultMuted = true;
@@ -787,17 +717,18 @@
       video.playsInline = true;
       video.preload = 'metadata';
       video.controls = false;
-
       video.setAttribute('muted', '');
       video.setAttribute('playsinline', '');
       video.setAttribute('webkit-playsinline', '');
       video.setAttribute('disablepictureinpicture', '');
-      video.setAttribute(
-        'aria-label',
-        item.title || 'Video preview'
-      );
+      video.setAttribute('aria-label', item.title || 'Video preview');
 
+      // Card videos are previews only; keep them muted and without controls.
       video.src = item.url;
+
+      video.addEventListener('error', () => {
+        video.style.opacity = '.35';
+      });
 
       const playIcon = document.createElement('span');
       playIcon.className = 'rh-card-play';
@@ -815,7 +746,6 @@
 
       const meta = document.createElement('span');
       meta.className = 'rh-card-meta';
-
       meta.textContent =
         dateText(item.date) +
         (item.size ? ' · ' + formatBytes(item.size) : '');
@@ -823,11 +753,7 @@
       caption.append(title, meta);
       card.append(frame, caption);
 
-      // Clicking a card changes the featured player.
-      card.addEventListener('click', () => {
-        selectVideo(item);
-      });
-
+      card.addEventListener('click', () => selectVideo(item));
       return card;
     }
 
@@ -839,22 +765,16 @@
       grid.querySelectorAll('.rh-card').forEach(card => {
         const item = items.get(card.dataset.id);
         const title = item ? item.title || '' : '';
-
-        const matches =
-          !query || title.toLocaleLowerCase().includes(query);
+        const matches = !query || title.toLocaleLowerCase().includes(query);
 
         card.hidden = !matches;
-
         if (matches) shown++;
       });
 
-      if (query && shown === 0) {
-        countLabel.textContent = 'No videos match your search';
-      } else {
-        countLabel.textContent =
-          shown + ' video' + (shown === 1 ? '' : 's') +
+      countLabel.textContent = query && shown === 0
+        ? 'No videos match your search'
+        : shown + ' video' + (shown === 1 ? '' : 's') +
           ' · live from Google Form uploads';
-      }
 
       emptyMessage.hidden = items.size !== 0;
     }
@@ -864,14 +784,11 @@
     /* LOAD VIDEOS FROM GOOGLE APPS SCRIPT */
     async function refreshGallery() {
       if (refreshInProgress) return;
-
       refreshInProgress = true;
 
       try {
         if (!apiBase) {
-          throw new Error(
-            'Missing Google Apps Script Web App URL.'
-          );
+          throw new Error('Missing Google Apps Script Web App URL.');
         }
 
         const response = await fetch(apiBase, {
@@ -881,31 +798,23 @@
 
         if (!response.ok) {
           throw new Error(
-            'Could not retrieve videos. HTTP status: ' +
-            response.status
+            'Could not retrieve videos. HTTP status: ' + response.status
           );
         }
 
         const body = await response.json();
 
-        if (body.error) {
-          throw new Error(body.error);
-        }
+        if (body.error) throw new Error(body.error);
 
-        const videos = Array.isArray(body.videos)
-          ? body.videos
-          : [];
-
+        const videos = Array.isArray(body.videos) ? body.videos : [];
         const incomingIds = new Set();
 
-        // Preserve the order returned by Apps Script.
         videos.forEach(item => {
           if (!item || item.id == null || !item.url) return;
 
           const id = String(item.id);
           incomingIds.add(id);
 
-          // Update existing cards without interrupting playback.
           if (items.has(id)) {
             items.set(id, item);
 
@@ -914,37 +823,26 @@
             ).find(card => card.dataset.id === id);
 
             if (existingCard) {
-              const title = existingCard.querySelector(
-                '.rh-card-title'
-              );
+              const title = existingCard.querySelector('.rh-card-title');
+              const meta = existingCard.querySelector('.rh-card-meta');
 
-              const meta = existingCard.querySelector(
-                '.rh-card-meta'
-              );
-
-              if (title) {
-                title.textContent =
-                  item.title || 'Untitled video';
-              }
+              if (title) title.textContent = item.title || 'Untitled video';
 
               if (meta) {
                 meta.textContent =
                   dateText(item.date) +
-                  (item.size
-                    ? ' · ' + formatBytes(item.size)
-                    : '');
+                  (item.size ? ' · ' + formatBytes(item.size) : '');
               }
             }
 
             return;
           }
 
-          // Add new uploads at the end, preserving current order.
           items.set(id, item);
           grid.appendChild(createCard(item));
         });
 
-        // Remove cards for files no longer returned by the API.
+        // Remove deleted uploads from the visible gallery.
         for (const [id] of items) {
           if (!incomingIds.has(id)) {
             const card = Array.from(
@@ -952,7 +850,6 @@
             ).find(element => element.dataset.id === id);
 
             if (card) card.remove();
-
             items.delete(id);
 
             if (selectedId === id) {
@@ -965,18 +862,15 @@
           }
         }
 
-        // Automatically feature the first video on initial load.
+        // Automatically load and play the first available video.
         if (!selectedId && videos.length > 0) {
           const firstVideo = videos.find(item =>
             item && item.id != null && item.url
           );
 
-          if (firstVideo) {
-            selectVideo(firstVideo);
-          }
+          if (firstVideo) selectVideo(firstVideo);
         }
 
-        // If the selected video still exists, keep its title current.
         if (selectedId && items.has(selectedId)) {
           featuredTitle.textContent =
             items.get(selectedId).title || 'Untitled video';
@@ -989,8 +883,7 @@
         console.error('Reelhouse gallery error:', error);
 
         galleryError.textContent =
-          error.message ||
-          'Could not load videos. Please try again later.';
+          error.message || 'Could not load videos. Please try again later.';
 
         galleryError.hidden = false;
 
@@ -1002,16 +895,21 @@
       }
     }
 
+    /* ALLOW A CLICK ON THE FEATURED AREA TO RETRY PLAYBACK */
+    featuredVideo.addEventListener('click', () => {
+      attemptAutoplay(featuredVideo);
+    });
+
     // Load the gallery when the page opens.
     refreshGallery();
 
     // Detect new Google Form uploads every 20 seconds.
     window.setInterval(refreshGallery, 20000);
 
-    // Retry playback when the visitor returns to the page.
+    // Retry when the visitor returns to the page.
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && featuredVideo.src) {
-        playMuted(featuredVideo);
+      if (!document.hidden && featuredVideo.getAttribute('src')) {
+        attemptAutoplay(featuredVideo);
       }
     });
 
