@@ -116,99 +116,9 @@
         border-radius: 16px;
         background: var(--rh-player);
         box-shadow: 0 1px 2px rgba(48, 44, 40, .06), 0 8px 24px -12px rgba(48, 44, 40, .18);
-        transition: box-shadow .22s ease;
       }
-      .rh-card:hover .rh-frame { box-shadow: 0 2px 4px rgba(48, 44, 40, .08), 0 18px 40px -16px rgba(48, 44, 40, .3); }
-      .rh-video { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--rh-player); }
-      .rh-play-overlay {
-        position: absolute;
-        inset: 0;
-        display: grid;
-        place-items: center;
-        border: 0;
-        background: rgba(20, 18, 17, .22);
-        color: #fff;
-        cursor: pointer;
-        opacity: 0;
-        transition: opacity .18s ease;
-      }
-      .rh-play-overlay.rh-show { opacity: 1; }
-      .rh-play-circle {
-        width: 58px;
-        height: 58px;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        background: var(--rh-primary);
-        color: #fff;
-        box-shadow: 0 5px 18px rgba(0, 0, 0, .22);
-      }
-      .rh-play-circle svg { width: 24px; height: 24px; margin-left: 3px; }
-      .rh-tools {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        padding: 30px 11px 10px;
-        background: linear-gradient(transparent, rgba(0, 0, 0, .78));
-        color: white;
-        opacity: 0;
-        transition: opacity .18s ease;
-      }
-      .rh-frame:hover .rh-tools, .rh-frame:focus-within .rh-tools { opacity: 1; }
-      .rh-control {
-        width: 28px;
-        height: 28px;
-        display: grid;
-        place-items: center;
-        flex: 0 0 auto;
-        padding: 0;
-        border: 0;
-        border-radius: 7px;
-        background: transparent;
-        color: #fff;
-        cursor: pointer;
-      }
-      .rh-control:hover { background: rgba(255, 255, 255, .18); }
-      .rh-control svg { width: 17px; height: 17px; }
-      .rh-progress { min-width: 30px; flex: 1; height: 4px; accent-color: var(--rh-primary); cursor: pointer; }
-      .rh-time { flex: 0 0 auto; color: #fff; font-size: 11px; font-variant-numeric: tabular-nums; }
-      .rh-volume { width: 52px; height: 4px; flex: 0 0 52px; accent-color: var(--rh-primary); cursor: pointer; }
-      .rh-spinner {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 30px;
-        height: 30px;
-        margin: -15px;
-        border: 3px solid rgba(255, 255, 255, .35);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: rh-spin .8s linear infinite;
-        pointer-events: none;
-      }
-      @keyframes rh-spin { to { transform: rotate(360deg); } }
-      .rh-full {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        width: 29px;
-        height: 29px;
-        display: grid;
-        place-items: center;
-        border: 0;
-        border-radius: 999px;
-        background: rgba(28, 25, 23, .62);
-        color: #fff;
-        cursor: pointer;
-        opacity: 0;
-        transition: opacity .18s ease;
-      }
-      .rh-frame:hover .rh-full, .rh-frame:focus-within .rh-full { opacity: 1; }
-      .rh-full svg { width: 15px; height: 15px; }
+      .rh-video { display: block; width: 100%; height: 100%; object-fit: cover; background: var(--rh-player); }
+      
       .rh-card-caption {
         display: block;
         width: 100%;
@@ -218,7 +128,6 @@
         background: none;
         color: var(--rh-ink);
         text-align: left;
-        cursor: pointer;
       }
       .rh-card-title { display: block; overflow: hidden; font-size: 15px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
       .rh-card-meta { display: block; margin-top: 2px; color: var(--rh-muted); font-size: 13px; }
@@ -279,20 +188,11 @@
     const galleryError = root.querySelector('.rh-error');
     
     const items = new Map();
-    const ratios = new Map();
-    let activeVideo = null;
-    let observer = null;
 
     function formatBytes(bytes) {
       const n = Number(bytes || 0);
       if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + ' KB';
       return (n / (1024 * 1024)).toFixed(1) + ' MB';
-    }
-    function formatTime(value) {
-      if (!Number.isFinite(value)) return '0:00';
-      const minutes = Math.floor(value / 60);
-      const seconds = Math.floor(value % 60).toString().padStart(2, '0');
-      return minutes + ':' + seconds;
     }
     function dateText(value) {
       const date = new Date(value);
@@ -301,107 +201,63 @@
     
     search.addEventListener('input', renderFilter);
 
-    function setPlayOverlay(button, visible) { button.classList.toggle('rh-show', visible); }
-    function pauseAll(except) {
-      root.querySelectorAll('.rh-video').forEach(video => { if (video !== except) video.pause(); });
-    }
-    function attemptPlay(video, overlay) {
-      pauseAll(video);
-      video.muted = true;
-      activeVideo = video;
-      const promise = video.play();
-      if (promise && promise.catch) promise.catch(() => setPlayOverlay(overlay, true));
-    }
-    function createIcon(name) {
-      const paths = {
-        play:'<path d="m8 5 12 7-12 7V5Z" fill="currentColor" stroke="none"/>',
-        pause:'<path d="M8 5h3v14H8zM15 5h3v14h-3z" fill="currentColor" stroke="none"/>',
-        volume:'<path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="M15 9a5 5 0 0 1 0 6M17.5 6.5a9 9 0 0 1 0 11"/>',
-        mute:'<path d="M4 10v4h3l4 3V7l-4 3H4Z"/><path d="m16 9 5 6m0-6-5 6"/>',
-        full:'<path d="M8 3H3v5m0-5 6 6m7-6h5v5m0-5-6 6M3 16v5h5m-5 0 6-6m10 1v5h-5m5 0-6-6"/>'
-      };
-      const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-      svg.setAttribute('viewBox','0 0 24 24'); svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor'); svg.setAttribute('stroke-width','2'); svg.setAttribute('stroke-linecap','round'); svg.setAttribute('stroke-linejoin','round'); svg.innerHTML = paths[name];
-      return svg;
-    }
-    function makeButton(className, label, icon) {
-      const button = document.createElement('button'); button.type='button'; button.className=className; button.setAttribute('aria-label',label); button.title=label; if(icon) button.append(createIcon(icon)); return button;
-    }
     function createCard(item) {
       const article = document.createElement('article'); article.className='rh-card'; article.dataset.id=String(item.id);
       const frame = document.createElement('div'); frame.className='rh-frame';
       
-      const video = document.createElement('video'); video.className='rh-video'; video.src=item.url; video.playsInline=true; video.muted=true; video.loop=true; video.preload='auto'; video.setAttribute('aria-label',item.title || 'Uploaded video');
+      // Video configured to autoplay, loop seamlessly, and play inline without controls
+      const video = document.createElement('video'); 
+      video.className = 'rh-video'; 
+      video.src = item.url; 
+      video.autoplay = true;
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.preload = 'auto';
+      video.setAttribute('aria-label', item.title || 'Uploaded video');
       
-      const playOverlay = document.createElement('button'); playOverlay.type='button'; playOverlay.className='rh-play-overlay rh-show'; playOverlay.setAttribute('aria-label','Play video');
-      const playCircle=document.createElement('span');playCircle.className='rh-play-circle';playCircle.append(createIcon('play'));playOverlay.append(playCircle);
-      const spinner=document.createElement('span');spinner.className='rh-spinner';spinner.hidden=true;spinner.setAttribute('aria-label','Loading video');
-      const fullscreen=makeButton('rh-full','Open fullscreen','full');
-      const tools=document.createElement('div');tools.className='rh-tools';
-      const playButton=makeButton('rh-control','Play','play');
-      const timeline=document.createElement('input');timeline.type='range';timeline.min='0';timeline.max='1000';timeline.value='0';timeline.className='rh-progress';timeline.setAttribute('aria-label','Seek video');
-      const time=document.createElement('span');time.className='rh-time';time.textContent='0:00';
-      const muteButton=makeButton('rh-control','Unmute video','mute');
-      const volume=document.createElement('input');volume.type='range';volume.min='0';volume.max='1';volume.step='0.05';volume.value='1';volume.className='rh-volume';volume.setAttribute('aria-label','Video volume');
-      tools.append(playButton,timeline,time,muteButton,volume);frame.append(video,playOverlay,spinner,fullscreen,tools);
+      frame.append(video);
       
-      const caption=document.createElement('button');caption.type='button';caption.className='rh-card-caption';caption.setAttribute('aria-label','Play '+(item.title || 'video'));
-      const title=document.createElement('span');title.className='rh-card-title';title.textContent=item.title || 'Untitled video';
-      const meta=document.createElement('span');meta.className='rh-card-meta';meta.textContent=dateText(item.date)+(item.size ? ' · '+formatBytes(item.size) : '');
-      caption.append(title,meta);article.append(frame,caption);
+      const caption = document.createElement('div'); caption.className='rh-card-caption';
+      const title = document.createElement('span'); title.className='rh-card-title'; title.textContent=item.title || 'Untitled video';
+      const meta = document.createElement('span'); meta.className='rh-card-meta'; meta.textContent=dateText(item.date)+(item.size ? ' · '+formatBytes(item.size) : '');
+      caption.append(title, meta);
+      article.append(frame, caption);
 
-      const toggle=()=>{if(video.paused)attemptPlay(video,playOverlay);else video.pause();};
-      playOverlay.addEventListener('click',event=>{event.stopPropagation();toggle();});
-      video.addEventListener('click',toggle);
-      playButton.addEventListener('click',event=>{event.stopPropagation();toggle();});
-      caption.addEventListener('click',()=>{if(video.paused)attemptPlay(video,playOverlay);});
-      muteButton.addEventListener('click',event=>{event.stopPropagation();video.muted=!video.muted;});
-      volume.addEventListener('input',()=>{video.volume=Number(volume.value);if(video.volume>0)video.muted=false;});
-      fullscreen.addEventListener('click',event=>{event.stopPropagation();if(document.fullscreenElement)document.exitFullscreen();else if(frame.requestFullscreen)frame.requestFullscreen();else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();});
-      timeline.addEventListener('input',()=>{if(Number.isFinite(video.duration)&&video.duration>0)video.currentTime=(Number(timeline.value)/1000)*video.duration;});
-      video.addEventListener('play',()=>{setPlayOverlay(playOverlay,false);playButton.replaceChildren(createIcon('pause'));playButton.setAttribute('aria-label','Pause video');playButton.title='Pause video';});
-      video.addEventListener('pause',()=>{playButton.replaceChildren(createIcon('play'));playButton.setAttribute('aria-label','Play video');playButton.title='Play video';if(activeVideo===video)activeVideo=null;});
-      video.addEventListener('waiting',()=>{spinner.hidden=false;});
-      video.addEventListener('playing',()=>{spinner.hidden=true;setPlayOverlay(playOverlay,false);});
-      video.addEventListener('canplay',()=>{spinner.hidden=true;});
-      video.addEventListener('error',()=>{spinner.hidden=true;setPlayOverlay(playOverlay,true);});
-      video.addEventListener('timeupdate',()=>{if(video.duration){timeline.value=String(Math.round((video.currentTime/video.duration)*1000));time.textContent=formatTime(video.currentTime)+' / '+formatTime(video.duration);}});
-      video.addEventListener('volumechange',()=>{muteButton.replaceChildren(createIcon(video.muted||video.volume===0?'mute':'volume'));muteButton.setAttribute('aria-label',video.muted?'Unmute video':'Mute video');muteButton.title=video.muted?'Unmute video':'Mute video';volume.value=String(video.volume);});
-      
-      if(observer)observer.observe(article);
+      // Ensure playback starts immediately on append
+      video.play().catch(() => {});
+
       return article;
     }
 
     function renderFilter(){
-      const query=search.value.trim().toLocaleLowerCase();let shown=0;
-      grid.querySelectorAll('.rh-card').forEach(card=>{const title=items.get(card.dataset.id)?.title||'';const match=!query||title.toLocaleLowerCase().includes(query);card.style.display=match?'':'none';if(match)shown++;});
-      if(query && shown===0 && items.size>0) countLabel.textContent='No videos match your search';
-      else countLabel.textContent=items.size+' video'+(items.size===1?'':'s')+' · live from Google Form uploads';
+      const query = search.value.trim().toLocaleLowerCase(); let shown = 0;
+      grid.querySelectorAll('.rh-card').forEach(card => {
+        const title = items.get(card.dataset.id)?.title || '';
+        const match = !query || title.toLocaleLowerCase().includes(query);
+        card.style.display = match ? '' : 'none';
+        if (match) shown++;
+      });
+      if (query && shown === 0 && items.size > 0) countLabel.textContent = 'No videos match your search';
+      else countLabel.textContent = items.size + ' video' + (items.size === 1 ? '' : 's') + ' · live from Google Form uploads';
     }
 
     async function refreshGallery(){
-      if(!apiBase)throw new Error('Missing Google Apps Script Web App URL.');
-      const response=await fetch(apiBase,{cache:'no-store'});
-      if(!response.ok)throw new Error('Could not load videos from Google Drive.');
-      const body=await response.json();
-      const videos=Array.isArray(body.videos)?body.videos:[];
+      if (!apiBase) throw new Error('Missing Google Apps Script Web App URL.');
+      const response = await fetch(apiBase, {cache: 'no-store'});
+      if (!response.ok) throw new Error('Could not load videos from Google Drive.');
+      const body = await response.json();
+      const videos = Array.isArray(body.videos) ? body.videos : [];
       grid.innerHTML = '';
       items.clear();
-      videos.forEach(item=>{
-        if(!item||item.id==null||!item.url||items.has(String(item.id)))return;
-        items.set(String(item.id),item);grid.prepend(createCard(item));
+      videos.forEach(item => {
+        if (!item || item.id == null || !item.url || items.has(String(item.id))) return;
+        items.set(String(item.id), item);
+        grid.prepend(createCard(item));
       });
-      galleryError.hidden=true;
+      galleryError.hidden = true;
       renderFilter();
     }
-
-    observer=new IntersectionObserver(entries=>{
-      entries.forEach(entry=>ratios.set(entry.target.dataset.id,entry.isIntersecting?entry.intersectionRatio:0));
-      let bestId=null,bestRatio=0;
-      ratios.forEach((ratio,id)=>{if(ratio>bestRatio){bestRatio=ratio;bestId=id;}});
-      if(bestId&&bestRatio>=0.3){const card=grid.querySelector('.rh-card[data-id="'+CSS.escape(bestId)+'"]');const video=card&&card.querySelector('.rh-video');const overlay=card&&card.querySelector('.rh-play-overlay');if(video&&video.paused)attemptPlay(video,overlay);else if(video&&activeVideo!==video){pauseAll(video);activeVideo=video;}}
-      else if(activeVideo){activeVideo.pause();}
-    },{threshold:[0,0.1,0.3,0.5,0.75,1]});
 
     refreshGallery().catch(error => {
       galleryError.textContent = error.message || 'Could not load videos.';
