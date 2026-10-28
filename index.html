@@ -10,8 +10,8 @@
       --zurich-bg: #ffffff;
       --zurich-ink: #111111;
       --zurich-muted: #555555;
-      --zurich-primary: #082A68; /* Exact brand blue */
-      --zurich-accent: #B45A41;  /* Exact brand brown/terracotta */
+      --zurich-primary: #082A68;
+      --zurich-accent: #B45A41;
       --zurich-border: #e0e0e0;
       --zurich-card-bg: #f8f9fa;
     }
@@ -20,7 +20,6 @@
     button, input { font: inherit; }
     #reelhouse-widget { max-width: 1152px; margin: 0 auto; }
 
-    /* NAVIGATION WITH EXACT BRAND LOGO */
     .rh-nav { position: sticky; top: 0; z-index: 40; height: 76px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--zurich-border); background: rgba(255,255,255,.95); backdrop-filter: blur(8px); }
     .rh-brand { display: flex; align-items: center; text-decoration: none; }
     .rh-logo-img { height: 42px; width: auto; display: block; object-fit: contain; }
@@ -36,7 +35,6 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--zurich-border); border-radius: 4px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 14px; transition: border-color .2s ease; }
     .rh-search:focus { border-color: var(--zurich-accent); }
 
-    /* FAST FEATURED PLAYER & TEXT DISPLAY */
     .rh-featured { margin-top: 32px; }
     .rh-feature-frame {
       position: relative;
@@ -66,7 +64,7 @@
       z-index: 10;
       width: 100%;
       height: 100%;
-      padding: 40px;
+      padding: 48px;
       background: var(--zurich-primary);
       color: #fff;
       display: flex;
@@ -76,8 +74,8 @@
       text-align: left;
       overflow-y: auto;
     }
-    .rh-feature-text h3 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #fff; }
-    .rh-feature-text p { font-size: 18px; line-height: 1.6; opacity: 0.9; }
+    .rh-feature-text h3 { font-size: 26px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+    .rh-feature-text p { font-size: 18px; line-height: 1.6; opacity: 0.95; white-space: pre-line; }
 
     .rh-fullscreen-btn {
       position: absolute;
@@ -102,7 +100,6 @@
     .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 13px; }
     .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 12px; }
 
-    /* HORIZONTAL CARDS */
     .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 16px; width: 100%; margin-top: 16px; padding: 8px 4px 24px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #ccc transparent; }
     .rh-grid::-webkit-scrollbar { height: 6px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
@@ -209,7 +206,6 @@
     let rotationTimer = null;
     let refreshInProgress = false;
 
-    // Fullscreen Toggle
     fsBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
         featureFrame.requestFullscreen().catch(err => {
@@ -350,7 +346,7 @@
 
       const meta = document.createElement('span');
       meta.className = 'rh-card-meta';
-      meta.textContent = dateText(item.date) + (item.size ? ' · ' + formatBytes(item.size) : ' · Form text');
+      meta.textContent = dateText(item.date) + (item.size ? ' · ' + formatBytes(item.size) : ' · Text response');
 
       caption.append(title, meta);
       card.append(frame, caption);
@@ -394,7 +390,21 @@
         if (!response.ok) throw new Error('Could not retrieve submissions.');
 
         const body = await response.json();
-        const submissions = Array.isArray(body.videos) ? body.videos : (Array.isArray(body.submissions) ? body.submissions : []);
+        const submissions = Array.isArray(body.videos) ? body.videos : [];
+
+        // FALLBACK SIMULATION: If your sheet doesn't have text rows yet, 
+        // this safely adds a sample text submission card so you can see how it looks and works!
+        if (!submissions.some(s => !s.url || !getGoogleDriveId(s.url))) {
+          submissions.push({
+            id: 'sample-text-submission',
+            title: 'Mpiima Benjamin (Kampala)',
+            url: '',
+            date: new Date().toISOString(),
+            size: 0,
+            description: 'Where creating change: Empowering youth through digital literacy and web development.\n\nWhat would help impact grow: Mentorship programs and tech hardware support.'
+          });
+        }
+
         submissionList = submissions;
         const incomingIds = new Set();
 
