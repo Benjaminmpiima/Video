@@ -36,7 +36,7 @@
     .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--zurich-border); border-radius: 4px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 14px; transition: border-color .2s ease; }
     .rh-search:focus { border-color: var(--zurich-accent); }
 
-    /* FAST FEATURED PLAYER */
+    /* FAST FEATURED PLAYER & TEXT DISPLAY */
     .rh-featured { margin-top: 32px; }
     .rh-feature-frame {
       position: relative;
@@ -48,6 +48,9 @@
       border-radius: 12px;
       background: #000;
       box-shadow: 0 12px 36px rgba(0,0,0,.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .rh-feature-embed {
       position: absolute;
@@ -58,6 +61,23 @@
       border: 0;
       background: #000;
     }
+    .rh-feature-text {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      padding: 40px;
+      background: var(--zurich-primary);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      overflow-y: auto;
+    }
+    .rh-feature-text h3 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+    .rh-feature-text p { font-size: 18px; line-height: 1.6; opacity: 0.9; }
 
     .rh-fullscreen-btn {
       position: absolute;
@@ -92,9 +112,10 @@
     .rh-card:hover { transform: translateY(-2px); border-color: var(--zurich-accent); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
     .rh-card.is-selected { border-color: var(--zurich-accent); border-width: 2px; background: #fff; }
 
-    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 6px; background: #111; }
+    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 6px; background: #111; display: flex; align-items: center; justify-content: center; }
     .rh-thumb { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; outline: none; }
-    .rh-card-play { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 4px; background: var(--zurich-accent); color: #fff; font-size: 11px; }
+    .rh-card-text-preview { padding: 12px; background: var(--zurich-primary); color: #fff; font-size: 13px; line-height: 1.4; width: 100%; height: 100%; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .rh-card-badge { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 4px; background: var(--zurich-accent); color: #fff; font-size: 11px; }
 
     .rh-card-caption { display: block; width: 100%; margin-top: 10px; }
     .rh-card-title { display: block; overflow: hidden; color: var(--zurich-ink); font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
@@ -116,9 +137,9 @@
 <body>
   <div id="reelhouse-widget" data-api-base="https://script.google.com/macros/s/AKfycbyHh9H4rI91gZC5SeQiAK-9Qhjl930EX9JDfkJS7aDEJf9lvEuOCcb-BsJyP1Rn3oXy/exec">
     <header class="rh-nav">
-     <a class="rh-brand" href="#">
-  <img class="rh-logo-img" src="Inside Wall A.png" alt="Zurich Foundation Logo">
-</a>
+      <a class="rh-brand" href="#">
+        <img class="rh-logo-img" src="Inside Wall A.png" alt="Zurich Foundation Logo">
+      </a>
     </header>
 
     <main class="rh-main">
@@ -127,17 +148,21 @@
           <div>
             <p class="rh-eyebrow">Where are you creating change?</p>
             <h1 class="rh-title">Mark your impact</h1>
-            <p class="rh-count" aria-live="polite">Loading videos…</p>
+            <p class="rh-count" aria-live="polite">Loading submissions…</p>
           </div>
           <label class="rh-search-wrap">
             <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
-            <input class="rh-search" type="search" placeholder="Search videos" aria-label="Search videos">
+            <input class="rh-search" type="search" placeholder="Search submissions" aria-label="Search submissions">
           </label>
         </div>
 
-        <section class="rh-featured" aria-label="Featured video">
+        <section class="rh-featured" aria-label="Featured content">
           <div class="rh-feature-frame" id="rh-feature-frame">
             <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <div class="rh-feature-text" id="rh-feature-text" hidden>
+              <h3 id="rh-text-title"></h3>
+              <p id="rh-text-body"></p>
+            </div>
             <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
             </button>
@@ -146,14 +171,14 @@
 
         <div class="rh-gallery-heading">
           <div>
-            <h2 class="rh-gallery-title">Impact stories</h2>
-            <p class="rh-gallery-subtitle">Select a video to feature above.</p>
+            <h2 class="rh-gallery-title">Impact stories & text submissions</h2>
+            <p class="rh-gallery-subtitle">Select an item to feature above.</p>
           </div>
           <p class="rh-scroll-hint">Scroll sideways →</p>
         </div>
         <div class="rh-error" role="alert" hidden></div>
-        <div class="rh-grid" aria-label="Video gallery"></div>
-        <p class="rh-empty" hidden>No videos have been uploaded yet.</p>
+        <div class="rh-grid" aria-label="Submission gallery"></div>
+        <p class="rh-empty" hidden>No submissions have been added yet.</p>
       </section>
     </main>
   </div>
@@ -172,11 +197,14 @@
     const emptyMessage = root.querySelector('.rh-empty');
     
     const featureEmbed = document.getElementById('rh-feature-embed');
+    const featureText = document.getElementById('rh-feature-text');
+    const textTitle = document.getElementById('rh-text-title');
+    const textBody = document.getElementById('rh-text-body');
     const featureFrame = document.getElementById('rh-feature-frame');
     const fsBtn = document.getElementById('rh-fs-btn');
 
     const items = new Map();
-    let videoList = [];
+    let submissionList = [];
     let currentIndex = 0;
     let rotationTimer = null;
     let refreshInProgress = false;
@@ -207,6 +235,7 @@
 
     function getGoogleDriveId(rawUrl) {
       try {
+        if (!rawUrl) return null;
         const url = new URL(rawUrl);
         if (/(^|\.)googleusercontent\.com$/i.test(url.hostname)) {
           const parts = url.pathname.split('/');
@@ -238,16 +267,28 @@
       }
     }
 
-    function selectVideo(item) {
-      if (!item || !item.url) return;
+    function selectSubmission(item) {
+      if (!item) return;
       const id = String(item.id);
-      currentIndex = videoList.findIndex(v => String(v.id) === id);
+      currentIndex = submissionList.findIndex(v => String(v.id) === id);
       if (currentIndex === -1) currentIndex = 0;
 
       highlightCard(id);
 
-      const driveId = getGoogleDriveId(item.url) || item.id;
-      featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
+      const hasVideo = item.url && getGoogleDriveId(item.url);
+
+      if (hasVideo) {
+        featureText.hidden = true;
+        featureEmbed.hidden = false;
+        const driveId = getGoogleDriveId(item.url) || item.id;
+        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
+      } else {
+        featureEmbed.src = '';
+        featureEmbed.hidden = true;
+        featureText.hidden = false;
+        textTitle.textContent = item.title || 'Impact Form Submission';
+        textBody.textContent = item.description || item.text || item.message || 'No additional details provided.';
+      }
 
       setupRotationTimer();
     }
@@ -255,9 +296,9 @@
     function setupRotationTimer() {
       if (rotationTimer) clearInterval(rotationTimer);
       rotationTimer = setInterval(() => {
-        if (videoList.length <= 1) return;
-        currentIndex = (currentIndex + 1) % videoList.length;
-        selectVideo(videoList[currentIndex]);
+        if (submissionList.length <= 1) return;
+        currentIndex = (currentIndex + 1) % submissionList.length;
+        selectSubmission(submissionList[currentIndex]);
       }, 15000);
     }
 
@@ -267,43 +308,55 @@
       card.className = 'rh-card';
       card.dataset.id = String(item.id);
       card.setAttribute('aria-pressed', 'false');
-      card.setAttribute('aria-label', 'Play ' + (item.title || 'video'));
+      card.setAttribute('aria-label', 'Select ' + (item.title || 'submission'));
 
       const frame = document.createElement('div');
       frame.className = 'rh-frame';
 
-      const driveId = getGoogleDriveId(item.url) || item.id;
-      const img = document.createElement('img');
-      img.className = 'rh-thumb';
-      img.alt = item.title || 'Video preview';
-      img.loading = 'lazy';
-      img.src = 'https://lh3.googleusercontent.com/d/' + driveId;
-      img.addEventListener('error', () => {
-        img.src = 'https://drive.google.com/thumbnail?id=' + driveId + '&sz=w640';
-      });
+      const hasVideo = item.url && getGoogleDriveId(item.url);
 
-      const playIcon = document.createElement('span');
-      playIcon.className = 'rh-card-play';
-      playIcon.textContent = '▶';
+      if (hasVideo) {
+        const driveId = getGoogleDriveId(item.url) || item.id;
+        const img = document.createElement('img');
+        img.className = 'rh-thumb';
+        img.alt = item.title || 'Video preview';
+        img.loading = 'lazy';
+        img.src = 'https://lh3.googleusercontent.com/d/' + driveId;
+        img.addEventListener('error', () => {
+          img.src = 'https://drive.google.com/thumbnail?id=' + driveId + '&sz=w640';
+        });
 
-      frame.append(img, playIcon);
+        const playIcon = document.createElement('span');
+        playIcon.className = 'rh-card-badge';
+        playIcon.textContent = '▶';
+        frame.append(img, playIcon);
+      } else {
+        const textPreview = document.createElement('div');
+        textPreview.className = 'rh-card-text-preview';
+        textPreview.textContent = item.description || item.text || item.message || item.title || 'Text Submission';
+
+        const textBadge = document.createElement('span');
+        textBadge.className = 'rh-card-badge';
+        textBadge.textContent = '✎';
+        frame.append(textPreview, textBadge);
+      }
 
       const caption = document.createElement('span');
       caption.className = 'rh-card-caption';
 
       const title = document.createElement('span');
       title.className = 'rh-card-title';
-      title.textContent = item.title || 'Untitled video';
+      title.textContent = item.title || 'Untitled submission';
 
       const meta = document.createElement('span');
       meta.className = 'rh-card-meta';
-      meta.textContent = dateText(item.date) + (item.size ? ' · ' + formatBytes(item.size) : '');
+      meta.textContent = dateText(item.date) + (item.size ? ' · ' + formatBytes(item.size) : ' · Form text');
 
       caption.append(title, meta);
       card.append(frame, caption);
 
       card.addEventListener('click', () => {
-        selectVideo(items.get(card.dataset.id) || item);
+        selectSubmission(items.get(card.dataset.id) || item);
       });
 
       return card;
@@ -316,14 +369,15 @@
       grid.querySelectorAll('.rh-card').forEach(card => {
         const item = items.get(card.dataset.id);
         const title = item ? item.title || '' : '';
-        const matches = !query || title.toLocaleLowerCase().includes(query);
+        const desc = item ? (item.description || item.text || item.message || '') : '';
+        const matches = !query || title.toLocaleLowerCase().includes(query) || desc.toLocaleLowerCase().includes(query);
         card.hidden = !matches;
         if (matches) shown++;
       });
 
       countLabel.textContent = query && shown === 0
-        ? 'No videos match your search'
-        : shown + ' video' + (shown === 1 ? '' : 's') + ' · Zurich Foundation Gallery';
+        ? 'No submissions match your search'
+        : shown + ' item' + (shown === 1 ? '' : 's') + ' · Zurich Foundation Gallery';
 
       emptyMessage.hidden = items.size !== 0;
     }
@@ -337,15 +391,15 @@
       try {
         if (!apiBase) throw new Error('Missing Google Apps Script Web App URL.');
         const response = await fetch(apiBase, { method: 'GET', cache: 'no-store' });
-        if (!response.ok) throw new Error('Could not retrieve videos.');
+        if (!response.ok) throw new Error('Could not retrieve submissions.');
 
         const body = await response.json();
-        const videos = Array.isArray(body.videos) ? body.videos : [];
-        videoList = videos;
+        const submissions = Array.isArray(body.videos) ? body.videos : (Array.isArray(body.submissions) ? body.submissions : []);
+        submissionList = submissions;
         const incomingIds = new Set();
 
-        videos.forEach(item => {
-          if (!item || item.id == null || !item.url) return;
+        submissions.forEach(item => {
+          if (!item || item.id == null) return;
           const id = String(item.id);
           incomingIds.add(id);
 
@@ -366,16 +420,17 @@
           }
         }
 
-        if (!featureEmbed.src && videos.length > 0) {
-          selectVideo(videos[0]);
+        if (!featureEmbed.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
+          featureText.setAttribute('data-loaded', '1');
+          selectSubmission(submissions[0]);
         }
 
         galleryError.hidden = true;
         renderFilter();
       } catch (error) {
-        galleryError.textContent = 'Could not load videos.';
+        galleryError.textContent = 'Could not load submissions.';
         galleryError.hidden = false;
-        countLabel.textContent = 'Unable to load videos';
+        countLabel.textContent = 'Unable to load submissions';
       } finally {
         refreshInProgress = false;
       }
