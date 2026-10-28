@@ -4,49 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zurich Foundation · Impact Gallery</title>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --zurich-bg: #fdfdfd;
-      --zurich-ink: #1a1a1a;
-      --zurich-muted: #666666;
+      --zurich-bg: #f8fafc;
+      --zurich-ink: #0f172a;
+      --zurich-muted: #475569;
       --zurich-primary: #082A68;
       --zurich-accent: #B45A41;
-      --zurich-border: #e2e8f0;
+      --zurich-border: #cbd5e1;
       --zurich-card-bg: #ffffff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--zurich-bg); color: var(--zurich-ink); font-family: 'Public Sans', sans-serif; font-size: 16px; line-height: 1.6; }
+    body { background: var(--zurich-bg); color: var(--zurich-ink); font-family: 'Public Sans', sans-serif; font-size: 18px; line-height: 1.6; }
     button, input { font: inherit; }
-    #reelhouse-widget { max-width: 1152px; margin: 0 auto; }
+    #reelhouse-widget { max-width: 1280px; margin: 0 auto; }
 
-    .rh-nav { position: sticky; top: 0; z-index: 40; height: 80px; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--zurich-border); background: rgba(255,255,255,.98); backdrop-filter: blur(8px); }
+    .rh-nav { position: sticky; top: 0; z-index: 40; height: 88px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--zurich-border); background: rgba(255,255,255,.98); backdrop-filter: blur(8px); }
     .rh-brand { display: flex; align-items: center; text-decoration: none; }
-    .rh-logo-img { height: 44px; width: auto; display: block; object-fit: contain; }
+    .rh-logo-img { height: 50px; width: auto; display: block; object-fit: contain; }
 
-    .rh-main { padding: 48px 32px 80px; }
+    .rh-main { padding: 48px 40px 80px; }
     .rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-    .rh-eyebrow { color: var(--zurich-accent); font-size: 13px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
-    .rh-title { margin-top: 6px; font-size: clamp(32px, 4vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; color: var(--zurich-primary); }
-    .rh-count { margin-top: 8px; color: var(--zurich-muted); font-size: 14px; font-weight: 500; }
+    .rh-eyebrow { color: var(--zurich-accent); font-size: 14px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+    .rh-title { margin-top: 6px; font-size: clamp(36px, 4.5vw, 52px); font-weight: 900; letter-spacing: -.03em; line-height: 1.1; color: var(--zurich-primary); }
+    .rh-count { margin-top: 8px; color: var(--zurich-muted); font-size: 16px; font-weight: 600; }
 
-    .rh-search-wrap { position: relative; width: 300px; flex: 0 0 300px; }
-    .rh-search-icon { position: absolute; top: 50%; left: 16px; width: 16px; height: 16px; transform: translateY(-50%); color: #777; pointer-events: none; }
-    .rh-search { width: 100%; height: 46px; padding: 0 16px 0 44px; border: 1px solid var(--zurich-border); border-radius: 6px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 14px; transition: all .2s ease; }
-    .rh-search:focus { border-color: var(--zurich-primary); box-shadow: 0 0 0 3px rgba(8,42,104,0.1); }
+    .rh-search-wrap { position: relative; width: 320px; flex: 0 0 320px; }
+    .rh-search-icon { position: absolute; top: 50%; left: 16px; width: 18px; height: 18px; transform: translateY(-50%); color: #555; pointer-events: none; }
+    .rh-search { width: 100%; height: 50px; padding: 0 16px 0 48px; border: 2px solid var(--zurich-border); border-radius: 8px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 16px; font-weight: 500; transition: all .2s ease; }
+    .rh-search:focus { border-color: var(--zurich-primary); box-shadow: 0 0 0 4px rgba(8,42,104,0.15); }
 
-    .rh-featured { margin-top: 32px; }
+    .rh-featured { margin-top: 36px; }
     .rh-feature-frame {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      min-height: 340px;
-      max-height: 640px;
+      min-height: 420px;
+      max-height: 720px;
       overflow: hidden;
-      border-radius: 16px;
+      border-radius: 20px;
       background: #000;
-      box-shadow: 0 16px 40px rgba(8,42,104,.08);
-      border: 1px solid var(--zurich-border);
+      box-shadow: 0 20px 50px rgba(8,42,104,.15);
+      border: 2px solid var(--zurich-border);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -61,12 +61,13 @@
       background: #000;
     }
 
+    /* High-Visibility Presentation Screen Layout for Text Submissions */
     .rh-feature-text {
       position: relative;
       z-index: 10;
       width: 100%;
       height: 100%;
-      padding: 48px 64px;
+      padding: 56px 64px;
       background: #ffffff;
       color: var(--zurich-ink);
       display: flex;
@@ -79,79 +80,80 @@
     .rh-text-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      background: rgba(180,90,65,0.1);
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(180,90,65,0.12);
       color: var(--zurich-accent);
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .1em;
-      border-radius: 4px;
-      margin-bottom: 12px;
+      letter-spacing: .12em;
+      border-radius: 6px;
+      margin-bottom: 16px;
     }
-    .rh-feature-text h3 { font-size: clamp(22px, 2.5vw, 28px); font-weight: 800; color: var(--zurich-primary); margin-bottom: 4px; letter-spacing: -.02em; }
-    .rh-meta-sub { font-size: 14px; color: var(--zurich-muted); margin-bottom: 20px; font-weight: 500; }
+    .rh-feature-text h3 { font-size: clamp(28px, 3.2vw, 40px); font-weight: 900; color: var(--zurich-primary); margin-bottom: 4px; letter-spacing: -.02em; }
+    .rh-meta-sub { font-size: 16px; color: var(--zurich-muted); margin-bottom: 28px; font-weight: 600; }
     
-    .rh-qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
-    .rh-qa-block { background: #f8fafc; padding: 16px 20px; border-radius: 8px; border: 1px solid var(--zurich-border); }
+    .rh-qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+    .rh-qa-block { background: #f8fafc; padding: 22px 28px; border-radius: 12px; border: 2px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
     .rh-qa-block.full-width { grid-column: span 2; }
-    .rh-qa-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--zurich-muted); margin-bottom: 6px; }
-    .rh-qa-content { font-size: 15px; font-weight: 400; color: var(--zurich-ink); line-height: 1.5; }
+    .rh-qa-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--zurich-accent); margin-bottom: 8px; }
+    .rh-qa-content { font-size: 18px; font-weight: 600; color: var(--zurich-ink); line-height: 1.5; }
 
     .rh-fullscreen-btn {
       position: absolute;
-      bottom: 24px;
-      right: 24px;
+      bottom: 28px;
+      right: 28px;
       z-index: 20;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       display: grid;
       place-items: center;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.8);
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
       cursor: pointer;
       transition: background 0.2s ease;
     }
     .rh-fullscreen-btn:hover { background: var(--zurich-accent); }
 
-    .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 56px; }
-    .rh-gallery-title { font-size: 24px; font-weight: 700; letter-spacing: -.02em; color: var(--zurich-primary); }
-    .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 14px; }
-    .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 13px; font-weight: 500; }
+    .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 64px; }
+    .rh-gallery-title { font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: var(--zurich-primary); }
+    .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 16px; font-weight: 500; }
+    .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 14px; font-weight: 600; }
 
-    .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 20px; width: 100%; margin-top: 20px; padding: 8px 4px 24px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
-    .rh-grid::-webkit-scrollbar { height: 8px; }
+    /* Horizontal Cards */
+    .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 24px; width: 100%; margin-top: 24px; padding: 8px 4px 28px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #94a3b8 transparent; }
+    .rh-grid::-webkit-scrollbar { height: 10px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
-    .rh-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .rh-grid::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 6px; }
 
-    .rh-card { position: relative; display: block; flex: 0 0 clamp(240px, 26%, 280px); min-width: 0; padding: 12px; border: 1px solid var(--zurich-border); border-radius: 12px; background: var(--zurich-card-bg); color: var(--zurich-ink); text-align: left; cursor: pointer; scroll-snap-align: start; transition: all .2s ease; box-shadow: 0 4px 12px rgba(0,0,0,.02); }
-    .rh-card:hover { transform: translateY(-3px); border-color: var(--zurich-primary); box-shadow: 0 10px 25px rgba(8,42,104,.08); }
-    .rh-card.is-selected { border-color: var(--zurich-accent); border-width: 2px; background: #fff; box-shadow: 0 10px 25px rgba(180,90,65,.12); }
+    .rh-card { position: relative; display: block; flex: 0 0 clamp(260px, 28%, 310px); min-width: 0; padding: 14px; border: 2px solid var(--zurich-border); border-radius: 14px; background: var(--zurich-card-bg); color: var(--zurich-ink); text-align: left; cursor: pointer; scroll-snap-align: start; transition: all .2s ease; box-shadow: 0 6px 16px rgba(0,0,0,.04); }
+    .rh-card:hover { transform: translateY(-4px); border-color: var(--zurich-primary); box-shadow: 0 12px 30px rgba(8,42,104,.12); }
+    .rh-card.is-selected { border-color: var(--zurich-accent); border-width: 3px; background: #fff; box-shadow: 0 12px 30px rgba(180,90,65,.18); }
 
-    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 8px; background: #0f172a; display: flex; align-items: center; justify-content: center; }
+    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 10px; background: #0f172a; display: flex; align-items: center; justify-content: center; }
     .rh-thumb { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; outline: none; }
-    .rh-card-text-preview { padding: 16px; background: #f8fafc; color: var(--zurich-ink); font-size: 13px; line-height: 1.5; width: 100%; height: 100%; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; border-left: 3px solid var(--zurich-accent); }
-    .rh-card-badge { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 6px; background: var(--zurich-primary); color: #fff; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .rh-card-text-preview { padding: 18px; background: #f8fafc; color: var(--zurich-ink); font-size: 14px; font-weight: 500; line-height: 1.5; width: 100%; height: 100%; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; border-left: 4px solid var(--zurich-accent); }
+    .rh-card-badge { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--zurich-primary); color: #fff; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
     .rh-card.is-selected .rh-card-badge { background: var(--zurich-accent); }
 
-    .rh-card-caption { display: block; width: 100%; margin-top: 12px; padding: 0 4px; }
-    .rh-card-title { display: block; overflow: hidden; color: var(--zurich-primary); font-size: 15px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
-    .rh-card-meta { display: block; margin-top: 4px; color: var(--zurich-muted); font-size: 12px; font-weight: 500; }
+    .rh-card-caption { display: block; width: 100%; margin-top: 14px; padding: 0 4px; }
+    .rh-card-title { display: block; overflow: hidden; color: var(--zurich-primary); font-size: 16px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .rh-card-meta { display: block; margin-top: 4px; color: var(--zurich-muted); font-size: 13px; font-weight: 600; }
 
-    .rh-error { margin-top: 24px; padding: 16px; border-radius: 8px; background: #fef2f2; color: #991b1b; font-size: 14px; border: 1px solid #fecaca; }
-    .rh-empty { margin-top: 24px; color: var(--zurich-muted); font-size: 14px; }
+    .rh-error { margin-top: 24px; padding: 20px; border-radius: 10px; background: #fef2f2; color: #991b1b; font-size: 16px; border: 2px solid #fecaca; font-weight: 600; }
+    .rh-empty { margin-top: 24px; color: var(--zurich-muted); font-size: 16px; font-weight: 600; }
     [hidden] { display: none !important; }
 
-    @media (max-width: 640px) {
-      .rh-nav { height: 64px; padding: 0 16px; }
-      .rh-logo-img { height: 34px; }
-      .rh-main { padding: 32px 16px 60px; }
-      .rh-head { flex-direction: column; align-items: stretch; gap: 16px; }
+    @media (max-width: 768px) {
+      .rh-nav { height: 72px; padding: 0 20px; }
+      .rh-logo-img { height: 38px; }
+      .rh-main { padding: 32px 20px 60px; }
+      .rh-head { flex-direction: column; align-items: stretch; gap: 20px; }
       .rh-search-wrap { width: 100%; flex-basis: auto; }
-      .rh-feature-text { padding: 32px 24px; }
+      .rh-feature-text { padding: 36px 24px; }
       .rh-qa-grid { grid-template-columns: 1fr; }
       .rh-qa-block.full-width { grid-column: span 1; }
     }
@@ -174,7 +176,7 @@
             <p class="rh-count" aria-live="polite">Loading submissions…</p>
           </div>
           <label class="rh-search-wrap">
-            <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+            <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
             <input class="rh-search" type="search" placeholder="Search submissions" aria-label="Search submissions">
           </label>
         </div>
@@ -184,7 +186,7 @@
             <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             <div class="rh-feature-text" id="rh-feature-text" hidden>
               <div class="rh-text-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                 Impact Story Submission
               </div>
               <h3 id="rh-text-title"></h3>
@@ -206,7 +208,7 @@
               </div>
             </div>
             <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
             </button>
           </div>
         </section>
