@@ -40,7 +40,7 @@
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      min-height: 320px;
+      min-height: 340px;
       max-height: 640px;
       overflow: hidden;
       border-radius: 16px;
@@ -61,13 +61,12 @@
       background: #000;
     }
 
-    /* Professional Editorial Layout for Text Submissions */
     .rh-feature-text {
       position: relative;
       z-index: 10;
       width: 100%;
       height: 100%;
-      padding: 56px 64px;
+      padding: 48px 64px;
       background: #ffffff;
       color: var(--zurich-ink);
       display: flex;
@@ -89,12 +88,16 @@
       text-transform: uppercase;
       letter-spacing: .1em;
       border-radius: 4px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
-    .rh-feature-text h3 { font-size: clamp(22px, 2.5vw, 28px); font-weight: 800; color: var(--zurich-primary); margin-bottom: 24px; letter-spacing: -.02em; }
-    .rh-qa-block { margin-bottom: 16px; width: 100%; }
-    .rh-qa-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--zurich-muted); margin-bottom: 4px; }
-    .rh-qa-content { font-size: 16px; font-weight: 400; color: var(--zurich-ink); line-height: 1.6; }
+    .rh-feature-text h3 { font-size: clamp(22px, 2.5vw, 28px); font-weight: 800; color: var(--zurich-primary); margin-bottom: 4px; letter-spacing: -.02em; }
+    .rh-meta-sub { font-size: 14px; color: var(--zurich-muted); margin-bottom: 20px; font-weight: 500; }
+    
+    .rh-qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+    .rh-qa-block { background: #f8fafc; padding: 16px 20px; border-radius: 8px; border: 1px solid var(--zurich-border); }
+    .rh-qa-block.full-width { grid-column: span 2; }
+    .rh-qa-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--zurich-muted); margin-bottom: 6px; }
+    .rh-qa-content { font-size: 15px; font-weight: 400; color: var(--zurich-ink); line-height: 1.5; }
 
     .rh-fullscreen-btn {
       position: absolute;
@@ -119,7 +122,6 @@
     .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 14px; }
     .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 13px; font-weight: 500; }
 
-    /* Horizontal Cards */
     .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 20px; width: 100%; margin-top: 20px; padding: 8px 4px 24px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
     .rh-grid::-webkit-scrollbar { height: 8px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
@@ -150,6 +152,8 @@
       .rh-head { flex-direction: column; align-items: stretch; gap: 16px; }
       .rh-search-wrap { width: 100%; flex-basis: auto; }
       .rh-feature-text { padding: 32px 24px; }
+      .rh-qa-grid { grid-template-columns: 1fr; }
+      .rh-qa-block.full-width { grid-column: span 1; }
     }
   </style>
 </head>
@@ -184,13 +188,21 @@
                 Impact Story Submission
               </div>
               <h3 id="rh-text-title"></h3>
-              <div class="rh-qa-block">
-                <div class="rh-qa-label">Where creating change</div>
-                <div class="rh-qa-content" id="rh-text-change"></div>
-              </div>
-              <div class="rh-qa-block" style="margin-top: 16px;" id="rh-help-container">
-                <div class="rh-qa-label">What would help impact grow</div>
-                <div class="rh-qa-content" id="rh-text-help"></div>
+              <div class="rh-meta-sub" id="rh-text-meta"></div>
+
+              <div class="rh-qa-grid">
+                <div class="rh-qa-block">
+                  <div class="rh-qa-label">Where are you from?</div>
+                  <div class="rh-qa-content" id="rh-text-location"></div>
+                </div>
+                <div class="rh-qa-block">
+                  <div class="rh-qa-label">Where are you creating change?</div>
+                  <div class="rh-qa-content" id="rh-text-change"></div>
+                </div>
+                <div class="rh-qa-block full-width">
+                  <div class="rh-qa-label">What's the one thing that would help your impact grow?</div>
+                  <div class="rh-qa-content" id="rh-text-help"></div>
+                </div>
               </div>
             </div>
             <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
@@ -229,9 +241,10 @@
     const featureEmbed = document.getElementById('rh-feature-embed');
     const featureText = document.getElementById('rh-feature-text');
     const textTitle = document.getElementById('rh-text-title');
+    const textMeta = document.getElementById('rh-text-meta');
+    const textLocation = document.getElementById('rh-text-location');
     const textChange = document.getElementById('rh-text-change');
     const textHelp = document.getElementById('rh-text-help');
-    const helpContainer = document.getElementById('rh-help-container');
     const featureFrame = document.getElementById('rh-feature-frame');
     const fsBtn = document.getElementById('rh-fs-btn');
 
@@ -312,13 +325,10 @@
         featureEmbed.hidden = true;
         featureText.hidden = false;
         textTitle.textContent = item.title || 'Impact Story';
-        textChange.textContent = item.change || 'No details provided.';
-        if (item.help) {
-          textHelp.textContent = item.help;
-          helpContainer.hidden = false;
-        } else {
-          helpContainer.hidden = true;
-        }
+        textMeta.textContent = item.email ? `Email: ${item.email}` : '';
+        textLocation.textContent = item.location || 'Not specified';
+        textChange.textContent = item.change || 'Not specified';
+        textHelp.textContent = item.help || 'Not specified';
       }
 
       setupRotationTimer();
@@ -400,9 +410,11 @@
       grid.querySelectorAll('.rh-card').forEach(card => {
         const item = items.get(card.dataset.id);
         const title = item ? item.title || '' : '';
+        const email = item ? item.email || '' : '';
+        const location = item ? item.location || '' : '';
         const change = item ? item.change || '' : '';
         const help = item ? item.help || '' : '';
-        const matches = !query || title.toLocaleLowerCase().includes(query) || change.toLocaleLowerCase().includes(query) || help.toLocaleLowerCase().includes(query);
+        const matches = !query || title.toLocaleLowerCase().includes(query) || email.toLocaleLowerCase().includes(query) || location.toLocaleLowerCase().includes(query) || change.toLocaleLowerCase().includes(query) || help.toLocaleLowerCase().includes(query);
         card.hidden = !matches;
         if (matches) shown++;
       });
