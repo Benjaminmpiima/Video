@@ -3,49 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zurich Foundation · Video Gallery</title>
+  <title>Zurich Foundation · Impact Gallery</title>
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --zurich-bg: #ffffff;
-      --zurich-ink: #111111;
-      --zurich-muted: #555555;
+      --zurich-bg: #fdfdfd;
+      --zurich-ink: #1a1a1a;
+      --zurich-muted: #666666;
       --zurich-primary: #082A68;
       --zurich-accent: #B45A41;
-      --zurich-border: #e0e0e0;
-      --zurich-card-bg: #f8f9fa;
+      --zurich-border: #e2e8f0;
+      --zurich-card-bg: #ffffff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--zurich-bg); color: var(--zurich-ink); font-family: 'Public Sans', sans-serif; font-size: 16px; line-height: 1.5; }
+    body { background: var(--zurich-bg); color: var(--zurich-ink); font-family: 'Public Sans', sans-serif; font-size: 16px; line-height: 1.6; }
     button, input { font: inherit; }
     #reelhouse-widget { max-width: 1152px; margin: 0 auto; }
 
-    .rh-nav { position: sticky; top: 0; z-index: 40; height: 76px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--zurich-border); background: rgba(255,255,255,.95); backdrop-filter: blur(8px); }
+    .rh-nav { position: sticky; top: 0; z-index: 40; height: 80px; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--zurich-border); background: rgba(255,255,255,.98); backdrop-filter: blur(8px); }
     .rh-brand { display: flex; align-items: center; text-decoration: none; }
-    .rh-logo-img { height: 42px; width: auto; display: block; object-fit: contain; }
+    .rh-logo-img { height: 44px; width: auto; display: block; object-fit: contain; }
 
-    .rh-main { padding: 48px 24px 80px; }
+    .rh-main { padding: 48px 32px 80px; }
     .rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-    .rh-eyebrow { color: var(--zurich-accent); font-size: 12px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
-    .rh-title { margin-top: 6px; font-size: clamp(34px, 4.5vw, 48px); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; color: var(--zurich-primary); }
-    .rh-count { margin-top: 8px; color: var(--zurich-muted); font-size: 14px; }
+    .rh-eyebrow { color: var(--zurich-accent); font-size: 13px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    .rh-title { margin-top: 6px; font-size: clamp(32px, 4vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; color: var(--zurich-primary); }
+    .rh-count { margin-top: 8px; color: var(--zurich-muted); font-size: 14px; font-weight: 500; }
 
-    .rh-search-wrap { position: relative; width: 280px; flex: 0 0 280px; }
-    .rh-search-icon { position: absolute; top: 50%; left: 14px; width: 16px; height: 16px; transform: translateY(-50%); color: #777; pointer-events: none; }
-    .rh-search { width: 100%; height: 44px; padding: 0 16px 0 40px; border: 1px solid var(--zurich-border); border-radius: 4px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 14px; transition: border-color .2s ease; }
-    .rh-search:focus { border-color: var(--zurich-accent); }
+    .rh-search-wrap { position: relative; width: 300px; flex: 0 0 300px; }
+    .rh-search-icon { position: absolute; top: 50%; left: 16px; width: 16px; height: 16px; transform: translateY(-50%); color: #777; pointer-events: none; }
+    .rh-search { width: 100%; height: 46px; padding: 0 16px 0 44px; border: 1px solid var(--zurich-border); border-radius: 6px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 14px; transition: all .2s ease; }
+    .rh-search:focus { border-color: var(--zurich-primary); box-shadow: 0 0 0 3px rgba(8,42,104,0.1); }
 
     .rh-featured { margin-top: 32px; }
     .rh-feature-frame {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      min-height: 280px;
+      min-height: 320px;
       max-height: 640px;
       overflow: hidden;
-      border-radius: 12px;
+      border-radius: 16px;
       background: #000;
-      box-shadow: 0 12px 36px rgba(0,0,0,.08);
+      box-shadow: 0 16px 40px rgba(8,42,104,.08);
+      border: 1px solid var(--zurich-border);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -59,14 +60,16 @@
       border: 0;
       background: #000;
     }
+
+    /* Professional Editorial Layout for Text Submissions */
     .rh-feature-text {
       position: relative;
       z-index: 10;
       width: 100%;
       height: 100%;
-      padding: 48px;
-      background: var(--zurich-primary);
-      color: #fff;
+      padding: 56px 64px;
+      background: #ffffff;
+      color: var(--zurich-ink);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -74,60 +77,79 @@
       text-align: left;
       overflow-y: auto;
     }
-    .rh-feature-text h3 { font-size: 26px; font-weight: 700; margin-bottom: 12px; color: #fff; }
-    .rh-feature-text p { font-size: 18px; line-height: 1.6; opacity: 0.95; white-space: pre-line; }
+    .rh-text-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(180,90,65,0.1);
+      color: var(--zurich-accent);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .rh-feature-text h3 { font-size: clamp(22px, 2.5vw, 28px); font-weight: 800; color: var(--zurich-primary); margin-bottom: 24px; letter-spacing: -.02em; }
+    .rh-qa-block { margin-bottom: 16px; width: 100%; }
+    .rh-qa-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--zurich-muted); margin-bottom: 4px; }
+    .rh-qa-content { font-size: 16px; font-weight: 400; color: var(--zurich-ink); line-height: 1.6; }
 
     .rh-fullscreen-btn {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
+      bottom: 24px;
+      right: 24px;
       z-index: 20;
       width: 40px;
       height: 40px;
       display: grid;
       place-items: center;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.75);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
+      border-radius: 8px;
       cursor: pointer;
       transition: background 0.2s ease;
     }
     .rh-fullscreen-btn:hover { background: var(--zurich-accent); }
 
-    .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 48px; }
+    .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 56px; }
     .rh-gallery-title { font-size: 24px; font-weight: 700; letter-spacing: -.02em; color: var(--zurich-primary); }
-    .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 13px; }
-    .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 12px; }
+    .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 14px; }
+    .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 13px; font-weight: 500; }
 
-    .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 16px; width: 100%; margin-top: 16px; padding: 8px 4px 24px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #ccc transparent; }
-    .rh-grid::-webkit-scrollbar { height: 6px; }
+    /* Horizontal Cards */
+    .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 20px; width: 100%; margin-top: 20px; padding: 8px 4px 24px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+    .rh-grid::-webkit-scrollbar { height: 8px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
-    .rh-grid::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+    .rh-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
-    .rh-card { position: relative; display: block; flex: 0 0 clamp(220px, 25%, 260px); min-width: 0; padding: 10px; border: 1px solid var(--zurich-border); border-radius: 8px; background: var(--zurich-card-bg); color: var(--zurich-ink); text-align: left; cursor: pointer; scroll-snap-align: start; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
-    .rh-card:hover { transform: translateY(-2px); border-color: var(--zurich-accent); box-shadow: 0 6px 20px rgba(0,0,0,.06); }
-    .rh-card.is-selected { border-color: var(--zurich-accent); border-width: 2px; background: #fff; }
+    .rh-card { position: relative; display: block; flex: 0 0 clamp(240px, 26%, 280px); min-width: 0; padding: 12px; border: 1px solid var(--zurich-border); border-radius: 12px; background: var(--zurich-card-bg); color: var(--zurich-ink); text-align: left; cursor: pointer; scroll-snap-align: start; transition: all .2s ease; box-shadow: 0 4px 12px rgba(0,0,0,.02); }
+    .rh-card:hover { transform: translateY(-3px); border-color: var(--zurich-primary); box-shadow: 0 10px 25px rgba(8,42,104,.08); }
+    .rh-card.is-selected { border-color: var(--zurich-accent); border-width: 2px; background: #fff; box-shadow: 0 10px 25px rgba(180,90,65,.12); }
 
-    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 6px; background: #111; display: flex; align-items: center; justify-content: center; }
+    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 8px; background: #0f172a; display: flex; align-items: center; justify-content: center; }
     .rh-thumb { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; outline: none; }
-    .rh-card-text-preview { padding: 12px; background: var(--zurich-primary); color: #fff; font-size: 13px; line-height: 1.4; width: 100%; height: 100%; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-    .rh-card-badge { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 4px; background: var(--zurich-accent); color: #fff; font-size: 11px; }
+    .rh-card-text-preview { padding: 16px; background: #f8fafc; color: var(--zurich-ink); font-size: 13px; line-height: 1.5; width: 100%; height: 100%; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; border-left: 3px solid var(--zurich-accent); }
+    .rh-card-badge { position: absolute; right: 10px; bottom: 10px; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 6px; background: var(--zurich-primary); color: #fff; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    .rh-card.is-selected .rh-card-badge { background: var(--zurich-accent); }
 
-    .rh-card-caption { display: block; width: 100%; margin-top: 10px; }
-    .rh-card-title { display: block; overflow: hidden; color: var(--zurich-ink); font-size: 14px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-    .rh-card-meta { display: block; margin-top: 2px; color: var(--zurich-muted); font-size: 12px; }
+    .rh-card-caption { display: block; width: 100%; margin-top: 12px; padding: 0 4px; }
+    .rh-card-title { display: block; overflow: hidden; color: var(--zurich-primary); font-size: 15px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .rh-card-meta { display: block; margin-top: 4px; color: var(--zurich-muted); font-size: 12px; font-weight: 500; }
 
-    .rh-error { margin-top: 24px; padding: 16px; border-radius: 6px; background: #fdf2f2; color: #991b1b; font-size: 14px; }
+    .rh-error { margin-top: 24px; padding: 16px; border-radius: 8px; background: #fef2f2; color: #991b1b; font-size: 14px; border: 1px solid #fecaca; }
     .rh-empty { margin-top: 24px; color: var(--zurich-muted); font-size: 14px; }
     [hidden] { display: none !important; }
 
     @media (max-width: 640px) {
-      .rh-nav { height: 60px; padding: 0 16px; }
-      .rh-logo-img { height: 32px; }
+      .rh-nav { height: 64px; padding: 0 16px; }
+      .rh-logo-img { height: 34px; }
       .rh-main { padding: 32px 16px 60px; }
       .rh-head { flex-direction: column; align-items: stretch; gap: 16px; }
       .rh-search-wrap { width: 100%; flex-basis: auto; }
+      .rh-feature-text { padding: 32px 24px; }
     }
   </style>
 </head>
@@ -157,8 +179,19 @@
           <div class="rh-feature-frame" id="rh-feature-frame">
             <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             <div class="rh-feature-text" id="rh-feature-text" hidden>
+              <div class="rh-text-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Impact Story Submission
+              </div>
               <h3 id="rh-text-title"></h3>
-              <p id="rh-text-body"></p>
+              <div class="rh-qa-block">
+                <div class="rh-qa-label">Where creating change</div>
+                <div class="rh-qa-content" id="rh-text-change"></div>
+              </div>
+              <div class="rh-qa-block" style="margin-top: 16px;" id="rh-help-container">
+                <div class="rh-qa-label">What would help impact grow</div>
+                <div class="rh-qa-content" id="rh-text-help"></div>
+              </div>
             </div>
             <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
@@ -168,7 +201,7 @@
 
         <div class="rh-gallery-heading">
           <div>
-            <h2 class="rh-gallery-title">Impact stories & text submissions</h2>
+            <h2 class="rh-gallery-title">Impact stories & submissions</h2>
             <p class="rh-gallery-subtitle">Select an item to feature above.</p>
           </div>
           <p class="rh-scroll-hint">Scroll sideways →</p>
@@ -196,7 +229,9 @@
     const featureEmbed = document.getElementById('rh-feature-embed');
     const featureText = document.getElementById('rh-feature-text');
     const textTitle = document.getElementById('rh-text-title');
-    const textBody = document.getElementById('rh-text-body');
+    const textChange = document.getElementById('rh-text-change');
+    const textHelp = document.getElementById('rh-text-help');
+    const helpContainer = document.getElementById('rh-help-container');
     const featureFrame = document.getElementById('rh-feature-frame');
     const fsBtn = document.getElementById('rh-fs-btn');
 
@@ -215,12 +250,6 @@
         document.exitFullscreen();
       }
     });
-
-    function formatBytes(bytes) {
-      const n = Number(bytes || 0);
-      if (n < 1024 * 1024) return Math.max(1, Math.round(n / 1024)) + ' KB';
-      return (n / (1024 * 1024)).toFixed(1) + ' MB';
-    }
 
     function dateText(value) {
       if (!value) return '';
@@ -282,8 +311,14 @@
         featureEmbed.src = '';
         featureEmbed.hidden = true;
         featureText.hidden = false;
-        textTitle.textContent = item.title || 'Impact Form Submission';
-        textBody.textContent = item.description || item.text || item.message || 'No additional details provided.';
+        textTitle.textContent = item.title || 'Impact Story';
+        textChange.textContent = item.change || 'No details provided.';
+        if (item.help) {
+          textHelp.textContent = item.help;
+          helpContainer.hidden = false;
+        } else {
+          helpContainer.hidden = true;
+        }
       }
 
       setupRotationTimer();
@@ -329,7 +364,7 @@
       } else {
         const textPreview = document.createElement('div');
         textPreview.className = 'rh-card-text-preview';
-        textPreview.textContent = item.description || item.text || item.message || item.title || 'Text Submission';
+        textPreview.textContent = item.change || item.title || 'Text Submission';
 
         const textBadge = document.createElement('span');
         textBadge.className = 'rh-card-badge';
@@ -346,7 +381,7 @@
 
       const meta = document.createElement('span');
       meta.className = 'rh-card-meta';
-      meta.textContent = dateText(item.date) + (item.size ? ' · ' + formatBytes(item.size) : ' · Text response');
+      meta.textContent = dateText(item.date) + (hasVideo ? ' · Video reel' : ' · Written story');
 
       caption.append(title, meta);
       card.append(frame, caption);
@@ -365,15 +400,16 @@
       grid.querySelectorAll('.rh-card').forEach(card => {
         const item = items.get(card.dataset.id);
         const title = item ? item.title || '' : '';
-        const desc = item ? (item.description || item.text || item.message || '') : '';
-        const matches = !query || title.toLocaleLowerCase().includes(query) || desc.toLocaleLowerCase().includes(query);
+        const change = item ? item.change || '' : '';
+        const help = item ? item.help || '' : '';
+        const matches = !query || title.toLocaleLowerCase().includes(query) || change.toLocaleLowerCase().includes(query) || help.toLocaleLowerCase().includes(query);
         card.hidden = !matches;
         if (matches) shown++;
       });
 
       countLabel.textContent = query && shown === 0
         ? 'No submissions match your search'
-        : shown + ' item' + (shown === 1 ? '' : 's') + ' · Zurich Foundation Gallery';
+        : shown + ' submission' + (shown === 1 ? '' : 's') + ' · Zurich Foundation Gallery';
 
       emptyMessage.hidden = items.size !== 0;
     }
@@ -391,20 +427,6 @@
 
         const body = await response.json();
         const submissions = Array.isArray(body.videos) ? body.videos : [];
-
-        // FALLBACK SIMULATION: If your sheet doesn't have text rows yet, 
-        // this safely adds a sample text submission card so you can see how it looks and works!
-        if (!submissions.some(s => !s.url || !getGoogleDriveId(s.url))) {
-          submissions.push({
-            id: 'sample-text-submission',
-            title: 'Mpiima Benjamin (Kampala)',
-            url: '',
-            date: new Date().toISOString(),
-            size: 0,
-            description: 'Where creating change: Empowering youth through digital literacy and web development.\n\nWhat would help impact grow: Mentorship programs and tech hardware support.'
-          });
-        }
-
         submissionList = submissions;
         const incomingIds = new Set();
 
