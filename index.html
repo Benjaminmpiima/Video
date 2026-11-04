@@ -24,6 +24,11 @@
     .rh-brand { display: flex; align-items: center; text-decoration: none; }
     .rh-logo-img { height: 50px; width: auto; display: block; object-fit: contain; }
 
+    .rh-controls { display: flex; align-items: center; gap: 16px; }
+    .rh-mode-toggle { display: inline-flex; align-items: center; gap: 8px; background: #e2e8f0; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; color: var(--zurich-primary); cursor: pointer; user-select: none; transition: background 0.2s; }
+    .rh-mode-toggle.active { background: var(--zurich-primary); color: #fff; }
+    .rh-mode-toggle input { display: none; }
+
     .rh-main { padding: 48px 40px 80px; }
     .rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
     .rh-eyebrow { color: var(--zurich-accent); font-size: 14px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
@@ -61,7 +66,6 @@
       background: #000;
     }
 
-    /* High-Visibility Presentation Screen Layout for Text Submissions */
     .rh-feature-text {
       position: relative;
       z-index: 10;
@@ -123,7 +127,6 @@
     .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 16px; font-weight: 500; }
     .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 14px; font-weight: 600; }
 
-    /* Horizontal Cards */
     .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 24px; width: 100%; margin-top: 24px; padding: 8px 4px 28px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #94a3b8 transparent; }
     .rh-grid::-webkit-scrollbar { height: 10px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
@@ -165,6 +168,12 @@
       <a class="rh-brand" href="#">
         <img class="rh-logo-img" src="Inside Wall A.png" alt="Zurich Foundation Logo">
       </a>
+      <div class="rh-controls">
+        <label class="rh-mode-toggle" id="rh-autoplay-toggle" title="Enable continuous autoplay through all videos">
+          <input type="checkbox" id="rh-autoplay-checkbox">
+          <span>▶ Continuous Exhibition Mode</span>
+        </label>
+      </div>
     </header>
 
     <main class="rh-main">
@@ -216,7 +225,7 @@
         <div class="rh-gallery-heading">
           <div>
             <h2 class="rh-gallery-title">Impact stories & submissions</h2>
-            <p class="rh-gallery-subtitle">Select an item to feature above.</p>
+            <p class="rh-gallery-subtitle">Select an item to feature above or turn on Continuous Mode for automated playback.</p>
           </div>
           <p class="rh-scroll-hint">Scroll sideways →</p>
         </div>
@@ -249,12 +258,20 @@
     const textHelp = document.getElementById('rh-text-help');
     const featureFrame = document.getElementById('rh-feature-frame');
     const fsBtn = document.getElementById('rh-fs-btn');
+    const autoplayCheckbox = document.getElementById('rh-autoplay-checkbox');
+    const autoplayToggle = document.getElementById('rh-autoplay-toggle');
 
     const items = new Map();
     let submissionList = [];
     let currentIndex = 0;
-    let rotationTimer = null;
+    let playlistTimer = null;
     let refreshInProgress = false;
+
+    // Toggle styling for Continuous Mode
+    autoplayCheckbox.addEventListener('change', () => {
+      autoplayToggle.classList.toggle('active', autoplayCheckbox.checked);
+      setupPlaylistTimer();
+    });
 
     fsBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
@@ -307,7 +324,7 @@
       }
     }
 
-    function selectSubmission(item) {
+    function selectSubmission(item, isManual = false) {
       if (!item) return;
       const id = String(item.id);
       currentIndex = submissionList.findIndex(v => String(v.id) === id);
@@ -333,16 +350,30 @@
         textHelp.textContent = item.help || 'Not specified';
       }
 
-      setupRotationTimer();
+      // If user clicked manually, restart the autoplay timer so it doesn't skip immediately
+      if (isManual) {
+        setupPlaylistTimer();
+      }
     }
 
-    function setupRotationTimer() {
-      if (rotationTimer) clearInterval(rotationTimer);
-      rotationTimer = setInterval(() => {
+    function setupPlaylistTimer() {
+      if (playlistTimer) clearTimeout(playlistTimer);
+      
+      // Only auto-advance if Continuous Exhibition Mode is checked
+      if (!autoplayCheckbox.checked) return;
+
+      const currentItem = submissionList[currentIndex];
+      const hasVideo = currentItem && currentItem.url && getGoogleDriveId(currentItem.url);
+      
+      // Give videos 45 seconds to play through fully, and text stories 15 seconds before advancing to the next item
+      const delay = hasVideo ? 45000 : 15000;
+
+      playlistTimer = setTimeout(() => {
         if (submissionList.length <= 1) return;
         currentIndex = (currentIndex + 1) % submissionList.length;
-        selectSubmission(submissionList[currentIndex]);
-      }, 15000);
+        selectSubmission(submissionList[currentIndex], false);
+        setupPlaylistTimer();
+      }, delay);
     }
 
     function createCard(item) {
@@ -399,7 +430,7 @@
       card.append(frame, caption);
 
       card.addEventListener('click', () => {
-        selectSubmission(items.get(card.dataset.id) || item);
+        selectSubmission(items.get(card.dataset.id) || item, true);
       });
 
       return card;
@@ -468,7 +499,7 @@
 
         if (!featureEmbed.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
           featureText.setAttribute('data-loaded', '1');
-          selectSubmission(submissions[0]);
+          selectSubmission(submissions[0], false);
         }
 
         galleryError.hidden = true;
