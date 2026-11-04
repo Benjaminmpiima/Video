@@ -267,7 +267,6 @@
     let playlistTimer = null;
     let refreshInProgress = false;
 
-    // Toggle styling for Continuous Mode
     autoplayCheckbox.addEventListener('change', () => {
       autoplayToggle.classList.toggle('active', autoplayCheckbox.checked);
       setupPlaylistTimer();
@@ -338,7 +337,7 @@
         featureText.hidden = true;
         featureEmbed.hidden = false;
         const driveId = getGoogleDriveId(item.url) || item.id;
-        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?autoplay=1';
+        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?usp=drivesdk';
       } else {
         featureEmbed.src = '';
         featureEmbed.hidden = true;
@@ -350,29 +349,24 @@
         textHelp.textContent = item.help || 'Not specified';
       }
 
-      // If user clicked manually, restart the autoplay timer so it doesn't skip immediately
-      if (isManual) {
-        setupPlaylistTimer();
-      }
+      setupPlaylistTimer();
     }
 
     function setupPlaylistTimer() {
       if (playlistTimer) clearTimeout(playlistTimer);
       
-      // Only auto-advance if Continuous Exhibition Mode is checked
       if (!autoplayCheckbox.checked) return;
 
       const currentItem = submissionList[currentIndex];
       const hasVideo = currentItem && currentItem.url && getGoogleDriveId(currentItem.url);
       
-      // Give videos 45 seconds to play through fully, and text stories 15 seconds before advancing to the next item
-      const delay = hasVideo ? 45000 : 15000;
+      // Optimized 30 seconds for videos and 12 seconds for text stories for a snappy, smooth transition
+      const delay = hasVideo ? 30000 : 12000;
 
       playlistTimer = setTimeout(() => {
         if (submissionList.length <= 1) return;
         currentIndex = (currentIndex + 1) % submissionList.length;
         selectSubmission(submissionList[currentIndex], false);
-        setupPlaylistTimer();
       }, delay);
     }
 
