@@ -24,11 +24,6 @@
     .rh-brand { display: flex; align-items: center; text-decoration: none; }
     .rh-logo-img { height: 50px; width: auto; display: block; object-fit: contain; }
 
-    .rh-controls { display: flex; align-items: center; gap: 16px; }
-    .rh-mode-toggle { display: inline-flex; align-items: center; gap: 8px; background: #e2e8f0; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; color: var(--zurich-primary); cursor: pointer; user-select: none; transition: background 0.2s; }
-    .rh-mode-toggle.active { background: var(--zurich-primary); color: #fff; }
-    .rh-mode-toggle input { display: none; }
-
     .rh-main { padding: 48px 40px 80px; }
     .rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
     .rh-eyebrow { color: var(--zurich-accent); font-size: 14px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
@@ -56,13 +51,14 @@
       align-items: center;
       justify-content: center;
     }
-    .rh-feature-embed {
+    
+    .rh-feature-video {
       position: absolute;
-      top: -75px;
+      top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% + 150px);
-      border: 0;
+      height: 100%;
+      object-fit: contain;
       background: #000;
     }
 
@@ -168,12 +164,6 @@
       <a class="rh-brand" href="#">
         <img class="rh-logo-img" src="Inside Wall A.png" alt="Zurich Foundation Logo">
       </a>
-      <div class="rh-controls">
-        <label class="rh-mode-toggle" id="rh-autoplay-toggle" title="Enable continuous autoplay through all videos">
-          <input type="checkbox" id="rh-autoplay-checkbox">
-          <span>▶ Continuous Exhibition Mode</span>
-        </label>
-      </div>
     </header>
 
     <main class="rh-main">
@@ -192,7 +182,9 @@
 
         <section class="rh-featured" aria-label="Featured content">
           <div class="rh-feature-frame" id="rh-feature-frame">
-            <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            <!-- Native video tag for precise event tracking -->
+            <video class="rh-feature-video" id="rh-feature-video" controls autoplay playsinline></video>
+            
             <div class="rh-feature-text" id="rh-feature-text" hidden>
               <div class="rh-text-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -225,7 +217,7 @@
         <div class="rh-gallery-heading">
           <div>
             <h2 class="rh-gallery-title">Impact stories & submissions</h2>
-            <p class="rh-gallery-subtitle">Select an item to feature above or turn on Continuous Mode for automated playback.</p>
+            <p class="rh-gallery-subtitle">Select an item to feature above. Videos play continuously to the end.</p>
           </div>
           <p class="rh-scroll-hint">Scroll sideways →</p>
         </div>
@@ -249,7 +241,7 @@
     const galleryError = root.querySelector('.rh-error');
     const emptyMessage = root.querySelector('.rh-empty');
     
-    const featureEmbed = document.getElementById('rh-feature-embed');
+    const featureVideo = document.getElementById('rh-feature-video');
     const featureText = document.getElementById('rh-feature-text');
     const textTitle = document.getElementById('rh-text-title');
     const textMeta = document.getElementById('rh-text-meta');
@@ -258,19 +250,23 @@
     const textHelp = document.getElementById('rh-text-help');
     const featureFrame = document.getElementById('rh-feature-frame');
     const fsBtn = document.getElementById('rh-fs-btn');
-    const autoplayCheckbox = document.getElementById('rh-autoplay-checkbox');
-    const autoplayToggle = document.getElementById('rh-autoplay-toggle');
 
     const items = new Map();
     let submissionList = [];
     let currentIndex = 0;
-    let playlistTimer = null;
+    let textHoldTimer = null;
     let refreshInProgress = false;
 
-    autoplayCheckbox.addEventListener('change', () => {
-      autoplayToggle.classList.toggle('active', autoplayCheckbox.checked);
-      setupPlaylistTimer();
+    // AUTOMATIC EVENT LISTENER: The exact millisecond a video finishes its full playback
+    featureVideo.addEventListener('ended', () => {
+      playNextSubmission();
     });
+
+    function playNextSubmission() {
+      if (submissionList.length <= 1) return;
+      currentIndex = (currentIndex + 1) % submissionList.length;
+      selectSubmission(submissionList[currentIndex]);
+    }
 
     fsBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
@@ -323,7 +319,7 @@
       }
     }
 
-    function selectSubmission(item, isManual = false) {
+    function selectSubmission(item) {
       if (!item) return;
       const id = String(item.id);
       currentIndex = submissionList.findIndex(v => String(v.id) === id);
@@ -331,43 +327,35 @@
 
       highlightCard(id);
 
+      // Clear any pending text display timer when switching manually or automatically
+      if (textHoldTimer) clearTimeout(textHoldTimer);
+
       const hasVideo = item.url && getGoogleDriveId(item.url);
 
       if (hasVideo) {
         featureText.hidden = true;
-        featureEmbed.hidden = false;
+        featureVideo.hidden = false;
         const driveId = getGoogleDriveId(item.url) || item.id;
-        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?usp=drivesdk';
+        
+        // Direct stream URL for native video element playback
+        featureVideo.src = 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(driveId);
+        featureVideo.play().catch(e => console.log("Autoplay blocked or waiting for interaction", e));
       } else {
-        featureEmbed.src = '';
-        featureEmbed.hidden = true;
+        featureVideo.pause();
+        featureVideo.src = '';
+        featureVideo.hidden = true;
         featureText.hidden = false;
         textTitle.textContent = item.title || 'Impact Story';
         textMeta.textContent = item.email ? `Email: ${item.email}` : '';
         textLocation.textContent = item.location || 'Not specified';
         textChange.textContent = item.change || 'Not specified';
         textHelp.textContent = item.help || 'Not specified';
+
+        // Automatically advance after 15 seconds if a text story is displayed on screen
+        textHoldTimer = setTimeout(() => {
+          playNextSubmission();
+        }, 15000);
       }
-
-      setupPlaylistTimer();
-    }
-
-    function setupPlaylistTimer() {
-      if (playlistTimer) clearTimeout(playlistTimer);
-      
-      if (!autoplayCheckbox.checked) return;
-
-      const currentItem = submissionList[currentIndex];
-      const hasVideo = currentItem && currentItem.url && getGoogleDriveId(currentItem.url);
-      
-      // Optimized 30 seconds for videos and 12 seconds for text stories for a snappy, smooth transition
-      const delay = hasVideo ? 30000 : 12000;
-
-      playlistTimer = setTimeout(() => {
-        if (submissionList.length <= 1) return;
-        currentIndex = (currentIndex + 1) % submissionList.length;
-        selectSubmission(submissionList[currentIndex], false);
-      }, delay);
     }
 
     function createCard(item) {
@@ -424,7 +412,7 @@
       card.append(frame, caption);
 
       card.addEventListener('click', () => {
-        selectSubmission(items.get(card.dataset.id) || item, true);
+        selectSubmission(items.get(card.dataset.id) || item);
       });
 
       return card;
@@ -491,9 +479,9 @@
           }
         }
 
-        if (!featureEmbed.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
+        if (!featureVideo.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
           featureText.setAttribute('data-loaded', '1');
-          selectSubmission(submissions[0], false);
+          selectSubmission(submissions[0]);
         }
 
         galleryError.hidden = true;
