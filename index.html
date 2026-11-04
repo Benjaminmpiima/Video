@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zurich Foundation · Impact Gallery</title>
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --zurich-bg: #f8fafc;
@@ -17,115 +15,27 @@
       --zurich-border: #cbd5e1;
       --zurich-card-bg: #ffffff;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--zurich-bg);
-      color: var(--zurich-ink);
-      font-family: 'Public Sans', sans-serif;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-
+    body { background: var(--zurich-bg); color: var(--zurich-ink); font-family: 'Public Sans', sans-serif; font-size: 18px; line-height: 1.6; }
     button, input { font: inherit; }
-
     #reelhouse-widget { max-width: 1280px; margin: 0 auto; }
 
-    .rh-nav {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      height: 88px;
-      padding: 0 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 2px solid var(--zurich-border);
-      background: rgba(255,255,255,.98);
-      backdrop-filter: blur(8px);
-    }
-
+    .rh-nav { position: sticky; top: 0; z-index: 40; height: 88px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--zurich-border); background: rgba(255,255,255,.98); backdrop-filter: blur(8px); }
     .rh-brand { display: flex; align-items: center; text-decoration: none; }
-
-    .rh-logo-img {
-      height: 50px;
-      width: auto;
-      display: block;
-      object-fit: contain;
-    }
+    .rh-logo-img { height: 50px; width: auto; display: block; object-fit: contain; }
 
     .rh-main { padding: 48px 40px 80px; }
+    .rh-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .rh-eyebrow { color: var(--zurich-accent); font-size: 14px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+    .rh-title { margin-top: 6px; font-size: clamp(36px, 4.5vw, 52px); font-weight: 900; letter-spacing: -.03em; line-height: 1.1; color: var(--zurich-primary); }
+    .rh-count { margin-top: 8px; color: var(--zurich-muted); font-size: 16px; font-weight: 600; }
 
-    .rh-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .rh-eyebrow {
-      color: var(--zurich-accent);
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-    }
-
-    .rh-title {
-      margin-top: 6px;
-      font-size: clamp(36px, 4.5vw, 52px);
-      font-weight: 900;
-      letter-spacing: -.03em;
-      line-height: 1.1;
-      color: var(--zurich-primary);
-    }
-
-    .rh-count {
-      margin-top: 8px;
-      color: var(--zurich-muted);
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .rh-search-wrap {
-      position: relative;
-      width: 320px;
-      flex: 0 0 320px;
-    }
-
-    .rh-search-icon {
-      position: absolute;
-      top: 50%;
-      left: 16px;
-      width: 18px;
-      height: 18px;
-      transform: translateY(-50%);
-      color: #555;
-      pointer-events: none;
-    }
-
-    .rh-search {
-      width: 100%;
-      height: 50px;
-      padding: 0 16px 0 48px;
-      border: 2px solid var(--zurich-border);
-      border-radius: 8px;
-      outline: none;
-      background: #fff;
-      color: var(--zurich-ink);
-      font-size: 16px;
-      font-weight: 500;
-      transition: all .2s ease;
-    }
-
-    .rh-search:focus {
-      border-color: var(--zurich-primary);
-      box-shadow: 0 0 0 4px rgba(8,42,104,0.15);
-    }
+    .rh-search-wrap { position: relative; width: 320px; flex: 0 0 320px; }
+    .rh-search-icon { position: absolute; top: 50%; left: 16px; width: 18px; height: 18px; transform: translateY(-50%); color: #555; pointer-events: none; }
+    .rh-search { width: 100%; height: 50px; padding: 0 16px 0 48px; border: 2px solid var(--zurich-border); border-radius: 8px; outline: none; background: #fff; color: var(--zurich-ink); font-size: 16px; font-weight: 500; transition: all .2s ease; }
+    .rh-search:focus { border-color: var(--zurich-primary); box-shadow: 0 0 0 4px rgba(8,42,104,0.15); }
 
     .rh-featured { margin-top: 36px; }
-
     .rh-feature-frame {
       position: relative;
       width: 100%;
@@ -141,33 +51,15 @@
       align-items: center;
       justify-content: center;
     }
-
-    /* AUTOMATIC VIDEO PLAYER */
-    .rh-feature-embed {
+    
+    .rh-feature-video {
       position: absolute;
-      inset: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      border: 0;
-      background: #000;
       object-fit: contain;
-      pointer-events: none;
-    }
-
-    .rh-player-message {
-      position: absolute;
-      z-index: 15;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: min(90%, 500px);
-      padding: 18px 22px;
-      border-radius: 10px;
-      background: rgba(15,23,42,.94);
-      color: #fff;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 600;
+      background: #000;
     }
 
     .rh-feature-text {
@@ -185,7 +77,6 @@
       text-align: left;
       overflow-y: auto;
     }
-
     .rh-text-badge {
       display: inline-flex;
       align-items: center;
@@ -200,54 +91,14 @@
       border-radius: 6px;
       margin-bottom: 16px;
     }
-
-    .rh-feature-text h3 {
-      font-size: clamp(28px, 3.2vw, 40px);
-      font-weight: 900;
-      color: var(--zurich-primary);
-      margin-bottom: 4px;
-      letter-spacing: -.02em;
-    }
-
-    .rh-meta-sub {
-      font-size: 16px;
-      color: var(--zurich-muted);
-      margin-bottom: 28px;
-      font-weight: 600;
-    }
-
-    .rh-qa-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      width: 100%;
-    }
-
-    .rh-qa-block {
-      background: #f8fafc;
-      padding: 22px 28px;
-      border-radius: 12px;
-      border: 2px solid #e2e8f0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-    }
-
+    .rh-feature-text h3 { font-size: clamp(28px, 3.2vw, 40px); font-weight: 900; color: var(--zurich-primary); margin-bottom: 4px; letter-spacing: -.02em; }
+    .rh-meta-sub { font-size: 16px; color: var(--zurich-muted); margin-bottom: 28px; font-weight: 600; }
+    
+    .rh-qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+    .rh-qa-block { background: #f8fafc; padding: 22px 28px; border-radius: 12px; border: 2px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
     .rh-qa-block.full-width { grid-column: span 2; }
-
-    .rh-qa-label {
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--zurich-accent);
-      margin-bottom: 8px;
-    }
-
-    .rh-qa-content {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--zurich-ink);
-      line-height: 1.5;
-    }
+    .rh-qa-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--zurich-accent); margin-bottom: 8px; }
+    .rh-qa-content { font-size: 18px; font-weight: 600; color: var(--zurich-ink); line-height: 1.5; }
 
     .rh-fullscreen-btn {
       position: absolute;
@@ -265,1104 +116,387 @@
       cursor: pointer;
       transition: background 0.2s ease;
     }
-
     .rh-fullscreen-btn:hover { background: var(--zurich-accent); }
 
-    .rh-gallery-heading {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-top: 64px;
-    }
+    .rh-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-top: 64px; }
+    .rh-gallery-title { font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: var(--zurich-primary); }
+    .rh-gallery-subtitle { margin-top: 4px; color: var(--zurich-muted); font-size: 16px; font-weight: 500; }
+    .rh-scroll-hint { flex-shrink: 0; color: var(--zurich-muted); font-size: 14px; font-weight: 600; }
 
-    .rh-gallery-title {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -.02em;
-      color: var(--zurich-primary);
-    }
-
-    .rh-gallery-subtitle {
-      margin-top: 4px;
-      color: var(--zurich-muted);
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .rh-scroll-hint {
-      flex-shrink: 0;
-      color: var(--zurich-muted);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .rh-grid {
-      display: flex;
-      flex-wrap: nowrap;
-      align-items: stretch;
-      gap: 24px;
-      width: 100%;
-      margin-top: 24px;
-      padding: 8px 4px 28px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: #94a3b8 transparent;
-    }
-
+    .rh-grid { display: flex; flex-wrap: nowrap; align-items: stretch; gap: 24px; width: 100%; margin-top: 24px; padding: 8px 4px 28px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #94a3b8 transparent; }
     .rh-grid::-webkit-scrollbar { height: 10px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
+    .rh-grid::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 6px; }
 
-    .rh-grid::-webkit-scrollbar-thumb {
-      background: #94a3b8;
-      border-radius: 6px;
-    }
+    .rh-card { position: relative; display: block; flex: 0 0 clamp(260px, 28%, 310px); min-width: 0; padding: 14px; border: 2px solid var(--zurich-border); border-radius: 14px; background: var(--zurich-card-bg); color: var(--zurich-ink); text-align: left; cursor: pointer; scroll-snap-align: start; transition: all .2s ease; box-shadow: 0 6px 16px rgba(0,0,0,.04); }
+    .rh-card:hover { transform: translateY(-4px); border-color: var(--zurich-primary); box-shadow: 0 12px 30px rgba(8,42,104,.12); }
+    .rh-card.is-selected { border-color: var(--zurich-accent); border-width: 3px; background: #fff; box-shadow: 0 12px 30px rgba(180,90,65,.18); }
 
-    .rh-card {
-      position: relative;
-      display: block;
-      flex: 0 0 clamp(260px, 28%, 310px);
-      min-width: 0;
-      padding: 14px;
-      border: 2px solid var(--zurich-border);
-      border-radius: 14px;
-      background: var(--zurich-card-bg);
-      color: var(--zurich-ink);
-      text-align: left;
-      cursor: pointer;
-      scroll-snap-align: start;
-      transition: all .2s ease;
-      box-shadow: 0 6px 16px rgba(0,0,0,.04);
-    }
+    .rh-frame { position: relative; width: 100%; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 10px; background: #0f172a; display: flex; align-items: center; justify-content: center; }
+    .rh-thumb { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; outline: none; }
+    .rh-card-text-preview { padding: 18px; background: #f8fafc; color: var(--zurich-ink); font-size: 14px; font-weight: 500; line-height: 1.5; width: 100%; height: 100%; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; border-left: 4px solid var(--zurich-accent); }
+    .rh-card-badge { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--zurich-primary); color: #fff; font-size: 14px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+    .rh-card.is-selected .rh-card-badge { background: var(--zurich-accent); }
 
-    .rh-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--zurich-primary);
-      box-shadow: 0 12px 30px rgba(8,42,104,.12);
-    }
+    .rh-card-caption { display: block; width: 100%; margin-top: 14px; padding: 0 4px; }
+    .rh-card-title { display: block; overflow: hidden; color: var(--zurich-primary); font-size: 16px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .rh-card-meta { display: block; margin-top: 4px; color: var(--zurich-muted); font-size: 13px; font-weight: 600; }
 
-    .rh-card.is-selected {
-      border-color: var(--zurich-accent);
-      border-width: 3px;
-      background: #fff;
-      box-shadow: 0 12px 30px rgba(180,90,65,.18);
-    }
-
-    .rh-frame {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      aspect-ratio: 16 / 9;
-      border-radius: 10px;
-      background: #0f172a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .rh-thumb {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border: 0;
-      outline: none;
-    }
-
-    .rh-card-text-preview {
-      padding: 18px;
-      background: #f8fafc;
-      color: var(--zurich-ink);
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1.5;
-      width: 100%;
-      height: 100%;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      border-left: 4px solid var(--zurich-accent);
-    }
-
-    .rh-card-badge {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      display: grid;
-      place-items: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: var(--zurich-primary);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    }
-
-    .rh-card.is-selected .rh-card-badge {
-      background: var(--zurich-accent);
-    }
-
-    .rh-card-caption {
-      display: block;
-      width: 100%;
-      margin-top: 14px;
-      padding: 0 4px;
-    }
-
-    .rh-card-title {
-      display: block;
-      overflow: hidden;
-      color: var(--zurich-primary);
-      font-size: 16px;
-      font-weight: 800;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .rh-card-meta {
-      display: block;
-      margin-top: 4px;
-      color: var(--zurich-muted);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .rh-error {
-      margin-top: 24px;
-      padding: 20px;
-      border-radius: 10px;
-      background: #fef2f2;
-      color: #991b1b;
-      font-size: 16px;
-      border: 2px solid #fecaca;
-      font-weight: 600;
-    }
-
-    .rh-empty {
-      margin-top: 24px;
-      color: var(--zurich-muted);
-      font-size: 16px;
-      font-weight: 600;
-    }
-
+    .rh-error { margin-top: 24px; padding: 20px; border-radius: 10px; background: #fef2f2; color: #991b1b; font-size: 16px; border: 2px solid #fecaca; font-weight: 600; }
+    .rh-empty { margin-top: 24px; color: var(--zurich-muted); font-size: 16px; font-weight: 600; }
     [hidden] { display: none !important; }
 
     @media (max-width: 768px) {
       .rh-nav { height: 72px; padding: 0 20px; }
       .rh-logo-img { height: 38px; }
       .rh-main { padding: 32px 20px 60px; }
-
-      .rh-head {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 20px;
-      }
-
+      .rh-head { flex-direction: column; align-items: stretch; gap: 20px; }
       .rh-search-wrap { width: 100%; flex-basis: auto; }
       .rh-feature-text { padding: 36px 24px; }
       .rh-qa-grid { grid-template-columns: 1fr; }
       .rh-qa-block.full-width { grid-column: span 1; }
-
-      .rh-feature-frame { min-height: 300px; }
     }
   </style>
 </head>
-
 <body>
+  <div id="reelhouse-widget" data-api-base="https://script.google.com/macros/s/AKfycbyHh9H4rI91gZC5SeQiAK-9Qhjl930EX9JDfkJS7aDEJf9lvEuOCcb-BsJyP1Rn3oXy/exec">
+    <header class="rh-nav">
+      <a class="rh-brand" href="#">
+        <img class="rh-logo-img" src="Inside Wall A.png" alt="Zurich Foundation Logo">
+      </a>
+    </header>
 
-<div id="reelhouse-widget"
-     data-api-base="https://script.google.com/macros/s/AKfycbyHh9H4rI91gZC5SeQiAK-9Qhjl930EX9JDfkJS7aDEJf9lvEuOCcb-BsJyP1Rn3oXy/exec">
-
-  <header class="rh-nav">
-    <a class="rh-brand" href="#">
-      <img class="rh-logo-img" src="Inside Wall A.png" alt="Zurich Foundation Logo">
-    </a>
-  </header>
-
-  <main class="rh-main">
-    <section class="rh-gallery-view">
-
-      <div class="rh-head">
-        <div>
-          <p class="rh-eyebrow">Where are you creating change?</p>
-          <h1 class="rh-title">Mark your impact</h1>
-          <p class="rh-count" aria-live="polite">Loading submissions…</p>
-        </div>
-
-        <label class="rh-search-wrap">
-          <svg class="rh-search-icon" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2.5"
-               aria-hidden="true">
-            <circle cx="10.8" cy="10.8" r="6.8"/>
-            <path d="m16 16 5 5"/>
-          </svg>
-          <input class="rh-search" type="search"
-                 placeholder="Search submissions"
-                 aria-label="Search submissions">
-        </label>
-      </div>
-
-      <section class="rh-featured" aria-label="Featured content">
-
-        <div class="rh-feature-frame" id="rh-feature-frame">
-
-          <video
-            class="rh-feature-embed"
-            id="rh-feature-embed"
-            autoplay
-            muted
-            playsinline
-            preload="auto"
-            disablepictureinpicture
-            disableremoteplayback>
-          </video>
-
-          <div class="rh-player-message" id="rh-player-message" hidden></div>
-
-          <div class="rh-feature-text" id="rh-feature-text" hidden>
-
-            <div class="rh-text-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24"
-                   fill="none" stroke="currentColor" stroke-width="3">
-                <path d="M12 20h9"/>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-              </svg>
-              Impact Story Submission
-            </div>
-
-            <h3 id="rh-text-title"></h3>
-            <div class="rh-meta-sub" id="rh-text-meta"></div>
-
-            <div class="rh-qa-grid">
-
-              <div class="rh-qa-block">
-                <div class="rh-qa-label">Where are you from?</div>
-                <div class="rh-qa-content" id="rh-text-location"></div>
-              </div>
-
-              <div class="rh-qa-block">
-                <div class="rh-qa-label">Where are you creating change?</div>
-                <div class="rh-qa-content" id="rh-text-change"></div>
-              </div>
-
-              <div class="rh-qa-block full-width">
-                <div class="rh-qa-label">
-                  What's the one thing that would help your impact grow?
-                </div>
-                <div class="rh-qa-content" id="rh-text-help"></div>
-              </div>
-
-            </div>
+    <main class="rh-main">
+      <section class="rh-gallery-view">
+        <div class="rh-head">
+          <div>
+            <p class="rh-eyebrow">Where are you creating change?</p>
+            <h1 class="rh-title">Mark your impact</h1>
+            <p class="rh-count" aria-live="polite">Loading submissions…</p>
           </div>
-
-          <button type="button"
-                  class="rh-fullscreen-btn"
-                  id="rh-fs-btn"
-                  aria-label="Maximize screen">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-            </svg>
-          </button>
-
+          <label class="rh-search-wrap">
+            <svg class="rh-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+            <input class="rh-search" type="search" placeholder="Search submissions" aria-label="Search submissions">
+          </label>
         </div>
+
+        <section class="rh-featured" aria-label="Featured content">
+          <div class="rh-feature-frame" id="rh-feature-frame">
+            <!-- Native HTML5 Video Player to track exact 'ended' event -->
+            <video class="rh-feature-video" id="rh-feature-video" controls autoplay playsinline></video>
+            
+            <div class="rh-feature-text" id="rh-feature-text" hidden>
+              <div class="rh-text-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                Impact Story Submission
+              </div>
+              <h3 id="rh-text-title"></h3>
+              <div class="rh-meta-sub" id="rh-text-meta"></div>
+
+              <div class="rh-qa-grid">
+                <div class="rh-qa-block">
+                  <div class="rh-qa-label">Where are you from?</div>
+                  <div class="rh-qa-content" id="rh-text-location"></div>
+                </div>
+                <div class="rh-qa-block">
+                  <div class="rh-qa-label">Where are you creating change?</div>
+                  <div class="rh-qa-content" id="rh-text-change"></div>
+                </div>
+                <div class="rh-qa-block full-width">
+                  <div class="rh-qa-label">What's the one thing that would help your impact grow?</div>
+                  <div class="rh-qa-content" id="rh-text-help"></div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="rh-fullscreen-btn" id="rh-fs-btn" aria-label="Maximize screen">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+          </div>
+        </section>
+
+        <div class="rh-gallery-heading">
+          <div>
+            <h2 class="rh-gallery-title">Impact stories & submissions</h2>
+            <p class="rh-gallery-subtitle">Select an item to feature above. Videos play fully to the end.</p>
+          </div>
+          <p class="rh-scroll-hint">Scroll sideways →</p>
+        </div>
+        <div class="rh-error" role="alert" hidden></div>
+        <div class="rh-grid" aria-label="Submission gallery"></div>
+        <p class="rh-empty" hidden>No submissions have been added yet.</p>
       </section>
+    </main>
+  </div>
 
-      <div class="rh-gallery-heading">
-        <div>
-          <h2 class="rh-gallery-title">Impact stories & submissions</h2>
-          <p class="rh-gallery-subtitle">
-            Select an item to feature above. Automatic exhibition loop is active.
-          </p>
-        </div>
-        <p class="rh-scroll-hint">Scroll sideways →</p>
-      </div>
+  <script>
+  (() => {
+    const root = document.getElementById('reelhouse-widget');
+    if (!root || root.dataset.initialized === '1') return;
+    root.dataset.initialized = '1';
 
-      <div class="rh-error" role="alert" hidden></div>
-      <div class="rh-grid" aria-label="Submission gallery"></div>
-      <p class="rh-empty" hidden>No submissions have been added yet.</p>
+    const apiBase = root.dataset.apiBase;
+    const grid = root.querySelector('.rh-grid');
+    const countLabel = root.querySelector('.rh-count');
+    const search = root.querySelector('.rh-search');
+    const galleryError = root.querySelector('.rh-error');
+    const emptyMessage = root.querySelector('.rh-empty');
+    
+    const featureVideo = document.getElementById('rh-feature-video');
+    const featureText = document.getElementById('rh-feature-text');
+    const textTitle = document.getElementById('rh-text-title');
+    const textMeta = document.getElementById('rh-text-meta');
+    const textLocation = document.getElementById('rh-text-location');
+    const textChange = document.getElementById('rh-text-change');
+    const textHelp = document.getElementById('rh-text-help');
+    const featureFrame = document.getElementById('rh-feature-frame');
+    const fsBtn = document.getElementById('rh-fs-btn');
 
-    </section>
-  </main>
-</div>
+    const items = new Map();
+    let submissionList = [];
+    let currentIndex = 0;
+    let textHoldTimer = null;
+    let refreshInProgress = false;
 
-<script>
-(() => {
-
-  const root = document.getElementById('reelhouse-widget');
-
-  if (!root || root.dataset.initialized === '1') return;
-
-  root.dataset.initialized = '1';
-
-  const apiBase = root.dataset.apiBase;
-
-  const grid = root.querySelector('.rh-grid');
-  const countLabel = root.querySelector('.rh-count');
-  const search = root.querySelector('.rh-search');
-  const galleryError = root.querySelector('.rh-error');
-  const emptyMessage = root.querySelector('.rh-empty');
-
-  const featureEmbed = document.getElementById('rh-feature-embed');
-  const featureText = document.getElementById('rh-feature-text');
-  const playerMessage = document.getElementById('rh-player-message');
-
-  const textTitle = document.getElementById('rh-text-title');
-  const textMeta = document.getElementById('rh-text-meta');
-  const textLocation = document.getElementById('rh-text-location');
-  const textChange = document.getElementById('rh-text-change');
-  const textHelp = document.getElementById('rh-text-help');
-
-  const featureFrame = document.getElementById('rh-feature-frame');
-  const fsBtn = document.getElementById('rh-fs-btn');
-
-  const items = new Map();
-
-  let submissionList = [];
-  let currentIndex = 0;
-  let exhibitionTimer = null;
-  let refreshInProgress = false;
-  let activeItemId = null;
-  let selectionVersion = 0;
-  let loadingTimer = null;
-  let failedItems = new Set();
-
-  /* FULLSCREEN */
-
-  fsBtn.addEventListener('click', () => {
-
-    if (!document.fullscreenElement) {
-
-      featureFrame.requestFullscreen?.().catch(err => {
-        console.warn('Fullscreen error:', err);
-      });
-
-    } else {
-      document.exitFullscreen?.();
-    }
-
-  });
-
-  /* DATE FORMAT */
-
-  function dateText(value) {
-
-    if (!value) return '';
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return '';
-
-    return date.toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
+    // AUTOMATIC EVENT LISTENER: Instantly plays the next video when the current one finishes completely
+    featureVideo.addEventListener('ended', () => {
+      playNextSubmission();
     });
 
-  }
+    function playNextSubmission() {
+      if (submissionList.length <= 1) return;
+      currentIndex = (currentIndex + 1) % submissionList.length;
+      selectSubmission(submissionList[currentIndex]);
+    }
 
-  /* GOOGLE DRIVE VIDEO ID */
-
-  function getGoogleDriveId(rawUrl) {
-
-    try {
-
-      if (!rawUrl) return null;
-
-      const url = new URL(rawUrl, window.location.href);
-
-      if (/(^|\.)googleusercontent\.com$/i.test(url.hostname)) {
-
-        const parts = url.pathname.split('/');
-        const dIndex = parts.indexOf('d');
-
-        if (dIndex !== -1 && parts[dIndex + 1]) {
-          return parts[dIndex + 1];
-        }
-
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        featureFrame.requestFullscreen().catch(err => {
+          console.warn('Fullscreen error:', err);
+        });
+      } else {
+        document.exitFullscreen();
       }
+    });
 
-      if (
-        !/(^|\.)drive\.google\.com$/i.test(url.hostname) &&
-        !/(^|\.)docs\.google\.com$/i.test(url.hostname)
-      ) {
+    function dateText(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function getGoogleDriveId(rawUrl) {
+      try {
+        if (!rawUrl) return null;
+        const url = new URL(rawUrl);
+        if (/(^|\.)googleusercontent\.com$/i.test(url.hostname)) {
+          const parts = url.pathname.split('/');
+          const dIndex = parts.indexOf('d');
+          if (dIndex !== -1 && parts[dIndex + 1]) return parts[dIndex + 1];
+        }
+        if (!/(^|\.)drive\.google\.com$/i.test(url.hostname) && !/(^|\.)docs\.google\.com$/i.test(url.hostname)) {
+          return null;
+        }
+        const pathMatch = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (pathMatch) return pathMatch[1];
+        const idParam = url.searchParams.get('id');
+        if (idParam && /^[a-zA-Z0-9_-]+$/.test(idParam)) return idParam;
+        return null;
+      } catch (_) {
         return null;
       }
-
-      const pathMatch = url.pathname.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-
-      if (pathMatch) return pathMatch[1];
-
-      const idParam = url.searchParams.get('id');
-
-      if (idParam && /^[a-zA-Z0-9_-]+$/.test(idParam)) {
-        return idParam;
-      }
-
-      return null;
-
-    } catch (_) {
-      return null;
     }
 
-  }
-
-  function isVideo(item) {
-    return !!(item && item.url);
-  }
-
-  /* VIDEO SOURCE */
-
-  function getPlayableVideoUrl(item) {
-
-    const driveId = getGoogleDriveId(item.url);
-
-    if (driveId) {
-      return 'https://drive.google.com/uc?export=download&id=' +
-        encodeURIComponent(driveId);
-    }
-
-    // Non-Drive links should be direct MP4 or browser-supported video URLs.
-    return item.url;
-
-  }
-
-  /* CLEAR TIMERS */
-
-  function clearExhibitionTimer() {
-
-    if (exhibitionTimer) {
-      clearTimeout(exhibitionTimer);
-      exhibitionTimer = null;
-    }
-
-    if (loadingTimer) {
-      clearTimeout(loadingTimer);
-      loadingTimer = null;
-    }
-
-  }
-
-  /* PLAYER MESSAGE */
-
-  function showPlayerMessage(message) {
-    playerMessage.textContent = message;
-    playerMessage.hidden = !message;
-  }
-
-  /* NEXT SUBMISSION */
-
-  function nextSubmission() {
-
-    if (submissionList.length <= 1) return;
-
-    // Find the next submission that has not already failed in this cycle.
-    for (let step = 1; step <= submissionList.length; step++) {
-
-      const nextIndex = (currentIndex + step) % submissionList.length;
-      const nextItem = submissionList[nextIndex];
-
-      if (!nextItem) continue;
-
-      if (
-        isVideo(nextItem) &&
-        failedItems.has(String(nextItem.id))
-      ) {
-        continue;
-      }
-
-      currentIndex = nextIndex;
-      selectSubmission(nextItem);
-      return;
-
-    }
-
-    // If every video failed, clear the failed list and try again next cycle.
-    failedItems.clear();
-
-    currentIndex = (currentIndex + 1) % submissionList.length;
-
-    selectSubmission(submissionList[currentIndex]);
-
-  }
-
-  /* TEXT STORY TIMER: 15 SECONDS */
-
-  function scheduleTextAdvance() {
-
-    clearExhibitionTimer();
-
-    if (submissionList.length <= 1) return;
-
-    exhibitionTimer = setTimeout(() => {
-      nextSubmission();
-    }, 15000);
-
-  }
-
-  /* FAILED VIDEO HANDLING */
-
-  function skipFailedVideo(id, version) {
-
-    if (version !== selectionVersion) return;
-
-    failedItems.add(String(id));
-
-    clearExhibitionTimer();
-
-    showPlayerMessage('Video unavailable. Moving to the next submission...');
-
-    if (submissionList.length > 1) {
-
-      exhibitionTimer = setTimeout(() => {
-
-        if (version === selectionVersion) {
-          nextSubmission();
-        }
-
-      }, 2500);
-
-    }
-
-  }
-
-  /* HIGHLIGHT CARD */
-
-  function highlightCard(id) {
-
-    grid.querySelectorAll('.rh-card').forEach(card => {
-
-      const selected = card.dataset.id === String(id);
-
-      card.classList.toggle('is-selected', selected);
-      card.setAttribute('aria-pressed', String(selected));
-
-    });
-
-    const selectedCard = Array.from(
-      grid.querySelectorAll('.rh-card')
-    ).find(card => card.dataset.id === String(id));
-
-    if (selectedCard && !selectedCard.hidden) {
-
-      selectedCard.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'nearest'
+    function highlightCard(id) {
+      grid.querySelectorAll('.rh-card').forEach(card => {
+        const selected = card.dataset.id === String(id);
+        card.classList.toggle('is-selected', selected);
+        card.setAttribute('aria-pressed', String(selected));
       });
-
+      const selectedCard = Array.from(grid.querySelectorAll('.rh-card')).find(card => card.dataset.id === String(id));
+      if (selectedCard) {
+        selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      }
     }
 
-  }
+    function selectSubmission(item) {
+      if (!item) return;
+      const id = String(item.id);
+      currentIndex = submissionList.findIndex(v => String(v.id) === id);
+      if (currentIndex === -1) currentIndex = 0;
 
-  /* VIDEO PLAYBACK */
+      highlightCard(id);
 
-  function startVideo(item, version) {
+      if (textHoldTimer) clearTimeout(textHoldTimer);
 
-    featureEmbed.pause();
+      const hasVideo = item.url && getGoogleDriveId(item.url);
 
-    featureEmbed.removeAttribute('src');
-
-    featureEmbed.autoplay = true;
-    featureEmbed.muted = true;
-    featureEmbed.defaultMuted = true;
-    featureEmbed.playsInline = true;
-
-    // No visitor playback controls.
-    featureEmbed.controls = false;
-    featureEmbed.removeAttribute('controls');
-
-    // Ensure the autoplay attributes are present.
-    featureEmbed.setAttribute('autoplay', '');
-    featureEmbed.setAttribute('muted', '');
-    featureEmbed.setAttribute('playsinline', '');
-
-    const videoUrl = getPlayableVideoUrl(item);
-
-    /*
-      Register the event before assigning the source.
-      This prevents missing the loadeddata event.
-    */
-
-    const attemptPlayback = () => {
-
-      if (version !== selectionVersion) return;
-
-      clearTimeout(loadingTimer);
-
-      if (featureEmbed.readyState < 2) return;
-
-      featureEmbed.play().then(() => {
-
-        if (version !== selectionVersion) return;
-
-        showPlayerMessage('');
-
-      }).catch(error => {
-
-        console.warn('Autoplay failed:', error);
-
-        if (version !== selectionVersion) return;
-
-        // Do not ask visitors to press play.
-        // Skip to the next submission instead.
-        skipFailedVideo(item.id, version);
-
-      });
-
-    };
-
-    featureEmbed.addEventListener(
-      'canplay',
-      attemptPlayback,
-      { once: true }
-    );
-
-    featureEmbed.addEventListener(
-      'loadeddata',
-      attemptPlayback,
-      { once: true }
-    );
-
-    featureEmbed.src = videoUrl;
-
-    featureEmbed.load();
-
-    /*
-      If the source never becomes playable, skip it.
-      This prevents the exhibition from remaining stuck.
-    */
-
-    loadingTimer = setTimeout(() => {
-
-      if (
-        version === selectionVersion &&
-        featureEmbed.readyState < 2
-      ) {
-        skipFailedVideo(item.id, version);
-      }
-
-    }, 20000);
-
-  }
-
-  /* SELECT SUBMISSION */
-
-  function selectSubmission(item) {
-
-    if (!item || item.id == null) return;
-
-    const id = String(item.id);
-
-    const foundIndex = submissionList.findIndex(
-      v => v && String(v.id) === id
-    );
-
-    currentIndex = foundIndex >= 0 ? foundIndex : 0;
-
-    activeItemId = id;
-
-    const version = ++selectionVersion;
-
-    clearExhibitionTimer();
-
-    showPlayerMessage('');
-
-    highlightCard(id);
-
-    if (isVideo(item)) {
-
-      // VIDEO SUBMISSION
-      featureText.hidden = true;
-      featureEmbed.hidden = false;
-
-      startVideo(item, version);
-
-    } else {
-
-      // TEXT SUBMISSION
-      featureEmbed.pause();
-      featureEmbed.removeAttribute('src');
-      featureEmbed.load();
-
-      featureEmbed.hidden = true;
-      featureText.hidden = false;
-
-      textTitle.textContent = item.title || 'Impact Story';
-
-      textMeta.textContent = item.email
-        ? `Email: ${item.email}`
-        : '';
-
-      textLocation.textContent = item.location || 'Not specified';
-
-      textChange.textContent = item.change || 'Not specified';
-
-      textHelp.textContent = item.help || 'Not specified';
-
-      scheduleTextAdvance();
-
-    }
-
-  }
-
-  /* VIDEO ENDED: AUTOMATICALLY PLAY NEXT */
-
-  featureEmbed.addEventListener('ended', () => {
-
-    if (
-      featureEmbed.hidden ||
-      !activeItemId ||
-      submissionList.length <= 1
-    ) {
-      return;
-    }
-
-    clearExhibitionTimer();
-
-    failedItems.clear();
-
-    nextSubmission();
-
-  });
-
-  /* VIDEO ERROR */
-
-  featureEmbed.addEventListener('error', () => {
-
-    if (featureEmbed.hidden || !activeItemId) return;
-
-    console.error(
-      'Video playback error:',
-      featureEmbed.error
-    );
-
-    skipFailedVideo(activeItemId, selectionVersion);
-
-  });
-
-  /* VIDEO PLAYING */
-
-  featureEmbed.addEventListener('playing', () => {
-
-    clearTimeout(loadingTimer);
-
-    showPlayerMessage('');
-
-  });
-
-  /* CREATE GALLERY CARD */
-
-  function createCard(item) {
-
-    const card = document.createElement('button');
-
-    card.type = 'button';
-    card.className = 'rh-card';
-    card.dataset.id = String(item.id);
-
-    card.setAttribute('aria-pressed', 'false');
-
-    card.setAttribute(
-      'aria-label',
-      'Select ' + (item.title || 'submission')
-    );
-
-    const frame = document.createElement('div');
-
-    frame.className = 'rh-frame';
-
-    const hasVideo = isVideo(item);
-
-    if (hasVideo) {
-
-      const driveId = getGoogleDriveId(item.url);
-
-      const img = document.createElement('img');
-
-      img.className = 'rh-thumb';
-      img.alt = item.title || 'Video preview';
-      img.loading = 'lazy';
-
-      if (driveId) {
-
-        img.src =
-          'https://lh3.googleusercontent.com/d/' +
-          encodeURIComponent(driveId);
-
-        img.addEventListener('error', () => {
-
-          img.src =
-            'https://drive.google.com/thumbnail?id=' +
-            encodeURIComponent(driveId) +
-            '&sz=w640';
-
-        }, { once: true });
-
-      } else {
-
-        img.src = '';
-
-      }
-
-      const playIcon = document.createElement('span');
-
-      playIcon.className = 'rh-card-badge';
-      playIcon.textContent = '▶';
-
-      frame.append(img, playIcon);
-
-    } else {
-
-      const textPreview = document.createElement('div');
-
-      textPreview.className = 'rh-card-text-preview';
-
-      textPreview.textContent =
-        item.change || item.title || 'Text Submission';
-
-      const textBadge = document.createElement('span');
-
-      textBadge.className = 'rh-card-badge';
-      textBadge.textContent = '✎';
-
-      frame.append(textPreview, textBadge);
-
-    }
-
-    const caption = document.createElement('span');
-
-    caption.className = 'rh-card-caption';
-
-    const title = document.createElement('span');
-
-    title.className = 'rh-card-title';
-
-    title.textContent = item.title || 'Untitled submission';
-
-    const meta = document.createElement('span');
-
-    meta.className = 'rh-card-meta';
-
-    meta.textContent =
-      dateText(item.date) +
-      (hasVideo ? ' · Video reel' : ' · Written story');
-
-    caption.append(title, meta);
-
-    card.append(frame, caption);
-
-    card.addEventListener('click', () => {
-
-      const selectedItem = items.get(card.dataset.id) || item;
-
-      // Manual selection starts the selected submission immediately.
-      selectSubmission(selectedItem);
-
-    });
-
-    return card;
-
-  }
-
-  /* SEARCH FILTER */
-
-  function renderFilter() {
-
-    const query = search.value.trim().toLocaleLowerCase();
-
-    let shown = 0;
-
-    grid.querySelectorAll('.rh-card').forEach(card => {
-
-      const item = items.get(card.dataset.id);
-
-      const title = item ? item.title || '' : '';
-      const email = item ? item.email || '' : '';
-      const location = item ? item.location || '' : '';
-      const change = item ? item.change || '' : '';
-      const help = item ? item.help || '' : '';
-
-      const matches =
-        !query ||
-        title.toLocaleLowerCase().includes(query) ||
-        email.toLocaleLowerCase().includes(query) ||
-        location.toLocaleLowerCase().includes(query) ||
-        change.toLocaleLowerCase().includes(query) ||
-        help.toLocaleLowerCase().includes(query);
-
-      card.hidden = !matches;
-
-      if (matches) shown++;
-
-    });
-
-    countLabel.textContent =
-      query && shown === 0
-        ? 'No submissions match your search'
-        : shown +
-          ' submission' +
-          (shown === 1 ? '' : 's') +
-          ' · Zurich Foundation Gallery';
-
-    emptyMessage.hidden = items.size !== 0;
-
-  }
-
-  search.addEventListener('input', renderFilter);
-
-  /* GOOGLE SHEETS AUTOMATION */
-
-  async function refreshGallery() {
-
-    if (refreshInProgress) return;
-
-    refreshInProgress = true;
-
-    try {
-
-      if (!apiBase) {
-        throw new Error('Missing Google Apps Script Web App URL.');
-      }
-
-      const response = await fetch(apiBase, {
-        method: 'GET',
-        cache: 'no-store'
-      });
-
-      if (!response.ok) {
-        throw new Error('Could not retrieve submissions.');
-      }
-
-      const body = await response.json();
-
-      const submissions = Array.isArray(body.videos)
-        ? body.videos.filter(item => item && item.id != null)
-        : [];
-
-      const previousActiveId = activeItemId;
-
-      submissionList = submissions;
-
-      const incomingIds = new Set();
-
-      submissions.forEach(item => {
-
-        const id = String(item.id);
-
-        incomingIds.add(id);
-
-        items.set(id, item);
-
-        const existingCard = Array.from(
-          grid.querySelectorAll('.rh-card')
-        ).find(el => el.dataset.id === id);
-
-        if (!existingCard) {
-          grid.appendChild(createCard(item));
-        }
-
-      });
-
-      /* REMOVE DELETED SUBMISSIONS */
-
-      for (const [id] of items) {
-
-        if (!incomingIds.has(id)) {
-
-          const card = Array.from(
-            grid.querySelectorAll('.rh-card')
-          ).find(el => el.dataset.id === id);
-
-          if (card) card.remove();
-
-          items.delete(id);
-
-          failedItems.delete(id);
-
-        }
-
-      }
-
-      /* PRESERVE CURRENT PLAYBACK DURING REFRESH */
-
-      if (submissions.length > 0) {
-
-        const activeStillExists =
-          previousActiveId &&
-          submissions.some(
-            item => String(item.id) === previousActiveId
-          );
-
-        if (!activeStillExists) {
-
-          selectSubmission(submissions[0]);
-
-        } else {
-
-          currentIndex = submissions.findIndex(
-            item => String(item.id) === previousActiveId
-          );
-
-          // Do not restart the currently playing video every 20 seconds.
-          highlightCard(previousActiveId);
-
-        }
-
-      } else {
-
-        clearExhibitionTimer();
-
-        activeItemId = null;
-
-        selectionVersion++;
-
-        featureEmbed.pause();
-        featureEmbed.removeAttribute('src');
-        featureEmbed.load();
-
-        featureEmbed.hidden = true;
+      if (hasVideo) {
         featureText.hidden = true;
+        featureVideo.hidden = false;
+        const driveId = getGoogleDriveId(item.url) || item.id;
+        
+        // Direct stream endpoint that triggers the native player's 'ended' event cleanly
+        featureVideo.src = 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(driveId);
+        featureVideo.play().catch(e => console.log("Autoplay waiting for user interaction", e));
+      } else {
+        featureVideo.pause();
+        featureVideo.src = '';
+        featureVideo.hidden = true;
+        featureText.hidden = false;
+        textTitle.textContent = item.title || 'Impact Story';
+        textMeta.textContent = item.email ? `Email: ${item.email}` : '';
+        textLocation.textContent = item.location || 'Not specified';
+        textChange.textContent = item.change || 'Not specified';
+        textHelp.textContent = item.help || 'Not specified';
 
+        // Text stories auto-advance smoothly after 15 seconds
+        textHoldTimer = setTimeout(() => {
+          playNextSubmission();
+        }, 15000);
       }
-
-      galleryError.hidden = true;
-
-      renderFilter();
-
-    } catch (error) {
-
-      console.error('Gallery refresh failed:', error);
-
-      galleryError.textContent = 'Could not load submissions.';
-
-      galleryError.hidden = false;
-
-      countLabel.textContent = 'Unable to load submissions';
-
-    } finally {
-
-      refreshInProgress = false;
-
     }
 
-  }
+    function createCard(item) {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'rh-card';
+      card.dataset.id = String(item.id);
+      card.setAttribute('aria-pressed', 'false');
+      card.setAttribute('aria-label', 'Select ' + (item.title || 'submission'));
 
-  /* INITIAL LOAD */
+      const frame = document.createElement('div');
+      frame.className = 'rh-frame';
 
-  refreshGallery();
+      const hasVideo = item.url && getGoogleDriveId(item.url);
 
-  /* REFRESH EVERY 20 SECONDS */
+      if (hasVideo) {
+        const driveId = getGoogleDriveId(item.url) || item.id;
+        const img = document.createElement('img');
+        img.className = 'rh-thumb';
+        img.alt = item.title || 'Video preview';
+        img.loading = 'lazy';
+        img.src = 'https://lh3.googleusercontent.com/d/' + driveId;
+        img.addEventListener('error', () => {
+          img.src = 'https://drive.google.com/thumbnail?id=' + driveId + '&sz=w640';
+        });
 
-  window.setInterval(refreshGallery, 20000);
+        const playIcon = document.createElement('span');
+        playIcon.className = 'rh-card-badge';
+        playIcon.textContent = '▶';
+        frame.append(img, playIcon);
+      } else {
+        const textPreview = document.createElement('div');
+        textPreview.className = 'rh-card-text-preview';
+        textPreview.textContent = item.change || item.title || 'Text Submission';
 
-})();
-</script>
+        const textBadge = document.createElement('span');
+        textBadge.className = 'rh-card-badge';
+        textBadge.textContent = '✎';
+        frame.append(textPreview, textBadge);
+      }
 
+      const caption = document.createElement('span');
+      caption.className = 'rh-card-caption';
+
+      const title = document.createElement('span');
+      title.className = 'rh-card-title';
+      title.textContent = item.title || 'Untitled submission';
+
+      const meta = document.createElement('span');
+      meta.className = 'rh-card-meta';
+      meta.textContent = dateText(item.date) + (hasVideo ? ' · Video reel' : ' · Written story');
+
+      caption.append(title, meta);
+      card.append(frame, caption);
+
+      card.addEventListener('click', () => {
+        selectSubmission(items.get(card.dataset.id) || item);
+      });
+
+      return card;
+    }
+
+    function renderFilter() {
+      const query = search.value.trim().toLocaleLowerCase();
+      let shown = 0;
+
+      grid.querySelectorAll('.rh-card').forEach(card => {
+        const item = items.get(card.dataset.id);
+        const title = item ? item.title || '' : '';
+        const email = item ? item.email || '' : '';
+        const location = item ? item.location || '' : '';
+        const change = item ? item.change || '' : '';
+        const help = item ? item.help || '' : '';
+        const matches = !query || title.toLocaleLowerCase().includes(query) || email.toLocaleLowerCase().includes(query) || location.toLocaleLowerCase().includes(query) || change.toLocaleLowerCase().includes(query) || help.toLocaleLowerCase().includes(query);
+        card.hidden = !matches;
+        if (matches) shown++;
+      });
+
+      countLabel.textContent = query && shown === 0
+        ? 'No submissions match your search'
+        : shown + ' submission' + (shown === 1 ? '' : 's') + ' · Zurich Foundation Gallery';
+
+      emptyMessage.hidden = items.size !== 0;
+    }
+
+    search.addEventListener('input', renderFilter);
+
+    async function refreshGallery() {
+      if (refreshInProgress) return;
+      refreshInProgress = true;
+
+      try {
+        if (!apiBase) throw new Error('Missing Google Apps Script Web App URL.');
+        const response = await fetch(apiBase, { method: 'GET', cache: 'no-store' });
+        if (!response.ok) throw new Error('Could not retrieve submissions.');
+
+        const body = await response.json();
+        const submissions = Array.isArray(body.videos) ? body.videos : [];
+        submissionList = submissions;
+        const incomingIds = new Set();
+
+        submissions.forEach(item => {
+          if (!item || item.id == null) return;
+          const id = String(item.id);
+          incomingIds.add(id);
+
+          if (items.has(id)) {
+            items.set(id, item);
+            return;
+          }
+
+          items.set(id, item);
+          grid.appendChild(createCard(item));
+        });
+
+        for (const [id] of items) {
+          if (!incomingIds.has(id)) {
+            const card = Array.from(grid.querySelectorAll('.rh-card')).find(el => el.dataset.id === id);
+            if (card) card.remove();
+            items.delete(id);
+          }
+        }
+
+        if (!featureVideo.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
+          featureText.setAttribute('data-loaded', '1');
+          selectSubmission(submissions[0]);
+        }
+
+        galleryError.hidden = true;
+        renderFilter();
+      } catch (error) {
+        galleryError.textContent = 'Could not load submissions.';
+        galleryError.hidden = false;
+        countLabel.textContent = 'Unable to load submissions';
+      } finally {
+        refreshInProgress = false;
+      }
+    }
+
+    refreshGallery();
+    window.setInterval(refreshGallery, 20000);
+  })();
+  </script>
 </body>
 </html>
