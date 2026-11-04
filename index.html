@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,10 +30,7 @@
 
     button, input { font: inherit; }
 
-    #reelhouse-widget {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
+    #reelhouse-widget { max-width: 1280px; margin: 0 auto; }
 
     .rh-nav {
       position: sticky;
@@ -48,11 +46,7 @@
       backdrop-filter: blur(8px);
     }
 
-    .rh-brand {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-    }
+    .rh-brand { display: flex; align-items: center; text-decoration: none; }
 
     .rh-logo-img {
       height: 50px;
@@ -148,6 +142,7 @@
       justify-content: center;
     }
 
+    /* AUTOMATIC VIDEO PLAYER */
     .rh-feature-embed {
       position: absolute;
       inset: 0;
@@ -156,6 +151,7 @@
       border: 0;
       background: #000;
       object-fit: contain;
+      pointer-events: none;
     }
 
     .rh-player-message {
@@ -167,7 +163,7 @@
       width: min(90%, 500px);
       padding: 18px 22px;
       border-radius: 10px;
-      background: rgba(15,23,42,.92);
+      background: rgba(15,23,42,.94);
       color: #fff;
       text-align: center;
       font-size: 14px;
@@ -270,9 +266,7 @@
       transition: background 0.2s ease;
     }
 
-    .rh-fullscreen-btn:hover {
-      background: var(--zurich-accent);
-    }
+    .rh-fullscreen-btn:hover { background: var(--zurich-accent); }
 
     .rh-gallery-heading {
       display: flex;
@@ -321,6 +315,7 @@
 
     .rh-grid::-webkit-scrollbar { height: 10px; }
     .rh-grid::-webkit-scrollbar-track { background: transparent; }
+
     .rh-grid::-webkit-scrollbar-thumb {
       background: #94a3b8;
       border-radius: 6px;
@@ -469,18 +464,12 @@
         gap: 20px;
       }
 
-      .rh-search-wrap {
-        width: 100%;
-        flex-basis: auto;
-      }
-
+      .rh-search-wrap { width: 100%; flex-basis: auto; }
       .rh-feature-text { padding: 36px 24px; }
       .rh-qa-grid { grid-template-columns: 1fr; }
       .rh-qa-block.full-width { grid-column: span 1; }
 
-      .rh-feature-frame {
-        min-height: 300px;
-      }
+      .rh-feature-frame { min-height: 300px; }
     }
   </style>
 </head>
@@ -523,19 +512,19 @@
 
         <div class="rh-feature-frame" id="rh-feature-frame">
 
-          <!-- HTML5 VIDEO PLAYER -->
           <video
             class="rh-feature-embed"
             id="rh-feature-embed"
+            autoplay
+            muted
             playsinline
-            preload="metadata"
-            controls
-            muted>
+            preload="auto"
+            disablepictureinpicture
+            disableremoteplayback>
           </video>
 
           <div class="rh-player-message" id="rh-player-message" hidden></div>
 
-          <!-- TEXT STORY DISPLAY -->
           <div class="rh-feature-text" id="rh-feature-text" hidden>
 
             <div class="rh-text-badge">
@@ -640,6 +629,8 @@
   let refreshInProgress = false;
   let activeItemId = null;
   let selectionVersion = 0;
+  let loadingTimer = null;
+  let failedItems = new Set();
 
   /* FULLSCREEN */
 
@@ -647,11 +638,9 @@
 
     if (!document.fullscreenElement) {
 
-      if (featureFrame.requestFullscreen) {
-        featureFrame.requestFullscreen().catch(err => {
-          console.warn('Fullscreen error:', err);
-        });
-      }
+      featureFrame.requestFullscreen?.().catch(err => {
+        console.warn('Fullscreen error:', err);
+      });
 
     } else {
       document.exitFullscreen?.();
@@ -677,7 +666,7 @@
 
   }
 
-  /* GOOGLE DRIVE ID */
+  /* GOOGLE DRIVE VIDEO ID */
 
   function getGoogleDriveId(rawUrl) {
 
@@ -724,10 +713,26 @@
   }
 
   function isVideo(item) {
-    return !!(item && item.url && getGoogleDriveId(item.url));
+    return !!(item && item.url);
   }
 
-  /* AUTOMATIC PLAYLIST */
+  /* VIDEO SOURCE */
+
+  function getPlayableVideoUrl(item) {
+
+    const driveId = getGoogleDriveId(item.url);
+
+    if (driveId) {
+      return 'https://drive.google.com/uc?export=download&id=' +
+        encodeURIComponent(driveId);
+    }
+
+    // Non-Drive links should be direct MP4 or browser-supported video URLs.
+    return item.url;
+
+  }
+
+  /* CLEAR TIMERS */
 
   function clearExhibitionTimer() {
 
@@ -736,19 +741,57 @@
       exhibitionTimer = null;
     }
 
+    if (loadingTimer) {
+      clearTimeout(loadingTimer);
+      loadingTimer = null;
+    }
+
   }
+
+  /* PLAYER MESSAGE */
+
+  function showPlayerMessage(message) {
+    playerMessage.textContent = message;
+    playerMessage.hidden = !message;
+  }
+
+  /* NEXT SUBMISSION */
 
   function nextSubmission() {
 
     if (submissionList.length <= 1) return;
 
-    const nextIndex = (currentIndex + 1) % submissionList.length;
+    // Find the next submission that has not already failed in this cycle.
+    for (let step = 1; step <= submissionList.length; step++) {
 
-    selectSubmission(submissionList[nextIndex]);
+      const nextIndex = (currentIndex + step) % submissionList.length;
+      const nextItem = submissionList[nextIndex];
+
+      if (!nextItem) continue;
+
+      if (
+        isVideo(nextItem) &&
+        failedItems.has(String(nextItem.id))
+      ) {
+        continue;
+      }
+
+      currentIndex = nextIndex;
+      selectSubmission(nextItem);
+      return;
+
+    }
+
+    // If every video failed, clear the failed list and try again next cycle.
+    failedItems.clear();
+
+    currentIndex = (currentIndex + 1) % submissionList.length;
+
+    selectSubmission(submissionList[currentIndex]);
 
   }
 
-  /* TEXT STORIES: 15 SECONDS */
+  /* TEXT STORY TIMER: 15 SECONDS */
 
   function scheduleTextAdvance() {
 
@@ -756,13 +799,39 @@
 
     if (submissionList.length <= 1) return;
 
-    exhibitionTimer = window.setTimeout(() => {
+    exhibitionTimer = setTimeout(() => {
       nextSubmission();
     }, 15000);
 
   }
 
-  /* HIGHLIGHT ACTIVE CARD */
+  /* FAILED VIDEO HANDLING */
+
+  function skipFailedVideo(id, version) {
+
+    if (version !== selectionVersion) return;
+
+    failedItems.add(String(id));
+
+    clearExhibitionTimer();
+
+    showPlayerMessage('Video unavailable. Moving to the next submission...');
+
+    if (submissionList.length > 1) {
+
+      exhibitionTimer = setTimeout(() => {
+
+        if (version === selectionVersion) {
+          nextSubmission();
+        }
+
+      }, 2500);
+
+    }
+
+  }
+
+  /* HIGHLIGHT CARD */
 
   function highlightCard(id) {
 
@@ -771,7 +840,6 @@
       const selected = card.dataset.id === String(id);
 
       card.classList.toggle('is-selected', selected);
-
       card.setAttribute('aria-pressed', String(selected));
 
     });
@@ -792,25 +860,94 @@
 
   }
 
-  /* PLAYER MESSAGE */
+  /* VIDEO PLAYBACK */
 
-  function showPlayerMessage(message) {
+  function startVideo(item, version) {
 
-    playerMessage.textContent = message;
-    playerMessage.hidden = !message;
+    featureEmbed.pause();
 
-  }
+    featureEmbed.removeAttribute('src');
 
-  /* GET DIRECT VIDEO URL */
+    featureEmbed.autoplay = true;
+    featureEmbed.muted = true;
+    featureEmbed.defaultMuted = true;
+    featureEmbed.playsInline = true;
 
-  function getPlayableVideoUrl(item) {
+    // No visitor playback controls.
+    featureEmbed.controls = false;
+    featureEmbed.removeAttribute('controls');
 
-    const driveId = getGoogleDriveId(item.url);
+    // Ensure the autoplay attributes are present.
+    featureEmbed.setAttribute('autoplay', '');
+    featureEmbed.setAttribute('muted', '');
+    featureEmbed.setAttribute('playsinline', '');
 
-    if (!driveId) return item.url;
+    const videoUrl = getPlayableVideoUrl(item);
 
-    return 'https://drive.google.com/uc?export=download&id=' +
-      encodeURIComponent(driveId);
+    /*
+      Register the event before assigning the source.
+      This prevents missing the loadeddata event.
+    */
+
+    const attemptPlayback = () => {
+
+      if (version !== selectionVersion) return;
+
+      clearTimeout(loadingTimer);
+
+      if (featureEmbed.readyState < 2) return;
+
+      featureEmbed.play().then(() => {
+
+        if (version !== selectionVersion) return;
+
+        showPlayerMessage('');
+
+      }).catch(error => {
+
+        console.warn('Autoplay failed:', error);
+
+        if (version !== selectionVersion) return;
+
+        // Do not ask visitors to press play.
+        // Skip to the next submission instead.
+        skipFailedVideo(item.id, version);
+
+      });
+
+    };
+
+    featureEmbed.addEventListener(
+      'canplay',
+      attemptPlayback,
+      { once: true }
+    );
+
+    featureEmbed.addEventListener(
+      'loadeddata',
+      attemptPlayback,
+      { once: true }
+    );
+
+    featureEmbed.src = videoUrl;
+
+    featureEmbed.load();
+
+    /*
+      If the source never becomes playable, skip it.
+      This prevents the exhibition from remaining stuck.
+    */
+
+    loadingTimer = setTimeout(() => {
+
+      if (
+        version === selectionVersion &&
+        featureEmbed.readyState < 2
+      ) {
+        skipFailedVideo(item.id, version);
+      }
+
+    }, 20000);
 
   }
 
@@ -830,57 +967,25 @@
 
     activeItemId = id;
 
-    const thisSelection = ++selectionVersion;
+    const version = ++selectionVersion;
 
     clearExhibitionTimer();
 
-    highlightCard(id);
-
     showPlayerMessage('');
 
-    /* VIDEO SUBMISSION */
+    highlightCard(id);
 
     if (isVideo(item)) {
 
+      // VIDEO SUBMISSION
       featureText.hidden = true;
       featureEmbed.hidden = false;
 
-      // Stop the previous video completely.
-      featureEmbed.pause();
-      featureEmbed.removeAttribute('src');
-      featureEmbed.load();
+      startVideo(item, version);
 
-      // Set the new video.
-      featureEmbed.src = getPlayableVideoUrl(item);
+    } else {
 
-      featureEmbed.muted = true;
-      featureEmbed.controls = true;
-
-      featureEmbed.load();
-
-      // Start playback.
-      featureEmbed.play().then(() => {
-
-        if (thisSelection !== selectionVersion) return;
-
-      }).catch(error => {
-
-        if (thisSelection !== selectionVersion) return;
-
-        console.warn('Video autoplay could not start:', error);
-
-        showPlayerMessage(
-          'Press play to start this video. If it does not load, check that the Google Drive file is shared publicly.'
-        );
-
-      });
-
-    }
-
-    /* TEXT SUBMISSION */
-
-    else {
-
+      // TEXT SUBMISSION
       featureEmbed.pause();
       featureEmbed.removeAttribute('src');
       featureEmbed.load();
@@ -900,14 +1005,13 @@
 
       textHelp.textContent = item.help || 'Not specified';
 
-      // Preserve the original 15-second text transition.
       scheduleTextAdvance();
 
     }
 
   }
 
-  /* VIDEO ENDS: PLAY NEXT SUBMISSION */
+  /* VIDEO ENDED: AUTOMATICALLY PLAY NEXT */
 
   featureEmbed.addEventListener('ended', () => {
 
@@ -921,6 +1025,8 @@
 
     clearExhibitionTimer();
 
+    failedItems.clear();
+
     nextSubmission();
 
   });
@@ -929,18 +1035,25 @@
 
   featureEmbed.addEventListener('error', () => {
 
-    if (featureEmbed.hidden) return;
+    if (featureEmbed.hidden || !activeItemId) return;
 
-    clearExhibitionTimer();
-
-    showPlayerMessage(
-      'This video could not be played. Make sure the Google Drive file is set to Anyone with the link and direct playback is allowed.'
+    console.error(
+      'Video playback error:',
+      featureEmbed.error
     );
+
+    skipFailedVideo(activeItemId, selectionVersion);
 
   });
 
+  /* VIDEO PLAYING */
+
   featureEmbed.addEventListener('playing', () => {
+
+    clearTimeout(loadingTimer);
+
     showPlayerMessage('');
+
   });
 
   /* CREATE GALLERY CARD */
@@ -976,18 +1089,26 @@
       img.alt = item.title || 'Video preview';
       img.loading = 'lazy';
 
-      img.src =
-        'https://lh3.googleusercontent.com/d/' +
-        encodeURIComponent(driveId);
-
-      img.addEventListener('error', () => {
+      if (driveId) {
 
         img.src =
-          'https://drive.google.com/thumbnail?id=' +
-          encodeURIComponent(driveId) +
-          '&sz=w640';
+          'https://lh3.googleusercontent.com/d/' +
+          encodeURIComponent(driveId);
 
-      }, { once: true });
+        img.addEventListener('error', () => {
+
+          img.src =
+            'https://drive.google.com/thumbnail?id=' +
+            encodeURIComponent(driveId) +
+            '&sz=w640';
+
+        }, { once: true });
+
+      } else {
+
+        img.src = '';
+
+      }
 
       const playIcon = document.createElement('span');
 
@@ -1040,6 +1161,7 @@
 
       const selectedItem = items.get(card.dataset.id) || item;
 
+      // Manual selection starts the selected submission immediately.
       selectSubmission(selectedItem);
 
     });
@@ -1161,11 +1283,13 @@
 
           items.delete(id);
 
+          failedItems.delete(id);
+
         }
 
       }
 
-      /* KEEP CURRENT PLAYBACK WHEN REFRESHING */
+      /* PRESERVE CURRENT PLAYBACK DURING REFRESH */
 
       if (submissions.length > 0) {
 
@@ -1185,6 +1309,7 @@
             item => String(item.id) === previousActiveId
           );
 
+          // Do not restart the currently playing video every 20 seconds.
           highlightCard(previousActiveId);
 
         }
@@ -1194,6 +1319,8 @@
         clearExhibitionTimer();
 
         activeItemId = null;
+
+        selectionVersion++;
 
         featureEmbed.pause();
         featureEmbed.removeAttribute('src');
@@ -1230,7 +1357,7 @@
 
   refreshGallery();
 
-  /* REFRESH SUBMISSIONS EVERY 20 SECONDS */
+  /* REFRESH EVERY 20 SECONDS */
 
   window.setInterval(refreshGallery, 20000);
 
