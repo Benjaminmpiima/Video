@@ -181,7 +181,6 @@
 
         <section class="rh-featured" aria-label="Featured content">
           <div class="rh-feature-frame" id="rh-feature-frame">
-            <!-- Reliable Google Drive Preview Iframe -->
             <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             
             <div class="rh-feature-text" id="rh-feature-text" hidden>
@@ -216,7 +215,7 @@
         <div class="rh-gallery-heading">
           <div>
             <h2 class="rh-gallery-title">Impact stories & submissions</h2>
-            <p class="rh-gallery-subtitle">Select an item to feature above. Continuous automated rotation is active.</p>
+            <p class="rh-gallery-subtitle">Select an item to feature above. Automated autoplay and rotation are active.</p>
           </div>
           <p class="rh-scroll-hint">Scroll sideways →</p>
         </div>
@@ -314,7 +313,7 @@
       const currentItem = submissionList[currentIndex];
       const hasVideo = currentItem && currentItem.url && getGoogleDriveId(currentItem.url);
       
-      // 35 seconds for videos, 15 seconds for text stories to keep the presentation moving smoothly
+      // 35 seconds for videos, 15 seconds for text stories
       const waitTime = hasVideo ? 35000 : 15000;
 
       autoPlayTimer = setTimeout(() => {
@@ -337,7 +336,8 @@
         featureText.hidden = true;
         featureEmbed.hidden = false;
         const driveId = getGoogleDriveId(item.url) || item.id;
-        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?usp=drivesdk';
+        // Added &autoplay=1 so videos start playing immediately without manual clicks
+        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?usp=drivesdk&autoplay=1';
       } else {
         featureEmbed.src = '';
         featureEmbed.hidden = true;
@@ -349,7 +349,6 @@
         textHelp.textContent = item.help || 'Not specified';
       }
 
-      // Keep the automated loop running
       scheduleNext();
     }
 
