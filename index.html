@@ -51,14 +51,13 @@
       align-items: center;
       justify-content: center;
     }
-    
-    .rh-feature-video {
+    .rh-feature-embed {
       position: absolute;
-      top: 0;
+      top: -75px;
       left: 0;
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      height: calc(100% + 150px);
+      border: 0;
       background: #000;
     }
 
@@ -182,9 +181,7 @@
 
         <section class="rh-featured" aria-label="Featured content">
           <div class="rh-feature-frame" id="rh-feature-frame">
-            <!-- Native video tag for precise event tracking -->
-            <video class="rh-feature-video" id="rh-feature-video" controls autoplay playsinline></video>
-            
+            <iframe class="rh-feature-embed" id="rh-feature-embed" title="Featured video player" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             <div class="rh-feature-text" id="rh-feature-text" hidden>
               <div class="rh-text-badge">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
@@ -217,7 +214,7 @@
         <div class="rh-gallery-heading">
           <div>
             <h2 class="rh-gallery-title">Impact stories & submissions</h2>
-            <p class="rh-gallery-subtitle">Select an item to feature above. Videos play continuously to the end.</p>
+            <p class="rh-gallery-subtitle">Select an item to feature above.</p>
           </div>
           <p class="rh-scroll-hint">Scroll sideways →</p>
         </div>
@@ -241,7 +238,7 @@
     const galleryError = root.querySelector('.rh-error');
     const emptyMessage = root.querySelector('.rh-empty');
     
-    const featureVideo = document.getElementById('rh-feature-video');
+    const featureEmbed = document.getElementById('rh-feature-embed');
     const featureText = document.getElementById('rh-feature-text');
     const textTitle = document.getElementById('rh-text-title');
     const textMeta = document.getElementById('rh-text-meta');
@@ -254,19 +251,7 @@
     const items = new Map();
     let submissionList = [];
     let currentIndex = 0;
-    let textHoldTimer = null;
     let refreshInProgress = false;
-
-    // AUTOMATIC EVENT LISTENER: The exact millisecond a video finishes its full playback
-    featureVideo.addEventListener('ended', () => {
-      playNextSubmission();
-    });
-
-    function playNextSubmission() {
-      if (submissionList.length <= 1) return;
-      currentIndex = (currentIndex + 1) % submissionList.length;
-      selectSubmission(submissionList[currentIndex]);
-    }
 
     fsBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
@@ -327,34 +312,22 @@
 
       highlightCard(id);
 
-      // Clear any pending text display timer when switching manually or automatically
-      if (textHoldTimer) clearTimeout(textHoldTimer);
-
       const hasVideo = item.url && getGoogleDriveId(item.url);
 
       if (hasVideo) {
         featureText.hidden = true;
-        featureVideo.hidden = false;
+        featureEmbed.hidden = false;
         const driveId = getGoogleDriveId(item.url) || item.id;
-        
-        // Direct stream URL for native video element playback
-        featureVideo.src = 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(driveId);
-        featureVideo.play().catch(e => console.log("Autoplay blocked or waiting for interaction", e));
+        featureEmbed.src = 'https://drive.google.com/file/d/' + encodeURIComponent(driveId) + '/preview?usp=drivesdk';
       } else {
-        featureVideo.pause();
-        featureVideo.src = '';
-        featureVideo.hidden = true;
+        featureEmbed.src = '';
+        featureEmbed.hidden = true;
         featureText.hidden = false;
         textTitle.textContent = item.title || 'Impact Story';
         textMeta.textContent = item.email ? `Email: ${item.email}` : '';
         textLocation.textContent = item.location || 'Not specified';
         textChange.textContent = item.change || 'Not specified';
         textHelp.textContent = item.help || 'Not specified';
-
-        // Automatically advance after 15 seconds if a text story is displayed on screen
-        textHoldTimer = setTimeout(() => {
-          playNextSubmission();
-        }, 15000);
       }
     }
 
@@ -479,7 +452,7 @@
           }
         }
 
-        if (!featureVideo.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
+        if (!featureEmbed.src && !featureText.hasAttribute('data-loaded') && submissions.length > 0) {
           featureText.setAttribute('data-loaded', '1');
           selectSubmission(submissions[0]);
         }
